@@ -140,13 +140,18 @@ public class DateUtil {
      * @return 返回当前星期
      */
     public String getWeek (String pushTime) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+
+        String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
-            String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
             return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek")) + Integer.parseInt(pushTime)) % 7];
         } else {
-            return simpleDateFormat.format(new Date(System.currentTimeMillis() + 24L * 60 * 60 * 1000 * Integer.parseInt(pushTime)));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(System.currentTimeMillis()));
+            int w = cal.get(Calendar.DAY_OF_WEEK) - 1 + Integer.parseInt(pushTime);
+            if (w < 0) w = 0;
+            return week[w];
         }
 
     }
+
 }
