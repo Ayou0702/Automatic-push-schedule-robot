@@ -20,9 +20,9 @@ public class ScheduledConfig {
     private PushController pushController;
 
     /**
-     * 每天的21:05触发推送
+     * 每天的17:30触发推送
      */
-    @Scheduled(cron = "0 05 21 ? * *")
+    @Scheduled(cron = "0 30 17 ? * *")
     public void scheduledPushCourseNight () {
         if (enterpriseDataService.queryingEnterpriseData("pushTime").equals("1")) {
             pushController.pushCourse();
