@@ -1,4 +1,4 @@
-# Automatic-push-schedule-robot
+# 课表自动推送
 这是一个使用SpringBoot + MyBatis-Plus 的自动推送课表的企业微信公众号项目<br>
 项目依赖MySql环境，推荐jdk1.8.0<br><br>
 
