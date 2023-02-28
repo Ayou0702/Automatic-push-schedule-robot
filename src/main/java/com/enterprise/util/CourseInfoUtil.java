@@ -157,22 +157,26 @@ public class CourseInfoUtil {
         // 根据推送时间偏移星期
         week = (week + Integer.parseInt(pushTime)) % 7;
 
-        // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
-        for (int i = 1; i < 5; i++) {
-            // 非空判断
-            if (schedule[period][week][i] != null) {
-                // 专业课程判断
-                if (schedule[period][week][i].getCourseSpecialized() == 1) {
-                    // 获取已上课的专业课程次数
-                    // 累计上过的专业课程次数
-                    Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes"));
-                    // 自增
-                    totalSpecializedClassTimes++;
-                    // 回写
-                    enterpriseDataService.updateEnterpriseData("totalSpecializedClassTimes", String.valueOf(totalSpecializedClassTimes));
+        // 判断是否是debug中，如是则不计算专业课程数
+        if (enterpriseDataService.queryingEnterpriseData("departmentId").equals("1")) {
+            // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
+            for (int i = 1; i < 5; i++) {
+                // 非空判断
+                if (schedule[period][week][i] != null) {
+                    // 专业课程判断
+                    if (schedule[period][week][i].getCourseSpecialized() == 1) {
+                        // 获取已上课的专业课程次数
+                        // 累计上过的专业课程次数
+                        Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes"));
+                        // 自增
+                        totalSpecializedClassTimes++;
+                        // 回写
+                        enterpriseDataService.updateEnterpriseData("totalSpecializedClassTimes", String.valueOf(totalSpecializedClassTimes));
+                    }
                 }
             }
         }
+
 
         // 封装五大节课程数据并将其返回
         courseSectionVo.setFirst(schedule[period][week][1]);
@@ -189,6 +193,10 @@ public class CourseInfoUtil {
      * 统计总课程数
      */
     public void extracted () {
+        // 判断是否是debug中，如是则不计算课程数
+        if (enterpriseDataService.queryingEnterpriseData("departmentId").equals("3")) {
+            return;
+        }
         // 获取当前总课程数
         int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("totalClassTimes"));
         // 自增

@@ -124,10 +124,15 @@ public class PushController {
                 courseInfoUtil.extracted();
                 message.append("\n1️⃣第一大节：").append(courseSectionVo.getFirst().getCourseName());
                 message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFirst().getCourseVenue()).append("\n");
-                // 早课天数统计
-                int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays"));
-                temp++;
-                enterpriseDataService.updateEnterpriseData("morningClassDays", String.valueOf(temp));
+
+                // 判断是否是debug中，如是则不计算早课天数
+                if (enterpriseDataService.queryingEnterpriseData("departmentId").equals("1")) {
+                    // 早课天数统计
+                    int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays"));
+                    temp++;
+                    enterpriseDataService.updateEnterpriseData("morningClassDays", String.valueOf(temp));
+                }
+
             }
             if (!isNull(courseSectionVo.getSecond())) {
                 courseInfoUtil.extracted();
@@ -148,10 +153,15 @@ public class PushController {
                 courseInfoUtil.extracted();
                 message.append("\n5️第五大节：").append(courseSectionVo.getFifth().getCourseName());
                 message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFifth().getCourseVenue()).append("\n");
-                // 晚课天数统计
-                int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays"));
-                temp++;
-                enterpriseDataService.updateEnterpriseData("nightClassDays", String.valueOf(temp));
+
+                // 判断是否是debug中，如是则不计算晚课天数
+                if (enterpriseDataService.queryingEnterpriseData("departmentId").equals("1")) {
+                    // 晚课天数统计
+                    int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays"));
+                    temp++;
+                    enterpriseDataService.updateEnterpriseData("nightClassDays", String.valueOf(temp));
+                }
+
             }
 
             // 距离开学日天数统计
