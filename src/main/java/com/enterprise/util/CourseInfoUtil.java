@@ -166,7 +166,6 @@ public class CourseInfoUtil {
                     // 专业课程判断
                     if (schedule[period][week][i].getCourseSpecialized() == 1) {
                         // 获取已上课的专业课程次数
-                        // 累计上过的专业课程次数
                         Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes"));
                         // 自增
                         totalSpecializedClassTimes++;
