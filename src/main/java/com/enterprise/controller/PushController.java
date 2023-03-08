@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -72,7 +71,6 @@ public class PushController {
             // 根据周期与星期获取五大节课程数据
             courseSectionVo = courseInfoUtil.getCourse(period, pushTime);
 
-
             // 非空判断五大节课程数据(与逻辑)
             if (isNull(courseSectionVo.getFirst()) && isNull(courseSectionVo.getSecond()) && isNull(courseSectionVo.getThirdly()) && isNull(courseSectionVo.getFourthly()) && isNull(courseSectionVo.getFifth())) {
                 // 五大节课程数据都为空，跳过当天的推送
@@ -103,7 +101,7 @@ public class PushController {
 
             // 根据推送时间设置标题
             if (pushTime.equals("1")) {
-                title = "\uD83C\uDF08晚上好~明天是本学期的 第" + period + "周 " + week;
+                title = "\uD83C\uDF08晚上好~明天是本学期的 第" + (period + 1) + "周 " + week;
             } else {
                 title = "\uD83C\uDF08早上好~今天是 " + parameterList.getWeatherVo().getDate() + " " + week;
             }
@@ -235,4 +233,5 @@ public class PushController {
     public void pushConferenceMsg (String title, String message) {
         sendMessage.sendNewsMsg(title, message);
     }
+
 }
