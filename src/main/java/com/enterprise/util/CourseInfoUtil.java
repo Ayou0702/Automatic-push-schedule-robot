@@ -14,8 +14,11 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 /**
- * @author AYOU
  * 获取课程信息的工具类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:56
  */
 @Component
 public class CourseInfoUtil {
@@ -35,6 +38,9 @@ public class CourseInfoUtil {
 
     /**
      * 更新课表数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:56
      */
     public void updateCourseInfo () {
 
@@ -55,6 +61,9 @@ public class CourseInfoUtil {
      * 获取所有课程数据
      *
      * @return 返回课程数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:56
      */
     public List<CourseInfo> getCourseInfos () {
 
@@ -67,6 +76,9 @@ public class CourseInfoUtil {
      * 通过for循环将课表数据按照上课时间填入数组中
      *
      * @param courseInfo 课表数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:57
      */
     public void createClassSchedule (CourseInfo courseInfo) {
 
@@ -102,7 +114,11 @@ public class CourseInfoUtil {
      * 通过split方法分割开始时间与结束时间
      *
      * @param classStringTime 上课时间数据
+     *
      * @return 返回两个int型的数据作为开始时间与结束时间
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:57
      */
     public CourseStartAndEndTimeVo getClassTime (String classStringTime) {
 
@@ -133,9 +149,15 @@ public class CourseInfoUtil {
     }
 
     /**
+     * 封装五大节课程数据
+     *
      * @param period   当前周期
      * @param pushTime 推送时间
+     *
      * @return 返回封装好的五大节课程数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:57
      */
     public CourseSectionVo getCourse (int period, String pushTime) {
 
@@ -190,6 +212,9 @@ public class CourseInfoUtil {
 
     /**
      * 统计总课程数
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:58
      */
     public void extracted () {
         // 判断是否是debug中，如是则不计算课程数

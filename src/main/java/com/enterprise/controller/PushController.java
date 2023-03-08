@@ -21,7 +21,11 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 /**
- * @author ayou 2023/2/16
+ * 推送服务
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:45
  */
 @RestController
 public class PushController {
@@ -46,6 +50,9 @@ public class PushController {
 
     /**
      * 课程推送主方法
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:45
      */
     @GetMapping("/pushCourse")
     public void pushCourse () {
@@ -220,6 +227,11 @@ public class PushController {
 
     /**
      * 推送纯文本消息
+     *
+     * @param message 需要推送的消息内容
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:46
      */
     @GetMapping("/pushTextMsg")
     public void pushTextMsg (String message) {
@@ -228,6 +240,12 @@ public class PushController {
 
     /**
      * 推送图文消息
+     *
+     * @param title   需要推送的消息标题
+     * @param message 需要推送的消息内容
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:46
      */
     @GetMapping("/pushConferenceMsg")
     public void pushConferenceMsg (String title, String message) {

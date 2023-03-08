@@ -14,6 +14,10 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * 企业微信主服务
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:41
  */
 @Component
 public class WxConfig {
@@ -24,7 +28,11 @@ public class WxConfig {
      * 核心服务
      *
      * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     *
      * @return 返回写入了agentId、secret、corpId、token配置的一个WxCpService类型的对象
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:41
      */
     public static WxCpService getWxCpService (EnterpriseDataServiceImpl enterpriseDataService) {
 
@@ -37,6 +45,16 @@ public class WxConfig {
         return wxCpService;
     }
 
+    /**
+     * 核心服务
+     *
+     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     *
+     * @return 返回写入了agentId、secret、corpId配置的一个WxCpDefaultConfigImpl类型的对象
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:42
+     */
     private static WxCpDefaultConfigImpl getWxCpDefaultConfig (EnterpriseDataServiceImpl enterpriseDataService) {
 
         WxCpDefaultConfigImpl config = new WxCpDefaultConfigImpl();
@@ -55,6 +73,9 @@ public class WxConfig {
      * @param wxCpService           企业微信主服务对象
      * @param wxCpDefaultConfig     企业微信配置
      * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:43
      */
     public static void resetTokenAndJsApi (WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig, EnterpriseDataServiceImpl enterpriseDataService) {
         // 配置redis
@@ -107,6 +128,7 @@ public class WxConfig {
      * 此方法需要调用主服务，需要传参，已弃用
      *
      * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     *
      * @return 返回token
      */
     public static String getAccessToken (EnterpriseDataServiceImpl enterpriseDataService) {

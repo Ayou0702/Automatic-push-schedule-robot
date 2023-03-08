@@ -7,6 +7,10 @@ import javax.annotation.Resource;
 
 /**
  * 负责enterpriseData表业务的接口实现类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:53
  */
 @Service
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
@@ -21,7 +25,11 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
      * 获取指定名称的数据
      *
      * @param dataName 要获取的参数名称
+     *
      * @return 返回参数值
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:53
      */
     @Override
     public String queryingEnterpriseData (String dataName) {
@@ -33,11 +41,18 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
      *
      * @param dataName  要修改的参数名称
      * @param dataValue 要修改的参数值
-     * @return 返回一个boolean表示修改成功与否
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:54
      */
     @Override
-    public boolean updateEnterpriseData (String dataName, String dataValue) {
-        return enterpriseDataMapper.updateEnterpriseData(dataName, dataValue) > 0;
+    public void updateEnterpriseData (String dataName, String dataValue) {
+
+        int state = enterpriseDataMapper.updateEnterpriseData(dataName, dataValue);
+
+        if (state <= 0) {
+            System.out.println(dataName + "修改失败");
+        }
 
     }
 

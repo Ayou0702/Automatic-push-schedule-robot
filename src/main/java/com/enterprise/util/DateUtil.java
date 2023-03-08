@@ -12,8 +12,11 @@ import java.util.Date;
 import static java.lang.Math.abs;
 
 /**
- * @author www29
  * 日期工具类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:58
  */
 @Component
 public class DateUtil {
@@ -29,8 +32,12 @@ public class DateUtil {
      * 将Date对象转换为指定格式的字符串
      *
      * @param date   Date对象
-     * @param format 格式化字符串
+     * @param format v
+     *
      * @return Date对象的字符串表达形式
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:58
      */
     public static String formatDate (Date date, String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
@@ -41,7 +48,11 @@ public class DateUtil {
      * 获取当前的星期
      *
      * @param dt 当前的日期
+     *
      * @return 当前的星期
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:58
      */
     public static int getW (Date dt) {
         Calendar cal = Calendar.getInstance();
@@ -58,7 +69,11 @@ public class DateUtil {
      *
      * @param startDateString 开始日期(String类型)
      * @param endDateString   结束日期(String类型)
+     *
      * @return 返回相差的天数(String类型)
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:58
      */
     public static int daysBetween (String startDateString, String endDateString) {
         long nd = 1000 * 24 * 60 * 60;
@@ -83,7 +98,11 @@ public class DateUtil {
      *
      * @param startDate 开始日期(String类型)
      * @param endDate   结束日期(String类型)
+     *
      * @return 返回相差的天数(long类型)
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:59
      */
     public static long getDiff (Date startDate, Date endDate) {
         return (endDate.getTime()) - (startDate.getTime());
@@ -93,6 +112,9 @@ public class DateUtil {
      * 获取当前日期(String类型)
      *
      * @return 当前日期(String类型)
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:59
      */
     static String getNow () {
         Date now = new Date(System.currentTimeMillis());
@@ -103,6 +125,9 @@ public class DateUtil {
      * 获取当前周数(int类型)
      *
      * @return 当前周数(int类型)
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:59
      */
     public int getPeriod () {
         int periods;
@@ -132,12 +157,16 @@ public class DateUtil {
 
         return period;
     }
-
+    
     /**
      * 根据日期判断当前星期
      *
      * @param pushTime 当前日期
+     *
      * @return 返回当前星期
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:59
      */
     public String getWeek (String pushTime) {
 

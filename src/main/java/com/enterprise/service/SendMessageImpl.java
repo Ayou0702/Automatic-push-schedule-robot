@@ -16,6 +16,10 @@ import static com.enterprise.config.WxConfig.getWxCpService;
 
 /**
  * 快速构建并发送消息类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:54
  */
 @Service
 @Slf4j
@@ -32,6 +36,9 @@ public class SendMessageImpl {
      *
      * @param title   推送的标题
      * @param message 推送的消息
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:54
      */
     public void pushCourse (String title, String message) {
 
@@ -63,6 +70,9 @@ public class SendMessageImpl {
      * 用于发送纯文本消息
      *
      * @param message 推送的消息
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:55
      */
     public void sendTextMsg (String message) {
 
@@ -88,6 +98,9 @@ public class SendMessageImpl {
      *
      * @param title   推送的标题
      * @param message 推送的消息
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:55
      */
     public void sendNewsMsg (String title, String message) {
 

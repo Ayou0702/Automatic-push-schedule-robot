@@ -7,8 +7,11 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * {@code @author:} ayou
  * 负责courseInfo表的数据交互
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:49
  */
 @Mapper
 public interface CourseInfoMapper {
@@ -17,6 +20,9 @@ public interface CourseInfoMapper {
      * 获取courseInfo表中的所有课程数据
      *
      * @return 返回所有课程数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:49
      */
     @Select("SELECT * FROM course_info")
     List<CourseInfo> queryCourse ();

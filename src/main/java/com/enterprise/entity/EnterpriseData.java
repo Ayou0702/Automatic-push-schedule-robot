@@ -4,6 +4,10 @@ import lombok.Data;
 
 /**
  * enterpriseData表的实体类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:47
  */
 @Data
 public class EnterpriseData {

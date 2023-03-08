@@ -1,8 +1,8 @@
 package com.enterprise.util;
 
+import com.enterprise.entity.vo.ParameterListVo;
 import com.enterprise.service.EnterpriseDataServiceImpl;
 import org.apache.commons.lang3.StringUtils;
-import com.enterprise.entity.vo.ParameterListVo;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -10,8 +10,11 @@ import javax.annotation.Resource;
 import static com.enterprise.util.DateUtil.getNow;
 
 /**
- * {@code @author:} ayou
  * 推送数据的工具类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 17:00
  */
 @Component
 public class PushDataUtil {
@@ -23,6 +26,9 @@ public class PushDataUtil {
      * 获取天气位置、彩虹屁api、开学日期、放假日期、推送时间并写入对象
      *
      * @return 返回参数列表对象
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 17:00
      */
     public ParameterListVo getParameterList () {
         // 参数列表实体类

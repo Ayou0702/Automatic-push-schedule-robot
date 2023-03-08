@@ -9,6 +9,10 @@ import javax.annotation.Resource;
 
 /**
  * 定时调用类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:40
  */
 @Configuration
 // 自动任务配置

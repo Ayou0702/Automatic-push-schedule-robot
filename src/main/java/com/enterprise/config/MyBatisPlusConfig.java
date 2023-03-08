@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 数据持久层框架配置
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:39
  */
 @Configuration
 public class MyBatisPlusConfig {
@@ -18,4 +22,5 @@ public class MyBatisPlusConfig {
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
         return interceptor;
     }
+
 }

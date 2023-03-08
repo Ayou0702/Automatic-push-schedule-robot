@@ -4,9 +4,14 @@ import lombok.Data;
 
 /**
  * 推送参数
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:47
  */
 @Data
 public class ParameterListVo {
+
     /**
      * 天气参数
      */

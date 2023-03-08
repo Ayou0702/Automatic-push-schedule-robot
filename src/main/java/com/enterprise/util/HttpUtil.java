@@ -14,10 +14,11 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
-
 /**
- * {@code @author:} ayou
  * http工具类
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:36
  */
 public class HttpUtil {
 
@@ -30,10 +31,10 @@ public class HttpUtil {
         myStrategy = (response, context) -> {
             BasicHeaderElementIterator it = new BasicHeaderElementIterator(response.headerIterator("Keep-Alive"));
 
-            String param;
-            String value;
+            String param, value;
 
             do {
+
                 if (!it.hasNext()) {
                     return 60000L;
                 }
@@ -49,9 +50,12 @@ public class HttpUtil {
 
     /**
      * 将请求到的内容转换为String返回
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:37
      *
      * @param url 需要请求的url
      * @return 将请求内容转换为String并返回
+     * @throws IOException 可能存在IO异常
      */
     public static String getUrl (String url) throws IOException {
 

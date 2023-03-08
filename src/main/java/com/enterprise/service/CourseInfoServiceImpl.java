@@ -9,6 +9,10 @@ import java.util.List;
 
 /**
  * 负责courseInfo表业务的接口实现类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:51
  */
 @Service
 public class CourseInfoServiceImpl implements CourseInfoService {
@@ -23,6 +27,9 @@ public class CourseInfoServiceImpl implements CourseInfoService {
      * 获取所有课程数据
      *
      * @return 返回课程数据
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:52
      */
     @Override
     public List<CourseInfo> queryCourse () {

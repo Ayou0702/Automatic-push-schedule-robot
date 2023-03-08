@@ -14,8 +14,11 @@ import static com.enterprise.config.WxConfig.getAccessToken;
 
 
 /**
- * @author AYOU
  * 获取推送所需参数的api工具类
+ *
+ * @author Iwlthxcl
+ * @version 1.0
+ * @time 2023/3/8 16:55
  */
 public class ApiUtil {
 
@@ -23,7 +26,11 @@ public class ApiUtil {
      * 获取部门id下所有成员的列表
      *
      * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     *
      * @return 返回一串拼接好的成员String
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:55
      */
     public static String getParticipants (EnterpriseDataServiceImpl enterpriseDataService) {
 
@@ -68,7 +75,11 @@ public class ApiUtil {
      * 获取彩虹屁
      *
      * @param key 天行数据彩虹屁api密钥
+     *
      * @return 返回彩虹屁
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:55
      */
     public static String getCaiHongPi (String key) {
 
@@ -100,7 +111,11 @@ public class ApiUtil {
      * @param key  天行数据天气预报api密钥
      * @param city 需要预报的城市
      * @param type 推送时间
+     *
      * @return 返回天气实体对象
+     *
+     * @author Iwlthxcl
+     * @time 2023/3/8 16:56
      */
     public static WeatherVo getWeather (String key, String city, String type) {
 
