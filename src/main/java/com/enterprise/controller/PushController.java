@@ -66,11 +66,12 @@ public class PushController {
 
         // 根据开学日期进行判断
         if (parameterList.getDateStarting() >= 0) {
-            System.out.println("开学日期" + parameterList.getDateStarting());
+            System.out.println("开学天数：" + parameterList.getDateStarting());
+
             // 计算当前推送周期、获取推送时间、计算当前推送星期
-            int period = dateUtil.getPeriod();
             String pushTime = parameterList.getPushTime();
             String week = dateUtil.getWeek(pushTime);
+            int period = dateUtil.getPeriod(Integer.parseInt(pushTime));
 
             // 推送前刷新一遍课表
             courseInfoUtil.updateCourseInfo();
@@ -108,7 +109,7 @@ public class PushController {
 
             // 根据推送时间设置标题
             if (pushTime.equals("1")) {
-                title = "\uD83C\uDF08晚上好~明天是本学期的 第" + (period + 1) + "周 " + week;
+                title = "\uD83C\uDF08晚上好~明天是本学期的 第" + period + "周 " + week;
             } else {
                 title = "\uD83C\uDF08早上好~今天是 " + parameterList.getWeatherVo().getDate() + " " + week;
             }

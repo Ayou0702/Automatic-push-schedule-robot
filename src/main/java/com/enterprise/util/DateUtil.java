@@ -129,13 +129,13 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public int getPeriod () {
+    public int getPeriod (int pushTime) {
         int periods;
         String date = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
 
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting"), date);
 
-        int period = periods / 7 + 1;
+        int period = (periods + pushTime) / 7 + 1;
 
 
         // 调试，用于指定周数与当前星期
@@ -157,7 +157,7 @@ public class DateUtil {
 
         return period;
     }
-    
+
     /**
      * 根据日期判断当前星期
      *
