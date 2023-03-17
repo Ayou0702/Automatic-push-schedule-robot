@@ -11,12 +11,14 @@ import javax.annotation.Resource;
  * 定时调用类
  *
  * @author Iwlthxcl
- * @version 1.0
- * @time 2023/3/8 16:40
+ * @version 1.1
+ * @time 2023/3/17 15:50
  */
 @Configuration
-// 自动任务配置
 public class ScheduledConfig {
+
+    final String nightPushMode = "1";
+    final String dayPushMode = "0";
 
     @Resource
     EnterpriseDataServiceImpl enterpriseDataService;
@@ -27,8 +29,8 @@ public class ScheduledConfig {
      * 每天的17:30触发推送
      */
     @Scheduled(cron = "0 30 17 ? * *")
-    public void scheduledPushCourseNight () {
-        if (enterpriseDataService.queryingEnterpriseData("pushTime").equals("1")) {
+    public void scheduledPushCourseNight() {
+        if (nightPushMode.equals(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
             pushController.pushCourse();
         }
     }
@@ -37,8 +39,8 @@ public class ScheduledConfig {
      * 每天的7:45触发推送
      */
     @Scheduled(cron = "0 45 7 ? * *")
-    public void scheduledPushCourseDay () {
-        if (enterpriseDataService.queryingEnterpriseData("pushTime").equals("0")) {
+    public void scheduledPushCourseDay() {
+        if (dayPushMode.equals(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
             pushController.pushCourse();
         }
     }

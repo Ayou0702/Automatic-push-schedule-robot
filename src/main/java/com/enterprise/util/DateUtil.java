@@ -15,16 +15,23 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author Iwlthxcl
- * @version 1.0
- * @time 2023/3/8 16:58
+ * @version 1.1
+ * @time 2023/3/17 15:56
  */
 @Component
 public class DateUtil {
 
-    // 格式化
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    // 工具类
+    /**
+     * 格式化
+     */
+    final static ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+    /**
+     * 最大周数
+     */
+    final int periodMax = 23;
+    /**
+     * 工具类
+     */
     @Resource
     private EnterpriseDataServiceImpl enterpriseDataService;
 
@@ -39,7 +46,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static String formatDate (Date date, String format) {
+    public static String formatDate(Date date, String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(date);
     }
@@ -54,7 +61,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static int getW (Date dt) {
+    public static int getW(Date dt) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dt);
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
@@ -75,14 +82,14 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static int daysBetween (String startDateString, String endDateString) {
+    public static int daysBetween(String startDateString, String endDateString) {
         long nd = 1000 * 24 * 60 * 60;
 
         // 转换时间格式
         Date startDate, endDate;
         try {
-            startDate = simpleDateFormat.parse(startDateString);
-            endDate = simpleDateFormat.parse(endDateString);
+            startDate = LOCAL_FORMAT.get().parse(startDateString);
+            endDate = LOCAL_FORMAT.get().parse(endDateString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -104,7 +111,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public static long getDiff (Date startDate, Date endDate) {
+    public static long getDiff(Date startDate, Date endDate) {
         return (endDate.getTime()) - (startDate.getTime());
     }
 
@@ -116,9 +123,9 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    static String getNow () {
+    static String getNow() {
         Date now = new Date(System.currentTimeMillis());
-        return simpleDateFormat.format(now);
+        return LOCAL_FORMAT.get().format(now);
     }
 
     /**
@@ -129,7 +136,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public int getPeriod (int pushTime) {
+    public int getPeriod(int pushTime) {
         int periods;
         String date = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
 
@@ -147,7 +154,7 @@ public class DateUtil {
         }
 
         // 周数校验
-        if (abs(period) > 23) {
+        if (abs(period) > periodMax) {
             period = 0;
             System.out.println("错误：周数超过课表最大周数限制，将会引发数组越界错误，已归零");
         } else if (period < 0) {
@@ -168,7 +175,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public String getWeek (String pushTime) {
+    public String getWeek(String pushTime) {
 
         String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
@@ -177,7 +184,9 @@ public class DateUtil {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(System.currentTimeMillis()));
             int w = cal.get(Calendar.DAY_OF_WEEK) - 1 + Integer.parseInt(pushTime);
-            if (w < 0) w = 0;
+            if (w < 0) {
+                w = 0;
+            }
             return week[w];
         }
 

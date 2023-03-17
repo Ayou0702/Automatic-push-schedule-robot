@@ -17,15 +17,30 @@ import static java.util.Objects.isNull;
  * 获取课程信息的工具类
  *
  * @author Iwlthxcl
- * @version 1.0
- * @time 2023/3/8 16:56
+ * @version 1.1
+ * @time 2023/3/17 15:56
  */
 @Component
 public class CourseInfoUtil {
 
-    // 五大节课程实体类
+    /**
+     * 最大周数、星期、节数
+     */
+    final int periodMax = 23;
+    final int weekMax = 8;
+    final int sectionMax = 6;
+    final String debugPushMode = "3";
+    /**
+     * 分割字符
+     */
+    final String splitString = "-";
+    /**
+     * 五大节课程实体类
+     */
     final CourseSectionVo courseSectionVo = new CourseSectionVo();
-    // 声明课表数组
+    /**
+     * 声明课表数组
+     */
     CourseInfo[][][] schedule;
 
     /**
@@ -42,10 +57,10 @@ public class CourseInfoUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:56
      */
-    public void updateCourseInfo () {
+    public void updateCourseInfo() {
 
         // 创建并清空课表数据
-        schedule = new CourseInfo[23][8][6];
+        schedule = new CourseInfo[periodMax][weekMax][sectionMax];
 
         // 获取课程数据
         List<CourseInfo> temp = getCourseInfos();
@@ -65,7 +80,7 @@ public class CourseInfoUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:56
      */
-    public List<CourseInfo> getCourseInfos () {
+    public List<CourseInfo> getCourseInfos() {
 
         // 通过Service层获取数据
         return courseInfoService.queryCourse();
@@ -80,7 +95,7 @@ public class CourseInfoUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:57
      */
-    public void createClassSchedule (CourseInfo courseInfo) {
+    public void createClassSchedule(CourseInfo courseInfo) {
 
         // 读取每个课表数据中的开始时间和结束时间
         CourseStartAndEndTimeVo period = getClassTime(courseInfo.getCoursePeriod());
@@ -120,13 +135,13 @@ public class CourseInfoUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:57
      */
-    public CourseStartAndEndTimeVo getClassTime (String classStringTime) {
+    public CourseStartAndEndTimeVo getClassTime(String classStringTime) {
 
         // 开始时间与结束时间实体类
         CourseStartAndEndTimeVo courseStartAndEndTimeVo = new CourseStartAndEndTimeVo();
 
         // 判断是否属于时间段
-        if (classStringTime.contains("-")) {
+        if (classStringTime.contains(splitString)) {
 
             // 以 "-" 符号分割开始时间与结束时间
             String[] temp = classStringTime.split("-");
@@ -159,7 +174,7 @@ public class CourseInfoUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:57
      */
-    public CourseSectionVo getCourse (int period, String pushTime) {
+    public CourseSectionVo getCourse(int period, String pushTime) {
 
         // 根据当前日期获取星期
         int week = (DateUtil.getW(new Date()) % 7);
@@ -179,10 +194,10 @@ public class CourseInfoUtil {
         // 根据推送时间偏移星期
         week = (week + Integer.parseInt(pushTime)) % 7;
 
-        // 判断是否是debug中，如是则不计算专业课程数
-        if (enterpriseDataService.queryingEnterpriseData("departmentId").equals("1")) {
+        // 判断是否是debug中，如不是则计算专业课程数
+        if (!debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
             // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
-            for (int i = 1; i < 5; i++) {
+            for (int i = 1; i < sectionMax - 1; i++) {
                 // 非空判断
                 if (schedule[period][week][i] != null) {
                     // 专业课程判断
@@ -216,9 +231,9 @@ public class CourseInfoUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public void extracted () {
+    public void extracted() {
         // 判断是否是debug中，如是则不计算课程数
-        if (enterpriseDataService.queryingEnterpriseData("departmentId").equals("3")) {
+        if (debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
             return;
         }
         // 获取当前总课程数

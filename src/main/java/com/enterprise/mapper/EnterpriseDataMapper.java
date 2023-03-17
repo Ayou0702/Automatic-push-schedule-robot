@@ -25,17 +25,18 @@ public interface EnterpriseDataMapper {
      * @time 2023/3/8 16:49
      */
     @Select("SELECT data_value FROM enterprise_data WHERE `data_name` = #{dataName}")
-    String queryingEnterpriseData (String dataName);
+    String queryingEnterpriseData(String dataName);
 
     /**
      * 修改enterpriseData表中的配置数据
      *
      * @param dataName  要修改的参数名称
      * @param dataValue 要修改的参数值
+     * @return 返回受影响的行数，用以判断是否修改成功
      *
      * @author Iwlthxcl
      * @time 2023/3/8 16:49
      */
     @Update("UPDATE enterprise_data SET `data_value`=#{dataValue} WHERE `data_name` = #{dataName}")
-    int updateEnterpriseData (String dataName, String dataValue);
+    int updateEnterpriseData(String dataName, String dataValue);
 }

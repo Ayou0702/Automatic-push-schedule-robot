@@ -17,10 +17,12 @@ import static com.enterprise.config.WxConfig.getAccessToken;
  * 获取推送所需参数的api工具类
  *
  * @author Iwlthxcl
- * @version 1.0
- * @time 2023/3/8 16:55
+ * @version 1.1
+ * @time 2023/3/17 15:56
  */
 public class ApiUtil {
+
+    static final String NIGHT_PUSH_MODE = "1";
 
     /**
      * 获取部门id下所有成员的列表
@@ -32,7 +34,7 @@ public class ApiUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:55
      */
-    public static String getParticipants (EnterpriseDataServiceImpl enterpriseDataService) {
+    public static String getParticipants(EnterpriseDataServiceImpl enterpriseDataService) {
 
         // 固定请求地址，详见 https://developer.work.weixin.qq.com/document/path/90200
         String url = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=";
@@ -81,7 +83,7 @@ public class ApiUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:55
      */
-    public static String getCaiHongPi (String key) {
+    public static String getCaiHongPi(String key) {
 
         // 固定请求地址，详见 https://www.tianapi.com/apiview/181
         String url = "https://api.tianapi.com/pyqwenan/index?key=";
@@ -117,7 +119,7 @@ public class ApiUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:56
      */
-    public static WeatherVo getWeather (String key, String city, String type) {
+    public static WeatherVo getWeather(String key, String city, String type) {
 
         JSONObject jsonObject;
         // 固定请求地址，详见 https://www.tianapi.com/apiview/72
@@ -130,7 +132,7 @@ public class ApiUtil {
             jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city));
             assert jsonObject != null;
             weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(Integer.parseInt(type)).toString(), WeatherVo.class);
-            System.out.println(type.equals("1") ? "当前推送的是明日天气" : "当前推送的是今日天气");
+            System.out.println(NIGHT_PUSH_MODE.equals(type) ? "当前推送的是明日天气" : "当前推送的是今日天气");
         } catch (IOException e) {
             e.printStackTrace();
         }

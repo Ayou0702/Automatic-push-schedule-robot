@@ -17,18 +17,18 @@ import java.io.IOException;
 /**
  * http工具类
  * @author Iwlthxcl
- * @version 1.0
+ * @version 1.1
  * @time 2023/3/8 16:36
  */
 public class HttpUtil {
 
-    static final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-    static final ConnectionKeepAliveStrategy myStrategy;
+    static final PoolingHttpClientConnectionManager CONNECTION_MANAGER = new PoolingHttpClientConnectionManager();
+    static final ConnectionKeepAliveStrategy MY_STRATEGY;
 
     static {
-        connectionManager.setMaxTotal(1000);
-        connectionManager.setDefaultMaxPerRoute(1000);
-        myStrategy = (response, context) -> {
+        CONNECTION_MANAGER.setMaxTotal(1000);
+        CONNECTION_MANAGER.setDefaultMaxPerRoute(1000);
+        MY_STRATEGY = (response, context) -> {
             BasicHeaderElementIterator it = new BasicHeaderElementIterator(response.headerIterator("Keep-Alive"));
 
             String param, value;
@@ -42,7 +42,7 @@ public class HttpUtil {
                 HeaderElement he = it.nextElement();
                 param = he.getName();
                 value = he.getValue();
-            } while (value == null || !param.equalsIgnoreCase("timeout"));
+            } while (value == null || !"timeout".equalsIgnoreCase(param));
 
             return Long.parseLong(value) * 1000L;
         };
@@ -57,7 +57,7 @@ public class HttpUtil {
      * @return 将请求内容转换为String并返回
      * @throws IOException 可能存在IO异常
      */
-    public static String getUrl (String url) throws IOException {
+    public static String getUrl(String url) throws IOException {
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
