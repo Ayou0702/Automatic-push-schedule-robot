@@ -12,11 +12,9 @@ import java.util.Date;
 import static java.lang.Math.abs;
 
 /**
- * 日期工具类
- *
  * @author Iwlthxcl
- * @version 1.1
- * @time 2023/3/17 15:56
+ * @version 1.2
+ * @time 2023/3/17 21:22
  */
 @Component
 public class DateUtil {
@@ -36,22 +34,6 @@ public class DateUtil {
     private EnterpriseDataServiceImpl enterpriseDataService;
 
     /**
-     * 将Date对象转换为指定格式的字符串
-     *
-     * @param date   Date对象
-     * @param format v
-     *
-     * @return Date对象的字符串表达形式
-     *
-     * @author Iwlthxcl
-     * @time 2023/3/8 16:58
-     */
-    public static String formatDate(Date date, String format) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-        return dateFormat.format(date);
-    }
-
-    /**
      * 获取当前的星期
      *
      * @param dt 当前的日期
@@ -61,7 +43,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static int getW(Date dt) {
+    public static int getW (Date dt) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dt);
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
@@ -82,7 +64,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static int daysBetween(String startDateString, String endDateString) {
+    public static int daysBetween (String startDateString, String endDateString) {
         long nd = 1000 * 24 * 60 * 60;
 
         // 转换时间格式
@@ -111,7 +93,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public static long getDiff(Date startDate, Date endDate) {
+    public static long getDiff (Date startDate, Date endDate) {
         return (endDate.getTime()) - (startDate.getTime());
     }
 
@@ -123,7 +105,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    static String getNow() {
+    static String getNow () {
         Date now = new Date(System.currentTimeMillis());
         return LOCAL_FORMAT.get().format(now);
     }
@@ -136,9 +118,9 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public int getPeriod(int pushTime) {
+    public int getPeriod (int pushTime) {
         int periods;
-        String date = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
+        String date = LOCAL_FORMAT.get().format(new Date());
 
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting"), date);
 
@@ -175,7 +157,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public String getWeek(String pushTime) {
+    public String getWeek (String pushTime) {
 
         String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
