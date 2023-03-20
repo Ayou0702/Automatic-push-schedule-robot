@@ -43,7 +43,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static int getW (Date dt) {
+    public static int getW(Date dt) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dt);
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
@@ -64,7 +64,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:58
      */
-    public static int daysBetween (String startDateString, String endDateString) {
+    public static int daysBetween(String startDateString, String endDateString) {
         long nd = 1000 * 24 * 60 * 60;
 
         // 转换时间格式
@@ -93,7 +93,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public static long getDiff (Date startDate, Date endDate) {
+    public static long getDiff(Date startDate, Date endDate) {
         return (endDate.getTime()) - (startDate.getTime());
     }
 
@@ -105,7 +105,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    static String getNow () {
+    static String getNow() {
         Date now = new Date(System.currentTimeMillis());
         return LOCAL_FORMAT.get().format(now);
     }
@@ -118,13 +118,16 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public int getPeriod (int pushTime) {
-        int periods;
+    public int getPeriod(int pushTime) {
+        int period, periods;
         String date = LOCAL_FORMAT.get().format(new Date());
 
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting"), date);
 
-        int period = (periods + pushTime) / 7 + 1;
+        period = (periods + pushTime) / 7;
+        if ((periods + pushTime) % 7 != 0) {
+            period++;
+        }
 
 
         // 调试，用于指定周数与当前星期
@@ -157,7 +160,7 @@ public class DateUtil {
      * @author Iwlthxcl
      * @time 2023/3/8 16:59
      */
-    public String getWeek (String pushTime) {
+    public String getWeek(String pushTime) {
 
         String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {

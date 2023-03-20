@@ -34,7 +34,7 @@ public class WxConfig {
      * @author Iwlthxcl
      * @time 2023/3/8 16:41
      */
-    public static WxCpService getWxCpService (EnterpriseDataServiceImpl enterpriseDataService) {
+    public static WxCpService getWxCpService(EnterpriseDataServiceImpl enterpriseDataService) {
 
         WxCpService wxCpService = new WxCpServiceImpl();
         WxCpDefaultConfigImpl config = getWxCpDefaultConfig(enterpriseDataService);
@@ -55,7 +55,7 @@ public class WxConfig {
      * @author Iwlthxcl
      * @time 2023/3/8 16:42
      */
-    private static WxCpDefaultConfigImpl getWxCpDefaultConfig (EnterpriseDataServiceImpl enterpriseDataService) {
+    private static WxCpDefaultConfigImpl getWxCpDefaultConfig(EnterpriseDataServiceImpl enterpriseDataService) {
 
         WxCpDefaultConfigImpl config = new WxCpDefaultConfigImpl();
 
@@ -77,7 +77,7 @@ public class WxConfig {
      * @author Iwlthxcl
      * @time 2023/3/8 16:43
      */
-    public static void resetTokenAndJsApi (WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig, EnterpriseDataServiceImpl enterpriseDataService) {
+    public static void resetTokenAndJsApi(WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig, EnterpriseDataServiceImpl enterpriseDataService) {
         // 配置redis
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(8);
@@ -118,20 +118,21 @@ public class WxConfig {
      * 此方法无需调用主服务，无需传参
      *
      * @return 返回token
+     * @deprecated 第一次运行会导致accessToken为null，弃用
      */
-    public static String getAccessToken () {
+    public static String getAccessToken() {
         return accessToken;
     }
 
     /**
      * 获取token明文
-     * 此方法需要调用主服务，需要传参，已弃用
+     * 此方法需要调用主服务，需要传参
      *
      * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
      *
      * @return 返回token
      */
-    public static String getAccessToken (EnterpriseDataServiceImpl enterpriseDataService) {
+    public static String getAccessToken(EnterpriseDataServiceImpl enterpriseDataService) {
         WxCpService wxCpService = getWxCpService(enterpriseDataService);
         wxCpService.setWxCpConfigStorage(getWxCpDefaultConfig(enterpriseDataService));
         try {

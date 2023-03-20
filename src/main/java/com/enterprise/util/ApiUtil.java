@@ -41,7 +41,7 @@ public class ApiUtil {
 
         try {
             // 发送GET请求
-            String sendGet = HttpUtil.getUrl(url + getAccessToken() + "&department_id=" + enterpriseDataService.queryingEnterpriseData("departmentId"));
+            String sendGet = HttpUtil.getUrl(url + getAccessToken(enterpriseDataService) + "&department_id=" + enterpriseDataService.queryingEnterpriseData("departmentId"));
 
             // 转换返回json数据
             JSONObject jsonObject = JSONObject.parseObject(sendGet);
