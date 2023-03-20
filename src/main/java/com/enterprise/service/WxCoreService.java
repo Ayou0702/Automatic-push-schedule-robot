@@ -1,16 +1,17 @@
-package com.enterprise.config;
+package com.enterprise.service;
 
 import com.alibaba.fastjson.JSON;
-import com.enterprise.service.EnterpriseDataServiceImpl;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.api.impl.WxCpServiceImpl;
 import me.chanjar.weixin.cp.config.impl.WxCpDefaultConfigImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import javax.annotation.Resource;
 
 /**
  * 企业微信主服务
@@ -18,26 +19,31 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author Iwlthxcl
  * @version 1.0
  */
-@Component
-public class WxConfig {
+@Service
+public class WxCoreService {
 
-    static String accessToken = null;
+    String accessToken = null;
+
+    /**
+     * enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     */
+    @Resource
+    EnterpriseDataServiceImpl enterpriseDataService;
 
     /**
      * 核心服务
      *
      * @author Iwlthxcl
      *
-     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
      * @return 返回写入了agentId、secret、corpId、token配置的一个WxCpService类型的对象
      */
-    public static  WxCpService getWxCpService(EnterpriseDataServiceImpl enterpriseDataService) {
+    public WxCpService getWxCpService() {
 
         WxCpService wxCpService = new WxCpServiceImpl();
-        WxCpDefaultConfigImpl config = getWxCpDefaultConfig(enterpriseDataService);
+        WxCpDefaultConfigImpl config = getWxCpDefaultConfig();
 
         // 配置token
-        resetTokenAndJsApi(wxCpService, config, enterpriseDataService);
+        resetTokenAndJsApi(wxCpService, config);
 
         return wxCpService;
     }
@@ -47,10 +53,9 @@ public class WxConfig {
      *
      * @author Iwlthxcl
      *
-     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
      * @return 返回写入了agentId、secret、corpId配置的一个WxCpDefaultConfigImpl类型的对象
      */
-    private static WxCpDefaultConfigImpl getWxCpDefaultConfig(EnterpriseDataServiceImpl enterpriseDataService) {
+    private WxCpDefaultConfigImpl getWxCpDefaultConfig() {
 
         WxCpDefaultConfigImpl config = new WxCpDefaultConfigImpl();
 
@@ -69,9 +74,8 @@ public class WxConfig {
      *
      * @param wxCpService 企业微信主服务对象
      * @param wxCpDefaultConfig 企业微信配置
-     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
      */
-    public static void resetTokenAndJsApi(WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig, EnterpriseDataServiceImpl enterpriseDataService) {
+    public void resetTokenAndJsApi(WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig) {
         // 配置redis
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(8);
@@ -109,30 +113,15 @@ public class WxConfig {
 
     /**
      * 获取token明文
-     * 此方法无需调用主服务，无需传参
-     *
-     * @author Iwlthxcl
-     *
-     * @return 返回token
-     * @deprecated 第一次运行会导致accessToken为null，弃用
-     */
-    public static String getAccessToken() {
-        return accessToken;
-    }
-
-
-    /**
-     * 获取token明文
      * 此方法需要调用主服务，需要传参
      *
      * @author Iwlthxcl
      *
-     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
      * @return 返回token
      */
-    public static String getAccessToken(EnterpriseDataServiceImpl enterpriseDataService) {
-        WxCpService wxCpService = getWxCpService(enterpriseDataService);
-        wxCpService.setWxCpConfigStorage(getWxCpDefaultConfig(enterpriseDataService));
+    public String getAccessToken() {
+        WxCpService wxCpService = getWxCpService();
+        wxCpService.setWxCpConfigStorage(getWxCpDefaultConfig());
         try {
             accessToken = wxCpService.getAccessToken(false);
         } catch (WxErrorException e) {

@@ -12,8 +12,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.enterprise.config.WxConfig.getWxCpService;
-
 /**
  * 快速构建并发送消息类
  *
@@ -22,7 +20,7 @@ import static com.enterprise.config.WxConfig.getWxCpService;
  */
 @Service
 @Slf4j
-public class SendMessageImpl {
+public class SendMessageService {
 
     /**
      * 工具类
@@ -30,6 +28,11 @@ public class SendMessageImpl {
     @Resource
     EnterpriseDataServiceImpl enterpriseDataService;
 
+    @Resource
+    WxCoreService wxCoreService;
+
+    @Resource
+    ApiUtil apiUtil;
     /**
      * 用于构建并发送课程相关消息
      *
@@ -42,13 +45,13 @@ public class SendMessageImpl {
 
         try {
             // 微信消息对象
-            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(getWxCpService(enterpriseDataService));
+            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(wxCoreService.getWxCpService());
             WxCpMessage pushCourse = new WxCpMessage();
             pushCourse.setSafe("0");
             // 设置消息类型
             pushCourse.setMsgType("textcard");
             // 设置发送用户
-            pushCourse.setToUser(ApiUtil.getParticipants(enterpriseDataService));
+            pushCourse.setToUser(apiUtil.getParticipants(enterpriseDataService));
             // 发送的标题
             pushCourse.setTitle(title);
             // 发送内容
@@ -74,13 +77,13 @@ public class SendMessageImpl {
     public void sendTextMsg (String message) {
 
         try {
-            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(getWxCpService(enterpriseDataService));
+            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(wxCoreService.getWxCpService());
             WxCpMessage textMsg = new WxCpMessage();
             textMsg.setSafe("0");
             // 设置消息类型
             textMsg.setMsgType("text");
             // 设置发送用户
-            textMsg.setToUser(ApiUtil.getParticipants(enterpriseDataService));
+            textMsg.setToUser(apiUtil.getParticipants(enterpriseDataService));
             textMsg.setContent(message);
             wxCpMessageService.send(textMsg);
             log.info(textMsg.toString());
@@ -102,13 +105,13 @@ public class SendMessageImpl {
 
         try {
             // 微信消息对象
-            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(getWxCpService(enterpriseDataService));
+            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(wxCoreService.getWxCpService());
             WxCpMessage newsMsg = new WxCpMessage();
             newsMsg.setSafe("0");
             // 设置消息类型
             newsMsg.setMsgType("news");
             // 设置发送用户
-            newsMsg.setToUser(ApiUtil.getParticipants(enterpriseDataService));
+            newsMsg.setToUser(apiUtil.getParticipants(enterpriseDataService));
 
             List<NewArticle> articlesList = new ArrayList<>();
             NewArticle newArticle = new NewArticle();

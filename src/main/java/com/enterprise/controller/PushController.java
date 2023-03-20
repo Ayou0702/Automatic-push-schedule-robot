@@ -4,7 +4,7 @@ import com.enterprise.entity.CourseInfo;
 import com.enterprise.entity.vo.CourseSectionVo;
 import com.enterprise.entity.vo.ParameterListVo;
 import com.enterprise.service.EnterpriseDataServiceImpl;
-import com.enterprise.service.SendMessageImpl;
+import com.enterprise.service.SendMessageService;
 import com.enterprise.util.CourseInfoUtil;
 import com.enterprise.util.DateUtil;
 import com.enterprise.util.PushDataUtil;
@@ -52,7 +52,7 @@ public class PushController {
      */
     String title;
     @Resource
-    private SendMessageImpl sendMessage;
+    private SendMessageService sendMessage;
 
     /**
      * 课程推送主方法
