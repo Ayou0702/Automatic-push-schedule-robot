@@ -10,7 +10,6 @@ import javax.annotation.Resource;
  *
  * @author Iwlthxcl
  * @version 1.0
- * @time 2023/3/8 16:53
  */
 @Service
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
@@ -24,12 +23,10 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
     /**
      * 获取指定名称的数据
      *
-     * @param dataName 要获取的参数名称
-     *
-     * @return 返回参数值
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:53
+     *
+     * @param dataName 要获取的参数名称
+     * @return 返回参数值
      */
     @Override
     public String queryingEnterpriseData (String dataName) {
@@ -39,11 +36,10 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
     /**
      * 修改指定名称的数据
      *
-     * @param dataName  要修改的参数名称
-     * @param dataValue 要修改的参数值
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:54
+     *
+     * @param dataName 要修改的参数名称
+     * @param dataValue 要修改的参数值
      */
     @Override
     public void updateEnterpriseData (String dataName, String dataValue) {

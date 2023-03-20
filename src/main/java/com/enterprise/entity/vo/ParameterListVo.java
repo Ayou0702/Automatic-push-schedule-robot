@@ -6,8 +6,7 @@ import lombok.Data;
  * 推送参数
  *
  * @author Iwlthxcl
- * @version 1.0
- * @time 2023/3/8 16:47
+ * @version 1.1
  */
 @Data
 public class ParameterListVo {
@@ -35,6 +34,6 @@ public class ParameterListVo {
     /**
      * 推送时间
      */
-    private String pushTime;
+    private int pushTime;
 
 }

@@ -17,8 +17,7 @@ import static java.util.Objects.isNull;
  * 获取课程信息的工具类
  *
  * @author Iwlthxcl
- * @version 1.1
- * @time 2023/3/17 15:56
+ * @version 1.2
  */
 @Component
 public class CourseInfoUtil {
@@ -55,7 +54,6 @@ public class CourseInfoUtil {
      * 更新课表数据
      *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:56
      */
     public void updateCourseInfo() {
 
@@ -75,10 +73,9 @@ public class CourseInfoUtil {
     /**
      * 获取所有课程数据
      *
-     * @return 返回课程数据
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:56
+     *
+     * @return 返回课程数据
      */
     public List<CourseInfo> getCourseInfos() {
 
@@ -90,10 +87,9 @@ public class CourseInfoUtil {
     /**
      * 通过for循环将课表数据按照上课时间填入数组中
      *
-     * @param courseInfo 课表数据
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:57
+     *
+     * @param courseInfo 课表数据
      */
     public void createClassSchedule(CourseInfo courseInfo) {
 
@@ -128,12 +124,10 @@ public class CourseInfoUtil {
     /**
      * 通过split方法分割开始时间与结束时间
      *
-     * @param classStringTime 上课时间数据
-     *
-     * @return 返回两个int型的数据作为开始时间与结束时间
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:57
+     *
+     * @param classStringTime 上课时间数据
+     * @return 返回两个int型的数据作为开始时间与结束时间
      */
     public CourseStartAndEndTimeVo getClassTime(String classStringTime) {
 
@@ -166,18 +160,16 @@ public class CourseInfoUtil {
     /**
      * 封装五大节课程数据
      *
-     * @param period   当前周期
-     * @param pushTime 推送时间
-     *
-     * @return 返回封装好的五大节课程数据
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:57
+     *
+     * @param period 当前周期
+     * @param pushTime 推送时间
+     * @return 返回封装好的五大节课程数据
      */
-    public CourseSectionVo getCourse(int period, String pushTime) {
+    public CourseSectionVo getCourse(int period, int pushTime) {
 
         // 根据当前日期获取星期
-        int week = (DateUtil.getW(new Date()) % 7);
+        int week = (DateUtil.getW(new Date()) % 7) + pushTime;
 
         // 判断是否需要调试星期
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
@@ -192,7 +184,7 @@ public class CourseInfoUtil {
         }
 
         // 根据推送时间偏移星期
-        week = (week + Integer.parseInt(pushTime)) % 7;
+        week = (week + pushTime) % 7;
 
         // 判断是否是debug中，如不是则计算专业课程数
         if (!debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
@@ -229,7 +221,6 @@ public class CourseInfoUtil {
      * 统计总课程数
      *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:58
      */
     public void extracted() {
         // 判断是否是debug中，如是则不计算课程数

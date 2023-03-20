@@ -12,9 +12,10 @@ import java.util.Date;
 import static java.lang.Math.abs;
 
 /**
+ * 日期工具类
+ *
  * @author Iwlthxcl
- * @version 1.2
- * @time 2023/3/17 21:22
+ * @version 1.3
  */
 @Component
 public class DateUtil {
@@ -36,12 +37,10 @@ public class DateUtil {
     /**
      * 获取当前的星期
      *
-     * @param dt 当前的日期
-     *
-     * @return 当前的星期
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:58
+     *
+     * @param dt 当前的日期
+     * @return 当前的星期
      */
     public static int getW(Date dt) {
         Calendar cal = Calendar.getInstance();
@@ -56,13 +55,11 @@ public class DateUtil {
     /**
      * 计算两个日期(String类型)之间相差多少天
      *
-     * @param startDateString 开始日期(String类型)
-     * @param endDateString   结束日期(String类型)
-     *
-     * @return 返回相差的天数(String类型)
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:58
+     *
+     * @param startDateString 开始日期(String类型)
+     * @param endDateString 结束日期(String类型)
+     * @return 返回相差的天数(String类型)
      */
     public static int daysBetween(String startDateString, String endDateString) {
         long nd = 1000 * 24 * 60 * 60;
@@ -85,13 +82,11 @@ public class DateUtil {
     /**
      * 计算两个日期(Date类型)之间相差多少天
      *
-     * @param startDate 开始日期(String类型)
-     * @param endDate   结束日期(String类型)
-     *
-     * @return 返回相差的天数(long类型)
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:59
+     *
+     * @param startDate 开始日期(String类型)
+     * @param endDate 结束日期(String类型)
+     * @return 返回相差的天数(long类型)
      */
     public static long getDiff(Date startDate, Date endDate) {
         return (endDate.getTime()) - (startDate.getTime());
@@ -100,10 +95,9 @@ public class DateUtil {
     /**
      * 获取当前日期(String类型)
      *
-     * @return 当前日期(String类型)
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:59
+     *
+     * @return 当前日期(String类型)
      */
     static String getNow() {
         Date now = new Date(System.currentTimeMillis());
@@ -113,10 +107,10 @@ public class DateUtil {
     /**
      * 获取当前周数(int类型)
      *
-     * @return 当前周数(int类型)
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:59
+     *
+     * @param pushTime 推送模式
+     * @return 当前周数(int类型)
      */
     public int getPeriod(int pushTime) {
         int period, periods;
@@ -124,11 +118,7 @@ public class DateUtil {
 
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting"), date);
 
-        period = (periods + pushTime) / 7;
-        // 使用if判断来取代ceil函数
-        if ((periods + pushTime) % 7 != 0) {
-            period++;
-        }
+        period = ((periods + pushTime) / 7) + 1;
 
 
         // 调试，用于指定周数与当前星期
@@ -154,22 +144,20 @@ public class DateUtil {
     /**
      * 根据日期判断当前星期
      *
-     * @param pushTime 当前日期
-     *
-     * @return 返回当前星期
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:59
+     *
+     * @param pushTime 当前日期
+     * @return 返回当前星期
      */
-    public String getWeek(String pushTime) {
+    public String getWeek(int pushTime) {
 
         String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
-            return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek")) + Integer.parseInt(pushTime)) % 7];
+            return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek")) + pushTime) % 7];
         } else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(System.currentTimeMillis()));
-            int w = cal.get(Calendar.DAY_OF_WEEK) - 1 + Integer.parseInt(pushTime);
+            int w = cal.get(Calendar.DAY_OF_WEEK) - 1 + pushTime;
             if (w < 0) {
                 w = 0;
             }

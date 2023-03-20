@@ -24,15 +24,14 @@ import static java.util.Objects.isNull;
  * 推送服务
  *
  * @author Iwlthxcl
- * @version 1.1
- * @time 2023/3/17 15:11
+ * @version 1.2
  */
 @RestController
 public class PushController {
 
     final String debugPushMode = "3";
 
-    final String nightPushMode = "1";
+    final int nightPushMode = 1;
     /**
      * 工具类
      */
@@ -59,7 +58,6 @@ public class PushController {
      * 课程推送主方法
      *
      * @author Iwlthxcl
-     * @time 2023/3/17 15:15
      */
     @GetMapping("/pushCourse")
     public void pushCourse() {
@@ -76,9 +74,9 @@ public class PushController {
             System.out.println("开学天数：" + parameterList.getDateStarting());
 
             // 计算当前推送周期、获取推送时间、计算当前推送星期
-            String pushTime = parameterList.getPushTime();
+            int pushTime = parameterList.getPushTime();
             String week = dateUtil.getWeek(pushTime);
-            int period = dateUtil.getPeriod(Integer.parseInt(pushTime));
+            int period = dateUtil.getPeriod(pushTime);
 
             // 推送前刷新一遍课表
             courseInfoUtil.updateCourseInfo();
@@ -101,17 +99,18 @@ public class PushController {
             }
 
             // 根据推送时间设置标题
-            if (nightPushMode.equals(pushTime)) {
-                title = "\uD83C\uDF08晚上好~明天是本学期的 第" + period + "周 " + week;
+            if (nightPushMode == pushTime) {
+                title = "\uD83C\uDF08晚上好~明天是";
             } else {
-                title = "\uD83C\uDF08早上好~今天是 " + parameterList.getWeatherVo().getDate() + " " + week;
+                title = "\uD83C\uDF08早上好~今天是";
             }
 
+            title = title + parameterList.getWeatherVo().getDate() + " 第" + period + "周 " + week;
             // 消息内容
             // 天气非空判断
             if (parameterList.getWeatherVo() != null) {
                 // 根据推送时间判断天气推送提示
-                message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(nightPushMode.equals(parameterList.getPushTime()) ? "明日" : "今日").append("天气");
+                message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(nightPushMode == pushTime ? "明日" : "今日").append("天气");
                 message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getWeather());
                 message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("~").append(parameterList.getWeatherVo().getHighest()).append("\n");
 
@@ -132,7 +131,7 @@ public class PushController {
             if (parameterList.getDateEnding() == 1) {
                 message.append("\n\n\uD83C\uDF92明天就放假咯~");
             } else {
-                message.append("\n\uD83C\uDFC1距离放假还有").append(parameterList.getDateEnding()).append("天");
+                message.append("\n\uD83C\uDFC1距离放假还有").append(parameterList.getDateEnding() - pushTime).append("天");
             }
 
             // 彩虹屁非空判断
@@ -153,13 +152,13 @@ public class PushController {
 
     }
 
+
     /**
      * 五大节课程非空判断、统计早晚课天数与总课程数
      *
-     * @param message 传入的message
-     *
      * @author Iwlthxcl
-     * @time 2023/3/17 15:20
+     *
+     * @param message 传入的message
      */
     private void courseSet(StringBuilder message) {
         if (!isNull(courseSectionVo.getFirst())) {
@@ -198,7 +197,7 @@ public class PushController {
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFifth().getCourseVenue()).append("\n");
 
             // 判断是否是debug中，如是则不计算晚课天数
-            if (nightPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+            if (!debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
                 // 晚课天数统计
                 int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays"));
                 temp++;
@@ -209,13 +208,12 @@ public class PushController {
     }
 
     /**
+     * 开学日推送
      *
+     * @author Iwlthxcl
      *
      * @param parameterList 传入的参数列表
      * @param message 传入的message
-     *
-     * @author Iwlthxcl
-     * @time 2023/3/17 15:17
      */
     private void startPush(ParameterListVo parameterList, StringBuilder message) {
         System.out.println("开学日期" + parameterList.getDateStarting());
@@ -245,13 +243,12 @@ public class PushController {
     }
 
     /**
-     * 假日推送方法
+     * 假日推送
+     *
+     * @author Iwlthxcl
      *
      * @param parameterList 传入的参数列表
      * @param message 传入的message
-     *
-     * @author Iwlthxcl
-     * @time 2023/3/17 15:08
      */
     private void vacationPush(ParameterListVo parameterList, StringBuilder message) {
         title = "\uD83C\uDFC1本学期的课程到此结束啦，一起来回顾一下吧";
@@ -274,10 +271,9 @@ public class PushController {
     /**
      * 推送纯文本消息
      *
-     * @param message 需要推送的消息内容
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:46
+     *
+     * @param message 需要推送的消息内容
      */
     @GetMapping("/pushTextMsg")
     public void pushTextMsg(String message) {
@@ -287,11 +283,10 @@ public class PushController {
     /**
      * 推送图文消息
      *
+     * @author Iwlthxcl
+     *
      * @param title 需要推送的消息标题
      * @param message 需要推送的消息内容
-     *
-     * @author Iwlthxcl
-     * @time 2023/3/8 16:46
      */
     @GetMapping("/pushConferenceMsg")
     public void pushConferenceMsg(String title, String message) {

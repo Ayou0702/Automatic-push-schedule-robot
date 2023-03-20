@@ -12,7 +12,6 @@ import javax.annotation.Resource;
  *
  * @author Iwlthxcl
  * @version 1.1
- * @time 2023/3/17 15:50
  */
 @Configuration
 public class ScheduledConfig {

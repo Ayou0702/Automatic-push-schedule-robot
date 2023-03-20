@@ -17,22 +17,19 @@ import static com.enterprise.config.WxConfig.getAccessToken;
  * 获取推送所需参数的api工具类
  *
  * @author Iwlthxcl
- * @version 1.1
- * @time 2023/3/17 15:56
+ * @version 1.2
  */
 public class ApiUtil {
 
-    static final String NIGHT_PUSH_MODE = "1";
+    static final int NIGHT_PUSH_MODE = 1;
 
     /**
      * 获取部门id下所有成员的列表
      *
-     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
-     *
-     * @return 返回一串拼接好的成员String
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:55
+     *
+     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     * @return 返回一串拼接好的成员String
      */
     public static String getParticipants(EnterpriseDataServiceImpl enterpriseDataService) {
 
@@ -76,12 +73,10 @@ public class ApiUtil {
     /**
      * 获取彩虹屁
      *
-     * @param key 天行数据彩虹屁api密钥
-     *
-     * @return 返回彩虹屁
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:55
+     *
+     * @param key 天行数据彩虹屁api密钥
+     * @return 返回彩虹屁
      */
     public static String getCaiHongPi(String key) {
 
@@ -110,16 +105,14 @@ public class ApiUtil {
     /**
      * 获取天气数据
      *
-     * @param key  天行数据天气预报api密钥
-     * @param city 需要预报的城市
-     * @param type 推送时间
-     *
-     * @return 返回天气实体对象
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 16:56
+     *
+     * @param key 天行数据天气预报api密钥
+     * @param city 需要预报的城市
+     * @param pushMode 推送时间
+     * @return 返回天气实体对象
      */
-    public static WeatherVo getWeather(String key, String city, String type) {
+    public static WeatherVo getWeather(String key, String city, int pushMode) {
 
         JSONObject jsonObject;
         // 固定请求地址，详见 https://www.tianapi.com/apiview/72
@@ -131,8 +124,8 @@ public class ApiUtil {
             // 根据推送时间获取天气
             jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city));
             assert jsonObject != null;
-            weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(Integer.parseInt(type)).toString(), WeatherVo.class);
-            System.out.println(NIGHT_PUSH_MODE.equals(type) ? "当前推送的是明日天气" : "当前推送的是今日天气");
+            weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(pushMode).toString(), WeatherVo.class);
+            System.out.println((NIGHT_PUSH_MODE == pushMode) ? "当前推送的是明日天气" : "当前推送的是今日天气");
         } catch (IOException e) {
             e.printStackTrace();
         }

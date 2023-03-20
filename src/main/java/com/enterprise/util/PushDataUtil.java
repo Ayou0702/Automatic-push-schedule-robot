@@ -13,8 +13,7 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author Iwlthxcl
- * @version 1.0
- * @time 2023/3/8 17:00
+ * @version 1.1
  */
 @Component
 public class PushDataUtil {
@@ -25,10 +24,9 @@ public class PushDataUtil {
     /**
      * 获取天气位置、彩虹屁api、开学日期、放假日期、推送时间并写入对象
      *
-     * @return 返回参数列表对象
-     *
      * @author Iwlthxcl
-     * @time 2023/3/8 17:00
+     *
+     * @return 返回参数列表对象
      */
     public ParameterListVo getParameterList () {
         // 参数列表实体类
@@ -39,7 +37,7 @@ public class PushDataUtil {
         String apiKey = enterpriseDataService.queryingEnterpriseData("apiKey");
         String dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding");
         String dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting");
-        String pushTime = enterpriseDataService.queryingEnterpriseData("pushTime");
+        int pushTime = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime"));
 
         // 写入推送时间用以共享给其他方法
         parameterList.setPushTime(pushTime);
@@ -59,7 +57,7 @@ public class PushDataUtil {
         }
         if (StringUtils.isNotEmpty(dateStarting)) {
             // 计算已经开学的天数,并根据推送时间偏移
-            parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + Integer.parseInt(parameterList.getPushTime())));
+            parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + parameterList.getPushTime()));
         }
 
         System.out.println("参数列表：" + parameterList);
