@@ -125,6 +125,7 @@ public class DateUtil {
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting"), date);
 
         period = (periods + pushTime) / 7;
+        // 使用if判断来取代ceil函数
         if ((periods + pushTime) % 7 != 0) {
             period++;
         }
