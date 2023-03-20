@@ -17,7 +17,7 @@ import static java.util.Objects.isNull;
  * 获取课程信息的工具类
  *
  * @author Iwlthxcl
- * @version 1.2
+ * @version 1.3
  */
 @Component
 public class CourseInfoUtil {
@@ -169,7 +169,7 @@ public class CourseInfoUtil {
     public CourseSectionVo getCourse(int period, int pushTime) {
 
         // 根据当前日期获取星期
-        int week = (DateUtil.getW(new Date()) % 7) + pushTime;
+        int week = DateUtil.getW(new Date()) % 7;
 
         // 判断是否需要调试星期
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {

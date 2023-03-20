@@ -17,7 +17,7 @@ import java.util.List;
  * 获取推送所需参数的api工具类
  *
  * @author Iwlthxcl
- * @version 1.2
+ * @version 1.4
  */
 @Component
 public class ApiUtil {

@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * 企业微信主服务
  *
  * @author Iwlthxcl
- * @version 1.0
+ * @version 1.2
  */
 @Service
 public class WxCoreService {
