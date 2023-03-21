@@ -29,7 +29,7 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
      * @return 返回参数值
      */
     @Override
-    public String queryingEnterpriseData (String dataName) {
+    public String queryingEnterpriseData(String dataName) {
         return enterpriseDataMapper.queryingEnterpriseData(dataName);
     }
 
@@ -42,7 +42,7 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
      * @param dataValue 要修改的参数值
      */
     @Override
-    public void updateEnterpriseData (String dataName, String dataValue) {
+    public void updateEnterpriseData(String dataName, String dataValue) {
 
         int state = enterpriseDataMapper.updateEnterpriseData(dataName, dataValue);
 

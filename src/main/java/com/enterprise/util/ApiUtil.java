@@ -3,10 +3,11 @@ package com.enterprise.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.enterprise.config.ScheduledConfig;
+import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.WxCoreService;
 import com.enterprise.entity.vo.UserListVo;
 import com.enterprise.entity.vo.WeatherVo;
-import com.enterprise.service.EnterpriseDataServiceImpl;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,61 +18,22 @@ import java.util.List;
  * 获取推送所需参数的api工具类
  *
  * @author Iwlthxcl
- * @version 1.4
+ * @version 1.5
  */
 @Component
 public class ApiUtil {
 
-    static final int NIGHT_PUSH_MODE = 1;
-
+    /**
+     * 微信核心服务
+     */
     @Resource
     WxCoreService wxCoreService;
+
     /**
-     * 获取部门id下所有成员的列表
-     *
-     * @author Iwlthxcl
-     *
-     * @param enterpriseDataService enterpriseData的接口实现类，用于读取查询企业微信配置数据
-     * @return 返回一串拼接好的成员String
+     * enterpriseData的接口，用于读取查询企业微信配置数据
      */
-    public String getParticipants(EnterpriseDataServiceImpl enterpriseDataService) {
-
-        // 固定请求地址，详见 https://developer.work.weixin.qq.com/document/path/90200
-        String url = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=";
-
-        try {
-            // 发送GET请求
-            String sendGet = HttpUtil.getUrl(url + wxCoreService.getAccessToken() + "&department_id=" + enterpriseDataService.queryingEnterpriseData("departmentId"));
-
-            // 转换返回json数据
-            JSONObject jsonObject = JSONObject.parseObject(sendGet);
-
-            // 判断是否请求成功
-            assert jsonObject != null;
-            if (jsonObject.getIntValue("errcode") == 0) {
-                // 截取userlist部门成员对象数组
-                JSONArray participants = jsonObject.getJSONArray("userlist");
-                // 通过部门成员类获取成员name与userid
-                List<UserListVo> userListVo = participants.toJavaList(UserListVo.class);
-
-                // 遍历拼接成员userid
-                StringBuilder temp = new StringBuilder();
-                for (UserListVo userlist : userListVo) {
-                    if (!temp.toString().isEmpty()) {
-                        temp.append("|");
-                    }
-                    temp.append(userlist.getUserid());
-                }
-                return temp.toString();
-            }
-            System.out.println("返回码错误：获取部门成员列表失败");
-        } catch (IOException e) {
-            System.out.println("try异常：获取部门成员列表失败");
-            e.printStackTrace();
-        }
-        System.out.println("try失败：获取部门成员列表失败");
-        return null;
-    }
+    @Resource
+    EnterpriseDataService enterpriseDataService;
 
     /**
      * 获取彩虹屁
@@ -128,11 +90,57 @@ public class ApiUtil {
             jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city));
             assert jsonObject != null;
             weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(pushMode).toString(), WeatherVo.class);
-            System.out.println((NIGHT_PUSH_MODE == pushMode) ? "当前推送的是明日天气" : "当前推送的是今日天气");
+            System.out.println((ScheduledConfig.NIGHT_PUSH_MODE == pushMode) ? "当前推送的是明日天气" : "当前推送的是今日天气");
         } catch (IOException e) {
             e.printStackTrace();
         }
         return weatherVo;
+    }
+
+    /**
+     * 获取部门id下所有成员的列表
+     *
+     * @author Iwlthxcl
+     *
+     * @return 返回一串拼接好的成员String
+     */
+    public String getParticipants() {
+
+        // 固定请求地址，详见 https://developer.work.weixin.qq.com/document/path/90200
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=";
+
+        try {
+            // 发送GET请求
+            String sendGet = HttpUtil.getUrl(url + wxCoreService.getAccessToken() + "&department_id=" + enterpriseDataService.queryingEnterpriseData("departmentId"));
+
+            // 转换返回json数据
+            JSONObject jsonObject = JSONObject.parseObject(sendGet);
+
+            // 判断是否请求成功
+            assert jsonObject != null;
+            if (jsonObject.getIntValue("errcode") == 0) {
+                // 截取userlist部门成员对象数组
+                JSONArray participants = jsonObject.getJSONArray("userlist");
+                // 通过部门成员类获取成员name与userid
+                List<UserListVo> userListVo = participants.toJavaList(UserListVo.class);
+
+                // 遍历拼接成员userid
+                StringBuilder temp = new StringBuilder();
+                for (UserListVo userlist : userListVo) {
+                    if (!temp.toString().isEmpty()) {
+                        temp.append("|");
+                    }
+                    temp.append(userlist.getUserid());
+                }
+                return temp.toString();
+            }
+            System.out.println("返回码错误：获取部门成员列表失败");
+        } catch (IOException e) {
+            System.out.println("try异常：获取部门成员列表失败");
+            e.printStackTrace();
+        }
+        System.out.println("try失败：获取部门成员列表失败");
+        return null;
     }
 
 }

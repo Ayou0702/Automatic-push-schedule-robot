@@ -1,9 +1,10 @@
 package com.enterprise.controller;
 
+import com.enterprise.config.ScheduledConfig;
 import com.enterprise.entity.CourseInfo;
 import com.enterprise.entity.vo.CourseSectionVo;
 import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.service.EnterpriseDataServiceImpl;
+import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
 import com.enterprise.util.CourseInfoUtil;
 import com.enterprise.util.DateUtil;
@@ -24,12 +25,11 @@ import static java.util.Objects.isNull;
  * 推送服务
  *
  * @author Iwlthxcl
- * @version 1.2
+ * @version 1.3
  */
 @RestController
 public class PushController {
 
-    final int nightPushMode = 1;
     /**
      * 工具类
      */
@@ -40,17 +40,23 @@ public class PushController {
     @Resource
     PushDataUtil pushDataUtil;
     @Resource
-    EnterpriseDataServiceImpl enterpriseDataService;
+    private SendMessageService sendMessage;
+
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
+    @Resource
+    EnterpriseDataService enterpriseDataService;
+
     /**
      * 五大节课程实体类
      */
     CourseSectionVo courseSectionVo = new CourseSectionVo();
+
     /**
      * 声明一个标题
      */
     String title;
-    @Resource
-    private SendMessageService sendMessage;
 
     /**
      * 课程推送主方法
@@ -97,7 +103,7 @@ public class PushController {
             }
 
             // 根据推送时间设置标题
-            if (nightPushMode == pushTime) {
+            if (ScheduledConfig.NIGHT_PUSH_MODE == pushTime) {
                 title = "\uD83C\uDF08晚上好~明天是";
             } else {
                 title = "\uD83C\uDF08早上好~今天是";
@@ -108,7 +114,7 @@ public class PushController {
             // 天气非空判断
             if (parameterList.getWeatherVo() != null) {
                 // 根据推送时间判断天气推送提示
-                message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(nightPushMode == pushTime ? "明日" : "今日").append("天气");
+                message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(ScheduledConfig.NIGHT_PUSH_MODE == pushTime ? "明日" : "今日").append("天气");
                 message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getWeather());
                 message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("~").append(parameterList.getWeatherVo().getHighest()).append("\n");
 

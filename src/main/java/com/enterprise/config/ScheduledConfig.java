@@ -1,7 +1,7 @@
 package com.enterprise.config;
 
 import com.enterprise.controller.PushController;
-import com.enterprise.service.EnterpriseDataServiceImpl;
+import com.enterprise.service.EnterpriseDataService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -11,16 +11,23 @@ import javax.annotation.Resource;
  * 定时调用类
  *
  * @author Iwlthxcl
- * @version 1.1
+ * @version 1.2
  */
 @Configuration
 public class ScheduledConfig {
 
-    final String nightPushMode = "1";
-    final String dayPushMode = "0";
+    /**
+     * 日夜推送模式
+     */
+    public static final int NIGHT_PUSH_MODE = 1;
+    public static final int DAY_PUSH_MODE = 0;
 
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
     @Resource
-    EnterpriseDataServiceImpl enterpriseDataService;
+    EnterpriseDataService enterpriseDataService;
+
     @Resource
     private PushController pushController;
 
@@ -29,7 +36,7 @@ public class ScheduledConfig {
      */
     @Scheduled(cron = "0 30 22 ? * *")
     public void scheduledPushCourseNight() {
-        if (nightPushMode.equals(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
+        if (NIGHT_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
             pushController.pushCourse();
         }
     }
@@ -39,7 +46,7 @@ public class ScheduledConfig {
      */
     @Scheduled(cron = "0 45 7 ? * *")
     public void scheduledPushCourseDay() {
-        if (dayPushMode.equals(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
+        if (DAY_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
             pushController.pushCourse();
         }
     }

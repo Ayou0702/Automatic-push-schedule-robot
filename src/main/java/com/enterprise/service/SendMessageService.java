@@ -16,7 +16,7 @@ import java.util.List;
  * 快速构建并发送消息类
  *
  * @author Iwlthxcl
- * @version 1.0
+ * @version 1.1
  */
 @Service
 @Slf4j
@@ -26,13 +26,16 @@ public class SendMessageService {
      * 工具类
      */
     @Resource
-    EnterpriseDataServiceImpl enterpriseDataService;
-
-    @Resource
     WxCoreService wxCoreService;
-
     @Resource
     ApiUtil apiUtil;
+
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
+    @Resource
+    EnterpriseDataService enterpriseDataService;
+
     /**
      * 用于构建并发送课程相关消息
      *
@@ -41,7 +44,7 @@ public class SendMessageService {
      * @param title 推送的标题
      * @param message 推送的消息
      */
-    public void pushCourse (String title, String message) {
+    public void pushCourse(String title, String message) {
 
         try {
             // 微信消息对象
@@ -51,7 +54,7 @@ public class SendMessageService {
             // 设置消息类型
             pushCourse.setMsgType("textcard");
             // 设置发送用户
-            pushCourse.setToUser(apiUtil.getParticipants(enterpriseDataService));
+            pushCourse.setToUser(apiUtil.getParticipants());
             // 发送的标题
             pushCourse.setTitle(title);
             // 发送内容
@@ -74,7 +77,7 @@ public class SendMessageService {
      *
      * @param message 推送的消息
      */
-    public void sendTextMsg (String message) {
+    public void sendTextMsg(String message) {
 
         try {
             WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(wxCoreService.getWxCpService());
@@ -83,7 +86,7 @@ public class SendMessageService {
             // 设置消息类型
             textMsg.setMsgType("text");
             // 设置发送用户
-            textMsg.setToUser(apiUtil.getParticipants(enterpriseDataService));
+            textMsg.setToUser(apiUtil.getParticipants());
             textMsg.setContent(message);
             wxCpMessageService.send(textMsg);
             log.info(textMsg.toString());
@@ -101,7 +104,7 @@ public class SendMessageService {
      * @param title 推送的标题
      * @param message 推送的消息
      */
-    public void sendNewsMsg (String title, String message) {
+    public void sendNewsMsg(String title, String message) {
 
         try {
             // 微信消息对象
@@ -111,7 +114,7 @@ public class SendMessageService {
             // 设置消息类型
             newsMsg.setMsgType("news");
             // 设置发送用户
-            newsMsg.setToUser(apiUtil.getParticipants(enterpriseDataService));
+            newsMsg.setToUser(apiUtil.getParticipants());
 
             List<NewArticle> articlesList = new ArrayList<>();
             NewArticle newArticle = new NewArticle();

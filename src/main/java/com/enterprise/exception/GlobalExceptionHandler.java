@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
      * @param e 异常内容
      */
     @ExceptionHandler(value = RuntimeException.class)
-    public void handler (RuntimeException e) {
+    public void handler(RuntimeException e) {
         log.error("运行时异常:----------------{}", e.getMessage());
     }
 
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
      * @param e 异常内容
      */
     @ExceptionHandler(value = NullPointerException.class)
-    public void handler (NullPointerException e) {
+    public void handler(NullPointerException e) {
         log.error("空指针异常:----------------{}", e.getMessage());
     }
 

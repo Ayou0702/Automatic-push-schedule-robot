@@ -1,6 +1,6 @@
 package com.enterprise.util;
 
-import com.enterprise.service.EnterpriseDataServiceImpl;
+import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author Iwlthxcl
- * @version 1.3
+ * @version 1.4
  */
 @Component
 public class DateUtil {
@@ -24,15 +24,12 @@ public class DateUtil {
      * 格式化
      */
     final static ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+
     /**
-     * 最大周数
-     */
-    final int periodMax = 23;
-    /**
-     * 工具类
+     * enterpriseData的接口，用于读取查询企业微信配置数据
      */
     @Resource
-    private EnterpriseDataServiceImpl enterpriseDataService;
+    private EnterpriseDataService enterpriseDataService;
 
     /**
      * 获取当前的星期
@@ -130,7 +127,7 @@ public class DateUtil {
         }
 
         // 周数校验
-        if (abs(period) > periodMax) {
+        if (abs(period) > CourseInfoUtil.PERIOD_MAX) {
             period = 0;
             System.out.println("错误：周数超过课表最大周数限制，将会引发数组越界错误，已归零");
         } else if (period < 0) {

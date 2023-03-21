@@ -1,7 +1,7 @@
 package com.enterprise.util;
 
 import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.service.EnterpriseDataServiceImpl;
+import com.enterprise.service.EnterpriseDataService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +13,16 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author Iwlthxcl
- * @version 1.1
+ * @version 1.2
  */
 @Component
 public class PushDataUtil {
 
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
     @Resource
-    private EnterpriseDataServiceImpl enterpriseDataService;
+    EnterpriseDataService enterpriseDataService;
 
     /**
      * 获取天气位置、彩虹屁api、开学日期、放假日期、推送时间并写入对象
@@ -28,7 +31,7 @@ public class PushDataUtil {
      *
      * @return 返回参数列表对象
      */
-    public ParameterListVo getParameterList () {
+    public ParameterListVo getParameterList() {
         // 参数列表实体类
         ParameterListVo parameterList = new ParameterListVo();
 

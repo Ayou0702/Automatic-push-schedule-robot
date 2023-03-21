@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * 企业微信主服务
  *
  * @author Iwlthxcl
- * @version 1.2
+ * @version 1.3
  */
 @Service
 public class WxCoreService {
@@ -25,10 +25,10 @@ public class WxCoreService {
     String accessToken = null;
 
     /**
-     * enterpriseData的接口实现类，用于读取查询企业微信配置数据
+     * enterpriseData的接口，用于读取查询企业微信配置数据
      */
     @Resource
-    EnterpriseDataServiceImpl enterpriseDataService;
+    EnterpriseDataService enterpriseDataService;
 
     /**
      * 核心服务

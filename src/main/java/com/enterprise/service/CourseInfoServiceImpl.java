@@ -30,7 +30,7 @@ public class CourseInfoServiceImpl implements CourseInfoService {
      * @return 返回课程数据
      */
     @Override
-    public List<CourseInfo> queryCourse () {
+    public List<CourseInfo> queryCourse() {
         return courseInfoMapper.queryCourse();
     }
 

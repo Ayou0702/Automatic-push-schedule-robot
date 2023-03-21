@@ -3,8 +3,8 @@ package com.enterprise.util;
 import com.enterprise.entity.CourseInfo;
 import com.enterprise.entity.vo.CourseSectionVo;
 import com.enterprise.entity.vo.CourseStartAndEndTimeVo;
-import com.enterprise.service.CourseInfoServiceImpl;
-import com.enterprise.service.EnterpriseDataServiceImpl;
+import com.enterprise.service.CourseInfoService;
+import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import static java.util.Objects.isNull;
  * 获取课程信息的工具类
  *
  * @author Iwlthxcl
- * @version 1.3
+ * @version 1.4
  */
 @Component
 public class CourseInfoUtil {
@@ -25,29 +25,36 @@ public class CourseInfoUtil {
     /**
      * 最大周数、星期、节数
      */
-    final int periodMax = 23;
-    final int weekMax = 8;
-    final int sectionMax = 6;
+    public static final int PERIOD_MAX = 23;
+    public static final int WEEK_MAX = 8;
+    public static final int SECTION_MAX = 6;
+
     /**
      * 分割字符
      */
     final String splitString = "-";
+
     /**
      * 五大节课程实体类
      */
     final CourseSectionVo courseSectionVo = new CourseSectionVo();
+
     /**
      * 声明课表数组
      */
     CourseInfo[][][] schedule;
 
     /**
-     * 工具类
+     * courseInfo的接口，用于读取查询课程数据
      */
     @Resource
-    private EnterpriseDataServiceImpl enterpriseDataService;
+    private CourseInfoService courseInfoService;
+
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
     @Resource
-    private CourseInfoServiceImpl courseInfoService;
+    private EnterpriseDataService enterpriseDataService;
 
     /**
      * 更新课表数据
@@ -57,7 +64,7 @@ public class CourseInfoUtil {
     public void updateCourseInfo() {
 
         // 创建并清空课表数据
-        schedule = new CourseInfo[periodMax][weekMax][sectionMax];
+        schedule = new CourseInfo[PERIOD_MAX][WEEK_MAX][SECTION_MAX];
 
         // 获取课程数据
         List<CourseInfo> temp = getCourseInfos();
@@ -188,7 +195,7 @@ public class CourseInfoUtil {
         // 判断是否是debug中，如不是则计算专业课程数
         if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
             // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
-            for (int i = 1; i < sectionMax - 1; i++) {
+            for (int i = 1; i < SECTION_MAX - 1; i++) {
                 // 非空判断
                 if (schedule[period][week][i] != null) {
                     // 专业课程判断

@@ -19,6 +19,6 @@ public interface CourseInfoService {
      *
      * @return 返回课程数据
      */
-    List<CourseInfo> queryCourse ();
+    List<CourseInfo> queryCourse();
 
 }

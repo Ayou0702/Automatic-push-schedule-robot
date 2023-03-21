@@ -23,6 +23,6 @@ public interface CourseInfoMapper {
      * @return 返回所有课程数据
      */
     @Select("SELECT * FROM course_info")
-    List<CourseInfo> queryCourse ();
+    List<CourseInfo> queryCourse();
 
 }
