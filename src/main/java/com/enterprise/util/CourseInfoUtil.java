@@ -28,7 +28,6 @@ public class CourseInfoUtil {
     final int periodMax = 23;
     final int weekMax = 8;
     final int sectionMax = 6;
-    final String debugPushMode = "3";
     /**
      * 分割字符
      */
@@ -187,7 +186,7 @@ public class CourseInfoUtil {
         week = (week + pushTime) % 7;
 
         // 判断是否是debug中，如不是则计算专业课程数
-        if (!debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+        if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
             // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
             for (int i = 1; i < sectionMax - 1; i++) {
                 // 非空判断
@@ -222,9 +221,9 @@ public class CourseInfoUtil {
      *
      * @author Iwlthxcl
      */
-    public void extracted() {
+    public void courseCount() {
         // 判断是否是debug中，如是则不计算课程数
-        if (debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+        if (enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
             return;
         }
         // 获取当前总课程数

@@ -29,8 +29,6 @@ import static java.util.Objects.isNull;
 @RestController
 public class PushController {
 
-    final String debugPushMode = "3";
-
     final int nightPushMode = 1;
     /**
      * 工具类
@@ -163,12 +161,12 @@ public class PushController {
     private void courseSet(StringBuilder message) {
         if (!isNull(courseSectionVo.getFirst())) {
             // 总课程数统计
-            courseInfoUtil.extracted();
+            courseInfoUtil.courseCount();
             message.append("\n1️⃣第一大节：").append(courseSectionVo.getFirst().getCourseName());
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFirst().getCourseVenue()).append("\n");
 
             // 判断是否是debug中，如不是则计算早课天数
-            if (!debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
                 // 早课天数统计
                 int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays"));
                 temp++;
@@ -177,27 +175,27 @@ public class PushController {
 
         }
         if (!isNull(courseSectionVo.getSecond())) {
-            courseInfoUtil.extracted();
+            courseInfoUtil.courseCount();
             message.append("\n2️⃣第二大节：").append(courseSectionVo.getSecond().getCourseName());
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getSecond().getCourseVenue()).append("\n");
         }
         if (!isNull(courseSectionVo.getThirdly())) {
-            courseInfoUtil.extracted();
+            courseInfoUtil.courseCount();
             message.append("\n3️⃣第三大节：").append(courseSectionVo.getThirdly().getCourseName());
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getThirdly().getCourseVenue()).append("\n");
         }
         if (!isNull(courseSectionVo.getFourthly())) {
-            courseInfoUtil.extracted();
+            courseInfoUtil.courseCount();
             message.append("\n4️⃣第四大节：").append(courseSectionVo.getFourthly().getCourseName());
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFourthly().getCourseVenue()).append("\n");
         }
         if (!isNull(courseSectionVo.getFifth())) {
-            courseInfoUtil.extracted();
+            courseInfoUtil.courseCount();
             message.append("\n5️第五大节：").append(courseSectionVo.getFifth().getCourseName());
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFifth().getCourseVenue()).append("\n");
 
             // 判断是否是debug中，如是则不计算晚课天数
-            if (!debugPushMode.equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
                 // 晚课天数统计
                 int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays"));
                 temp++;
