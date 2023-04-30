@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * http工具类
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.1
  */
 public class HttpUtil {
@@ -51,7 +51,7 @@ public class HttpUtil {
     /**
      * 将请求到的内容转换为String返回
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param url 需要请求的url
      * @return 将请求内容转换为String并返回

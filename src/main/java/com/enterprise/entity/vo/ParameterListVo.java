@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 推送参数
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.1
  */
 @Data

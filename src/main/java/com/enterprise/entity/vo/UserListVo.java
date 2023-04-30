@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 企业微信部门成员对象
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.0
  */
 @Data

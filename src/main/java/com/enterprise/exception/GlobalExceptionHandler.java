@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 全局异常捕捉
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.0
  */
 @Slf4j
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     /**
      * 捕捉运行时异常
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param e 异常内容
      */
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     /**
      * 捕捉空指针异常
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param e 异常内容
      */

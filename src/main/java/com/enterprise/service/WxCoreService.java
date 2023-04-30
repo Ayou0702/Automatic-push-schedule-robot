@@ -16,8 +16,8 @@ import javax.annotation.Resource;
 /**
  * 企业微信主服务
  *
- * @author Iwlthxcl
- * @version 1.3
+ * @author PrefersMin
+ * @version 1.4
  */
 @Service
 public class WxCoreService {
@@ -33,7 +33,7 @@ public class WxCoreService {
     /**
      * 核心服务
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 返回写入了agentId、secret、corpId、token配置的一个WxCpService类型的对象
      */
@@ -51,7 +51,7 @@ public class WxCoreService {
     /**
      * 核心服务
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 返回写入了agentId、secret、corpId配置的一个WxCpDefaultConfigImpl类型的对象
      */
@@ -60,9 +60,9 @@ public class WxCoreService {
         WxCpDefaultConfigImpl config = new WxCpDefaultConfigImpl();
 
         // 配置agentId、secret、corpId
-        config.setAgentId(Integer.valueOf(enterpriseDataService.queryingEnterpriseData("agentId")));
-        config.setCorpSecret(enterpriseDataService.queryingEnterpriseData("secret"));
-        config.setCorpId(enterpriseDataService.queryingEnterpriseData("corpId"));
+        config.setAgentId(Integer.valueOf(enterpriseDataService.queryingEnterpriseData("agentId").getDataValue()));
+        config.setCorpSecret(enterpriseDataService.queryingEnterpriseData("secret").getDataValue());
+        config.setCorpId(enterpriseDataService.queryingEnterpriseData("corpId").getDataValue());
         return config;
 
     }
@@ -70,7 +70,7 @@ public class WxCoreService {
     /**
      * 重置token和jsApi并写入核心服务对象
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param wxCpService 企业微信主服务对象
      * @param wxCpDefaultConfig 企业微信配置
@@ -84,7 +84,7 @@ public class WxCoreService {
         Jedis jedis = new JedisPool(jedisPoolConfig, "localhost", 6379, 5000).getResource();
 
         wxCpService.setWxCpConfigStorage(wxCpDefaultConfig);
-        String wxAccessToken = "wx" + enterpriseDataService.queryingEnterpriseData("corpId");
+        String wxAccessToken = "wx" + enterpriseDataService.queryingEnterpriseData("corpId").getDataValue();
         String json = jedis.get(wxAccessToken);
         if (!StringUtils.isEmpty(json)) {
             wxCpDefaultConfig = JSON.parseObject(json, WxCpDefaultConfigImpl.class);
@@ -115,7 +115,7 @@ public class WxCoreService {
      * 获取token明文
      * 此方法需要调用主服务，需要传参
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 返回token
      */

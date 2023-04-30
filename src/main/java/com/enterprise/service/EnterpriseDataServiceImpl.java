@@ -1,15 +1,17 @@
 package com.enterprise.service;
 
+import com.enterprise.entity.EnterpriseData;
 import com.enterprise.mapper.EnterpriseDataMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 负责enterpriseData表业务的接口实现类
  *
- * @author Iwlthxcl
- * @version 1.0
+ * @author PrefersMin
+ * @version 1.1
  */
 @Service
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
@@ -23,33 +25,57 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
     /**
      * 获取指定名称的数据
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param dataName 要获取的参数名称
      * @return 返回参数值
      */
     @Override
-    public String queryingEnterpriseData(String dataName) {
+    public EnterpriseData queryingEnterpriseData(String dataName) {
         return enterpriseDataMapper.queryingEnterpriseData(dataName);
+    }
+
+    /**
+     * 获取enterpriseData表中的所有课程数据
+     *
+     * @author PrefersMin
+     *
+     * @return 返回所有配置数据
+     */
+    public List<EnterpriseData> queryingAllEnterpriseData() {
+        return enterpriseDataMapper.queryingAllEnterpriseData();
     }
 
     /**
      * 修改指定名称的数据
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param dataName 要修改的参数名称
      * @param dataValue 要修改的参数值
      */
     @Override
-    public void updateEnterpriseData(String dataName, String dataValue) {
+    public void updateEnterpriseDataByDataName(String dataName, String dataValue) {
 
-        int state = enterpriseDataMapper.updateEnterpriseData(dataName, dataValue);
+        boolean state = enterpriseDataMapper.updateEnterpriseDataByDataName(dataName, dataValue);
 
-        if (state <= 0) {
+        if (state) {
             System.out.println(dataName + "修改失败");
         }
 
+    }
+
+    /**
+     * 修改指定名称的数据
+     * 这里的结果需要返回给前端
+     *
+     * @param enterpriseData  需要修改的配置数据
+     *
+     * @author PrefersMin
+     */
+    @Override
+    public boolean updateEnterpriseData(EnterpriseData enterpriseData) {
+        return enterpriseDataMapper.updateEnterpriseData(enterpriseData);
     }
 
 }

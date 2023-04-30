@@ -24,7 +24,7 @@ import static java.util.Objects.isNull;
 /**
  * 推送服务
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.3
  */
 @RestController
@@ -61,7 +61,7 @@ public class PushController {
     /**
      * 课程推送主方法
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      */
     @GetMapping("/pushCourse")
     public void pushCourse() {
@@ -160,7 +160,7 @@ public class PushController {
     /**
      * 五大节课程非空判断、统计早晚课天数与总课程数
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param message 传入的message
      */
@@ -172,11 +172,11 @@ public class PushController {
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFirst().getCourseVenue()).append("\n");
 
             // 判断是否是debug中，如不是则计算早课天数
-            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
                 // 早课天数统计
-                int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays"));
+                int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays").getDataValue());
                 temp++;
-                enterpriseDataService.updateEnterpriseData("morningClassDays", String.valueOf(temp));
+                enterpriseDataService.updateEnterpriseDataByDataName("morningClassDays", String.valueOf(temp));
             }
 
         }
@@ -201,11 +201,11 @@ public class PushController {
             message.append("\n\uD83D\uDE8F上课地点：").append(courseSectionVo.getFifth().getCourseVenue()).append("\n");
 
             // 判断是否是debug中，如是则不计算晚课天数
-            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
                 // 晚课天数统计
-                int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays"));
+                int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays").getDataValue());
                 temp++;
-                enterpriseDataService.updateEnterpriseData("nightClassDays", String.valueOf(temp));
+                enterpriseDataService.updateEnterpriseDataByDataName("nightClassDays", String.valueOf(temp));
             }
 
         }
@@ -214,7 +214,7 @@ public class PushController {
     /**
      * 开学日推送
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param parameterList 传入的参数列表
      * @param message 传入的message
@@ -249,7 +249,7 @@ public class PushController {
     /**
      * 假日推送
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param parameterList 传入的参数列表
      * @param message 传入的message
@@ -258,12 +258,12 @@ public class PushController {
         title = "\uD83C\uDFC1本学期的课程到此结束啦，一起来回顾一下吧";
 
         message.append("\n\uD83D\uDCD7这学期你一共上了 ").append(parameterList.getDateStarting()).append(" 天的课\n");
-        message.append("\uD83C\uDF1E其中有 ").append(enterpriseDataService.queryingEnterpriseData("morningClassDays")).append(" 天的早课\n");
-        message.append("\uD83C\uDF1B以及 ").append(enterpriseDataService.queryingEnterpriseData("nightClassDays")).append(" 天的晚课\n");
+        message.append("\uD83C\uDF1E其中有 ").append(enterpriseDataService.queryingEnterpriseData("morningClassDays").getDataValue()).append(" 天的早课\n");
+        message.append("\uD83C\uDF1B以及 ").append(enterpriseDataService.queryingEnterpriseData("nightClassDays").getDataValue()).append(" 天的晚课\n");
         message.append("✌早起的痛苦明天就远离你啦~\n");
 
-        message.append("\n\uD83D\uDCD8在这学期你一共认真听讲了 ").append(enterpriseDataService.queryingEnterpriseData("totalClassTimes")).append(" 节的课程\n");
-        message.append("\uD83C\uDF93其中有 ").append(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes")).append(" 节的专业课程\n");
+        message.append("\n\uD83D\uDCD8在这学期你一共认真听讲了 ").append(enterpriseDataService.queryingEnterpriseData("totalClassTimes").getDataValue()).append(" 节的课程\n");
+        message.append("\uD83C\uDF93其中有 ").append(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue()).append(" 节的专业课程\n");
         message.append("❓你的专业技能是否有所增长呢？\n");
 
         message.append("\n\uD83D\uDE0A本学期的工作到此结束，同学们下学期再见~\n");
@@ -275,7 +275,7 @@ public class PushController {
     /**
      * 推送纯文本消息
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param message 需要推送的消息内容
      */
@@ -287,7 +287,7 @@ public class PushController {
     /**
      * 推送图文消息
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param title 需要推送的消息标题
      * @param message 需要推送的消息内容

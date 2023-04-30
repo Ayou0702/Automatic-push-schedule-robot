@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 天气参数
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.0
  */
 @Data

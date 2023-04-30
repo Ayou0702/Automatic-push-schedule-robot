@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 课程实体类
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.0
  */
 @Data

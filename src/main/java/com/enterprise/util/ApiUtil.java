@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * 获取推送所需参数的api工具类
  *
- * @author Iwlthxcl
- * @version 1.5
+ * @author PrefersMin
+ * @version 1.6
  */
 @Component
 public class ApiUtil {
@@ -38,7 +38,7 @@ public class ApiUtil {
     /**
      * 获取彩虹屁
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param key 天行数据彩虹屁api密钥
      * @return 返回彩虹屁
@@ -70,7 +70,7 @@ public class ApiUtil {
     /**
      * 获取天气数据
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param key 天行数据天气预报api密钥
      * @param city 需要预报的城市
@@ -100,7 +100,7 @@ public class ApiUtil {
     /**
      * 获取部门id下所有成员的列表
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 返回一串拼接好的成员String
      */
@@ -111,7 +111,7 @@ public class ApiUtil {
 
         try {
             // 发送GET请求
-            String sendGet = HttpUtil.getUrl(url + wxCoreService.getAccessToken() + "&department_id=" + enterpriseDataService.queryingEnterpriseData("departmentId"));
+            String sendGet = HttpUtil.getUrl(url + wxCoreService.getAccessToken() + "&department_id=" + enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue());
 
             // 转换返回json数据
             JSONObject jsonObject = JSONObject.parseObject(sendGet);

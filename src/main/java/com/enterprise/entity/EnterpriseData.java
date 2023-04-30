@@ -5,8 +5,8 @@ import lombok.Data;
 /**
  * enterpriseData表的实体类
  *
- * @author Iwlthxcl
- * @version 1.0
+ * @author PrefersMin
+ * @version 1.1
  */
 @Data
 public class EnterpriseData {
@@ -14,6 +14,6 @@ public class EnterpriseData {
     /**
      * enterpriseData表的字段,转换驼峰命名
      */
-    private String dataName, dataValue;
+    private String dataName, dataValue, dataAnnotation;
 
 }

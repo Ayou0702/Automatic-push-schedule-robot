@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Tomcat配置
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.0
  */
 @Configuration

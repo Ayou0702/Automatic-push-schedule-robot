@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 课表时间参数
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.0
  */
 @Data

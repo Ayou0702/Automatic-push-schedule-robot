@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 /**
  * 定时调用类
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.2
  */
 @Configuration
@@ -36,7 +36,7 @@ public class ScheduledConfig {
      */
     @Scheduled(cron = "0 30 22 ? * *")
     public void scheduledPushCourseNight() {
-        if (NIGHT_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
+        if (NIGHT_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue())) {
             pushController.pushCourse();
         }
     }
@@ -46,7 +46,7 @@ public class ScheduledConfig {
      */
     @Scheduled(cron = "0 45 7 ? * *")
     public void scheduledPushCourseDay() {
-        if (DAY_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime"))) {
+        if (DAY_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue())) {
             pushController.pushCourse();
         }
     }

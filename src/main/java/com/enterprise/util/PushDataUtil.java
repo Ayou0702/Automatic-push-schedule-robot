@@ -12,8 +12,8 @@ import static com.enterprise.util.DateUtil.getNow;
 /**
  * 推送数据的工具类
  *
- * @author Iwlthxcl
- * @version 1.2
+ * @author PrefersMin
+ * @version 1.3
  */
 @Component
 public class PushDataUtil {
@@ -27,7 +27,7 @@ public class PushDataUtil {
     /**
      * 获取天气位置、彩虹屁api、开学日期、放假日期、推送时间并写入对象
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 返回参数列表对象
      */
@@ -36,11 +36,11 @@ public class PushDataUtil {
         ParameterListVo parameterList = new ParameterListVo();
 
         // 通过Service层获取数据
-        String weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue");
-        String apiKey = enterpriseDataService.queryingEnterpriseData("apiKey");
-        String dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding");
-        String dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting");
-        int pushTime = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime"));
+        String weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
+        String apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
+        String dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
+        String dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
+        int pushTime = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
 
         // 写入推送时间用以共享给其他方法
         parameterList.setPushTime(pushTime);

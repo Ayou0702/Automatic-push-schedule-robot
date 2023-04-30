@@ -14,7 +14,7 @@ import static java.lang.Math.abs;
 /**
  * 日期工具类
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.4
  */
 @Component
@@ -34,7 +34,7 @@ public class DateUtil {
     /**
      * 获取当前的星期
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param dt 当前的日期
      * @return 当前的星期
@@ -52,7 +52,7 @@ public class DateUtil {
     /**
      * 计算两个日期(String类型)之间相差多少天
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param startDateString 开始日期(String类型)
      * @param endDateString 结束日期(String类型)
@@ -79,7 +79,7 @@ public class DateUtil {
     /**
      * 计算两个日期(Date类型)之间相差多少天
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param startDate 开始日期(String类型)
      * @param endDate 结束日期(String类型)
@@ -92,7 +92,7 @@ public class DateUtil {
     /**
      * 获取当前日期(String类型)
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 当前日期(String类型)
      */
@@ -104,7 +104,7 @@ public class DateUtil {
     /**
      * 获取当前周数(int类型)
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param pushTime 推送模式
      * @return 当前周数(int类型)
@@ -113,14 +113,14 @@ public class DateUtil {
         int period, periods;
         String date = LOCAL_FORMAT.get().format(new Date());
 
-        periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting"), date);
+        periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue(), date);
 
         period = ((periods + pushTime) / 7) + 1;
 
 
         // 调试，用于指定周数与当前星期
-        if (!enterpriseDataService.queryingEnterpriseData("debugPeriod").isEmpty()) {
-            period = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugPeriod"));
+        if (!enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue().isEmpty()) {
+            period = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue());
             System.out.println("测试周数：" + period);
         } else {
             System.out.println("当前周数：" + period);
@@ -141,7 +141,7 @@ public class DateUtil {
     /**
      * 根据日期判断当前星期
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param pushTime 当前日期
      * @return 返回当前星期
@@ -149,8 +149,8 @@ public class DateUtil {
     public String getWeek(int pushTime) {
 
         String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
-        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
-            return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek")) + pushTime) % 7];
+        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue().isEmpty()) {
+            return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue()) + pushTime) % 7];
         } else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(System.currentTimeMillis()));

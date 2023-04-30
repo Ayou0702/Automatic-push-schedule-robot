@@ -16,8 +16,8 @@ import static java.util.Objects.isNull;
 /**
  * 获取课程信息的工具类
  *
- * @author Iwlthxcl
- * @version 1.4
+ * @author PrefersMin
+ * @version 1.5
  */
 @Component
 public class CourseInfoUtil {
@@ -59,7 +59,7 @@ public class CourseInfoUtil {
     /**
      * 更新课表数据
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      */
     public void updateCourseInfo() {
 
@@ -79,7 +79,7 @@ public class CourseInfoUtil {
     /**
      * 获取所有课程数据
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @return 返回课程数据
      */
@@ -93,7 +93,7 @@ public class CourseInfoUtil {
     /**
      * 通过for循环将课表数据按照上课时间填入数组中
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param courseInfo 课表数据
      */
@@ -130,7 +130,7 @@ public class CourseInfoUtil {
     /**
      * 通过split方法分割开始时间与结束时间
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param classStringTime 上课时间数据
      * @return 返回两个int型的数据作为开始时间与结束时间
@@ -166,7 +166,7 @@ public class CourseInfoUtil {
     /**
      * 封装五大节课程数据
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param period 当前周期
      * @param pushTime 推送时间
@@ -178,9 +178,9 @@ public class CourseInfoUtil {
         int week = DateUtil.getW(new Date()) % 7;
 
         // 判断是否需要调试星期
-        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").isEmpty()) {
+        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue().isEmpty()) {
 
-            week = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek"));
+            week = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue());
             System.out.println("测试星期：" + week);
 
         } else {
@@ -193,19 +193,19 @@ public class CourseInfoUtil {
         week = (week + pushTime) % 7;
 
         // 判断是否是debug中，如不是则计算专业课程数
-        if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+        if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
             // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
             for (int i = 1; i < SECTION_MAX - 1; i++) {
                 // 非空判断
                 if (schedule[period][week][i] != null) {
                     // 专业课程判断
-                    if (schedule[period][week][i].getCourseSpecialized() == 1) {
+                    if (schedule[period][week][i].isCourseSpecialized()) {
                         // 获取已上课的专业课程次数
-                        Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes"));
+                        Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue());
                         // 自增
                         totalSpecializedClassTimes++;
                         // 回写
-                        enterpriseDataService.updateEnterpriseData("totalSpecializedClassTimes", String.valueOf(totalSpecializedClassTimes));
+                        enterpriseDataService.updateEnterpriseDataByDataName("totalSpecializedClassTimes", String.valueOf(totalSpecializedClassTimes));
                     }
                 }
             }
@@ -226,19 +226,19 @@ public class CourseInfoUtil {
     /**
      * 统计总课程数
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      */
     public void courseCount() {
         // 判断是否是debug中，如是则不计算课程数
-        if (enterpriseDataService.queryingEnterpriseData("debugPushMode").equals(enterpriseDataService.queryingEnterpriseData("departmentId"))) {
+        if (enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
             return;
         }
         // 获取当前总课程数
-        int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("totalClassTimes"));
+        int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("totalClassTimes").getDataValue());
         // 自增
         temp++;
         // 回写
-        enterpriseDataService.updateEnterpriseData("totalClassTimes", String.valueOf(temp));
+        enterpriseDataService.updateEnterpriseDataByDataName("totalClassTimes", String.valueOf(temp));
 
     }
 

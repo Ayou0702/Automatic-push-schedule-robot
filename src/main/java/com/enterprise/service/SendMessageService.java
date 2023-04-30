@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 快速构建并发送消息类
  *
- * @author Iwlthxcl
+ * @author PrefersMin
  * @version 1.1
  */
 @Service
@@ -39,7 +39,7 @@ public class SendMessageService {
     /**
      * 用于构建并发送课程相关消息
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param title 推送的标题
      * @param message 推送的消息
@@ -60,7 +60,7 @@ public class SendMessageService {
             // 发送内容
             pushCourse.setDescription(message);
             // 设置跳转；可以自己制作一个网页
-            pushCourse.setUrl(enterpriseDataService.queryingEnterpriseData("url"));
+            pushCourse.setUrl(enterpriseDataService.queryingEnterpriseData("url").getDataValue());
             pushCourse.setBtnTxt("PrefersMin");
             wxCpMessageService.send(pushCourse);
             log.info(pushCourse.toString());
@@ -73,7 +73,7 @@ public class SendMessageService {
     /**
      * 用于发送纯文本消息
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param message 推送的消息
      */
@@ -99,7 +99,7 @@ public class SendMessageService {
     /**
      * 用于发送图文消息
      *
-     * @author Iwlthxcl
+     * @author PrefersMin
      *
      * @param title 推送的标题
      * @param message 推送的消息
@@ -125,9 +125,9 @@ public class SendMessageService {
             // 发送内容
             newArticle.setDescription(message);
             // 图片地址
-            newArticle.setPicUrl(enterpriseDataService.queryingEnterpriseData("imgUrl"));
+            newArticle.setPicUrl(enterpriseDataService.queryingEnterpriseData("imgUrl").getDataValue());
             // 设置跳转；可以自己制作一个网页
-            newArticle.setUrl(enterpriseDataService.queryingEnterpriseData("url"));
+            newArticle.setUrl(enterpriseDataService.queryingEnterpriseData("url").getDataValue());
             // 添加到List集合
             articlesList.add(newArticle);
             newsMsg.setArticles(articlesList);
