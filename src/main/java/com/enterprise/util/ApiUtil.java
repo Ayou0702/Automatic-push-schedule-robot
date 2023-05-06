@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.enterprise.config.ScheduledConfig;
 import com.enterprise.service.EnterpriseDataService;
-import com.enterprise.service.WxCoreService;
+import com.enterprise.service.impl.WxCoreServiceImpl;
 import com.enterprise.entity.vo.UserListVo;
 import com.enterprise.entity.vo.WeatherVo;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class ApiUtil {
      * 微信核心服务
      */
     @Resource
-    WxCoreService wxCoreService;
+    WxCoreServiceImpl wxCoreService;
 
     /**
      * enterpriseData的接口，用于读取查询企业微信配置数据

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 import static com.enterprise.util.DateUtil.getNow;
+import static java.util.Objects.isNull;
 
 /**
  * 推送数据的工具类
@@ -19,10 +20,23 @@ import static com.enterprise.util.DateUtil.getNow;
 public class PushDataUtil {
 
     /**
+     * 最大周数、星期、节数
+     */
+    public static final int PERIOD_MAX = 23;
+    public static final int WEEK_MAX = 8;
+    public static final int SECTION_MAX = 6;
+
+    /**
      * enterpriseData的接口，用于读取查询企业微信配置数据
      */
     @Resource
     EnterpriseDataService enterpriseDataService;
+
+    // 参数列表实体类
+    ParameterListVo parameterList = new ParameterListVo();
+
+    String weatherValue,apiKey,dateEnding,dateStarting;
+    int pushTime;
 
     /**
      * 获取天气位置、彩虹屁api、开学日期、放假日期、推送时间并写入对象
@@ -32,15 +46,22 @@ public class PushDataUtil {
      * @return 返回参数列表对象
      */
     public ParameterListVo getParameterList() {
-        // 参数列表实体类
-        ParameterListVo parameterList = new ParameterListVo();
 
+        if (isNull(parameterList.getWeatherVo())) {
+            resetParameterList();
+        }
+
+        System.out.println("获取了参数列表：" + parameterList);
+        return parameterList;
+    }
+
+    public void resetParameterList() {
         // 通过Service层获取数据
-        String weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
-        String apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
-        String dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
-        String dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
-        int pushTime = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
+        weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
+        apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
+        dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
+        dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
+        pushTime = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
 
         // 写入推送时间用以共享给其他方法
         parameterList.setPushTime(pushTime);
@@ -63,9 +84,7 @@ public class PushDataUtil {
             parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + parameterList.getPushTime()));
         }
 
-        System.out.println("参数列表：" + parameterList);
-        return parameterList;
+        System.out.println("重置了参数列表：" + parameterList);
     }
-
 
 }

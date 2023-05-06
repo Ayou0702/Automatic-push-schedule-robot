@@ -39,7 +39,7 @@ public class DateUtil {
      * @param dt 当前的日期
      * @return 当前的星期
      */
-    public static int getW(Date dt) {
+    public int getW(Date dt) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dt);
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
@@ -110,6 +110,7 @@ public class DateUtil {
      * @return 当前周数(int类型)
      */
     public int getPeriod(int pushTime) {
+
         int period, periods;
         String date = LOCAL_FORMAT.get().format(new Date());
 
@@ -127,7 +128,7 @@ public class DateUtil {
         }
 
         // 周数校验
-        if (abs(period) > CourseInfoUtil.PERIOD_MAX) {
+        if (abs(period) > PushDataUtil.PERIOD_MAX) {
             period = 0;
             System.out.println("错误：周数超过课表最大周数限制，将会引发数组越界错误，已归零");
         } else if (period < 0) {
@@ -136,6 +137,7 @@ public class DateUtil {
         }
 
         return period;
+
     }
 
     /**

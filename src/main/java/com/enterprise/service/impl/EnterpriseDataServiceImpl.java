@@ -1,7 +1,8 @@
-package com.enterprise.service;
+package com.enterprise.service.impl;
 
 import com.enterprise.entity.EnterpriseData;
 import com.enterprise.mapper.EnterpriseDataMapper;
+import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,6 +43,7 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
      *
      * @return 返回所有配置数据
      */
+    @Override
     public List<EnterpriseData> queryingAllEnterpriseData() {
         return enterpriseDataMapper.queryingAllEnterpriseData();
     }
