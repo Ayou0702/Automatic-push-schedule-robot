@@ -1,0 +1,11 @@
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (1, '⚽体育', '🏟田径场、篮球场', 0);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (2, '🥇HTML5与移动应用开发', '🏢信息楼305', 1);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (3, '🥈企业级项目实战', '🏢信息楼302', 1);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (4, '🥉Java Web应用开发', '🏢信息楼309', 1);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (5, '💫习近平新时代中国特色社会主义思想概论', '🏗汽车楼203-B', 0);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (6, '🥈企业级项目实战', '🏢信息楼302', 1);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (7, '💤形势与政策', '🏗汽车楼401', 0);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (8, '💬创业基础', '🏗机电楼401-1', 0);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (9, '🥇HTML5与移动应用开发', '🏢信息楼305', 1);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (10, '🥉Java Web应用开发', '🏢信息楼309', 1);
+INSERT INTO `course_data` (`course_id`, `course_name`, `course_venue`, `course_specialized`) VALUES (11, '🤡选修课', '🌍全校范围', 0);

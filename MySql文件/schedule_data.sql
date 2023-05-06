@@ -1,0 +1,11 @@
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (1, 1, 1, '1-18', '1', '2');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (2, 2, 1, '1-18', '1', '3-4');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (3, 3, 1, '9-18', '2', '1-2');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (4, 4, 1, '1-18', '2', '3-4');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (5, 5, 1, '2-13', '4', '4');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (6, 3, 1, '9-18', '4', '1-2');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (7, 6, 1, '3-6', '4', '3');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (8, 7, 1, '1-18', '3', '2');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (9, 2, 1, '1-18', '5', '1-2');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (10, 4, 1, '1-18', '3', '3-4');
+INSERT INTO `schedule_data` (`schedule_id`, `course_id`, `teacher_id`, `schedule_period`, `schedule_week`, `schedule_section`) VALUES (11, 8, 1, '1-18', '5', '3');
