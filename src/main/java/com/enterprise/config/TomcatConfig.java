@@ -20,6 +20,8 @@ public class TomcatConfig {
         factory.addConnectorCustomizers((Connector connector) -> {
             connector.setProperty("relaxedPathChars", "\"<>[\\]^`{|}");
             connector.setProperty("relaxedQueryChars", "\"<>[\\]^`{|}");
+            connector.setMaxPostSize(16777216);
+            connector.setMaxSavePostSize(16777216);
         });
         return factory;
     }

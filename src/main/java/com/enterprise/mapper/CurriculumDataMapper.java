@@ -11,8 +11,11 @@ import java.util.List;
 @Mapper
 public interface CurriculumDataMapper {
 
-    @Select("SELECT * FROM curriculum_data")
+    @Select("SELECT * FROM curriculum_data LIMIT 100")
     List<CurriculumData> queryAllCurriculumData();
+
+    @Select("SELECT * FROM curriculum_data WHERE curriculum_period > #{curriculumPeriod} OR (curriculum_period >= #{curriculumPeriod} AND curriculum_week >= #{curriculumWeek}) LIMIT 100")
+    List<CurriculumData> queryNowCurriculumData(int curriculumPeriod,int curriculumWeek);
 
     @Select("SELECT * FROM curriculum_data WHERE curriculum_period=#{curriculumPeriod} AND curriculum_week=#{curriculumWeek}")
     List<CurriculumData> queryCurriculumDataByTime(int curriculumPeriod, int curriculumWeek);

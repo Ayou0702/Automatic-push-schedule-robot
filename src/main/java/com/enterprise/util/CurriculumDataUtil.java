@@ -2,10 +2,7 @@ package com.enterprise.util;
 
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.ScheduleData;
-import com.enterprise.service.CourseDataService;
-import com.enterprise.service.CurriculumDataService;
-import com.enterprise.service.EnterpriseDataService;
-import com.enterprise.service.ScheduleDataService;
+import com.enterprise.service.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -157,21 +154,6 @@ public class CurriculumDataUtil {
      */
     public List<CurriculumData> getTodayCurriculumData(int period, int week) {
 
-        // 判断是否需要调试星期
-        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue().isEmpty()) {
-
-            week = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue());
-            System.out.println("测试星期：" + week);
-
-        } else {
-
-            System.out.println("当前星期：" + week);
-
-        }
-
-        // 根据推送时间偏移星期
-        week = (week + pushDataUtil.getParameterList().getPushTime()) % 7;
-
         // 判断是否是debug中，如不是则计算专业课程数
         if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
             // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
@@ -191,9 +173,7 @@ public class CurriculumDataUtil {
             }
         }
 
-        List<CurriculumData> temp = curriculumDataService.queryCurriculumDataByTime(period, week);
-
-        return temp;
+        return curriculumDataService.queryCurriculumDataByTime(period, week);
     }
 
 }

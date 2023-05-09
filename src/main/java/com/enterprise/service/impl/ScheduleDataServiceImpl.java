@@ -30,7 +30,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     @Override
-    public ScheduleData queryScheduleDataByTeacherId(int teacherId) {
+    public List<ScheduleData> queryScheduleDataByTeacherId(int teacherId) {
         return scheduleDataMapper.queryScheduleDataByTeacherId(teacherId);
     }
 

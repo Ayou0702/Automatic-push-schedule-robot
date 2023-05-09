@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -169,10 +169,10 @@ public class TeacherDataController {
         AtomicBoolean diffTeacherPreviewingResult = new AtomicBoolean(false);
 
         if (!deleteTeacherData.isEmpty()) {
-            deleteTeacherData.forEach(courseId -> {
-                if (!isNull(scheduleDataService.queryScheduleDataByCourseId(courseId))) {
-                    LogUtil.error("ID为" + courseId + "的教师信息删除失败,外键完整性约束检查失败");
-                    message.append(teacherDataService.queryTeacherDataByTeacherId(courseId).getTeacherName()).append(" 已在课表中使用，不可删除\n");
+            deleteTeacherData.forEach(teacherId -> {
+                if (!scheduleDataService.queryScheduleDataByTeacherId(teacherId).isEmpty()) {
+                    LogUtil.error("ID为" + teacherId + "的教师信息删除失败,外键完整性约束检查失败");
+                    message.append(teacherDataService.queryTeacherDataByTeacherId(teacherId).getTeacherName()).append(" 已在课表中使用，不可删除\n");
                     deleteTeacherDataPreviewingResult.set(true);
                 }
             });
@@ -229,7 +229,7 @@ public class TeacherDataController {
                 LogUtil.info("教师头像被修改，教师ID：" + teacherId);
             }
 
-            return result.success("教师头像上传成功");
+            return result.success("教师头像上传成功",teacherId);
 
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
@@ -260,6 +260,21 @@ public class TeacherDataController {
             LogUtil.error(e.getMessage());
             return result.failed("教师头像删除失败");
         }
+
+    }
+
+    @PostMapping("/queryTeacherAvatarByTeacherId")
+    public ResultVo queryTeacherAvatarByTeacherId(@RequestBody String teacherId) {
+
+        teacherId = JSONObject.parseObject(teacherId).getString("teacherId");
+
+        TeacherData teacherData = teacherDataService.queryTeacherAvatarByTeacherId(Integer.parseInt(teacherId));
+
+        if (isNull(teacherData)) {
+            return result.failed("教师头像加载失败");
+        }
+
+        return result.success("教师头像加载成功", teacherData);
 
     }
 

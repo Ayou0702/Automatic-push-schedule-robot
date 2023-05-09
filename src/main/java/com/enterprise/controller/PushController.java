@@ -46,8 +46,6 @@ public class PushController {
     @Resource
     EnterpriseDataService enterpriseDataService;
 
-    @Resource
-    CourseDataService courseDataService;
     /**
      * 五大节课程实体类
      */
@@ -80,11 +78,11 @@ public class PushController {
 
             // 计算当前推送周期、获取推送时间、计算当前推送星期
             int pushTime = parameterList.getPushTime();
-            int week = dateUtil.getW(new Date()) % 7;
-            int period = dateUtil.getPeriod(pushTime);
+            int period = dateUtil.getPeriod();
+            int week = dateUtil.getW();
 
             // 推送前刷新一遍课表
-            curriculumDataUtil.resetCurriculumData();
+            // curriculumDataUtil.resetCurriculumData();
 
             // 根据周期与星期获取五大节课程数据
             curriculumDataList = curriculumDataUtil.getTodayCurriculumData(period, week);

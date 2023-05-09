@@ -11,12 +11,12 @@ import com.enterprise.util.Result;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,10 +48,10 @@ public class CourseDataController {
         List<CourseData> courseDataList = courseDataService.queryAllCourseData();
 
         if (courseDataList.isEmpty()) {
-            return result.failed("课表数据加载失败");
+            return result.failed("课程数据加载失败");
         }
 
-        return result.success("课表数据加载成功", courseDataList);
+        return result.success("课程数据加载成功", courseDataList);
 
     }
 
@@ -170,7 +170,7 @@ public class CourseDataController {
 
         if (!deleteCourseData.isEmpty()) {
             deleteCourseData.forEach(courseId -> {
-                if (!isNull(scheduleDataService.queryScheduleDataByCourseId(courseId))) {
+                if (!scheduleDataService.queryScheduleDataByCourseId(courseId).isEmpty()) {
                     LogUtil.error("ID为" + courseId + "的课程信息删除失败,外键完整性约束检查失败");
                     message.append(courseDataService.queryCourseDataByCourseId(courseId).getCourseName()).append(" 已在课表中使用，不可删除\n");
                     deleteCourseDataPreviewingResult.set(true);
@@ -193,6 +193,87 @@ public class CourseDataController {
             throw new CustomException(message.toString(),"数据预检不通过，请检查",901);
         }
 
+    }
+
+    @PostMapping("/modifyCourseAvatar")
+    public ResultVo modifyCourseAvatar(@RequestParam("file") MultipartFile file, @RequestParam("courseId") int courseId) {
+
+        if (file.isEmpty()) {
+            return result.failed("文件上传失败");
+        }
+
+        String fileName = file.getOriginalFilename();
+        String extension = StringUtils.getFilenameExtension(fileName); // 获取文件扩展名
+
+        if (extension == null) {
+            return result.failed("文件不是图片");
+        }
+
+        if (!extension.equalsIgnoreCase("png") && !extension.equalsIgnoreCase("jpg") && !extension.equalsIgnoreCase("jpeg")) {
+            return result.failed("文件不是图片");
+        }
+
+        try {
+
+            byte[] bytes = file.getBytes();
+
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+
+            boolean modifyResult = courseDataService.modifyCourseAvatar(inputStream,courseId);
+
+            if (!modifyResult) {
+                LogUtil.error("ID为" + courseId + "的课程头像修改失败");
+                throw new Exception("修改课程头像失败,操作已回滚");
+            } else {
+                LogUtil.info("课程头像被修改，教师ID：" + courseId);
+            }
+
+            return result.success("课程头像上传成功",courseId);
+
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+            return result.failed("课程头像上传失败");
+        }
+
+    }
+
+    @PostMapping("/deleteCourseAvatar")
+    public ResultVo deleteCourseAvatar(@RequestBody String courseId) {
+
+        courseId = JSONObject.parseObject(courseId).getString("courseId");
+
+        try {
+
+            boolean deleteResult = courseDataService.deleteCourseAvatar(Integer.parseInt(courseId));
+
+            if (!deleteResult) {
+                LogUtil.error("ID为" + courseId + "的课程头像删除失败");
+                throw new Exception("删除课程头像失败,操作已回滚");
+            } else {
+                LogUtil.info("课程头像被删除，教师ID：" + courseId);
+            }
+
+            return result.success("课程头像删除成功");
+
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+            return result.failed("课程头像删除失败");
+        }
+
+    }
+
+    @PostMapping("/queryCourseAvatarByCourseId")
+    public ResultVo queryCourseAvatarByCourseId(@RequestBody String courseId) {
+
+        courseId = JSONObject.parseObject(courseId).getString("courseId");
+
+        CourseData teacherData = courseDataService.queryCourseAvatarByTeacherId(Integer.parseInt(courseId));
+
+        if (isNull(teacherData)) {
+            return result.failed("教师头像加载失败");
+        }
+
+        return result.success("教师头像加载成功", teacherData);
 
     }
 

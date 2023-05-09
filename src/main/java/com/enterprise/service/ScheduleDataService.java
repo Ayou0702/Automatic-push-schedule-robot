@@ -13,7 +13,7 @@ public interface ScheduleDataService {
 
     List<ScheduleData> queryScheduleDataByCourseId(int courseId);
 
-    ScheduleData queryScheduleDataByTeacherId(int teacherId);
+    List<ScheduleData> queryScheduleDataByTeacherId(int teacherId);
 
     boolean updateScheduleData(ScheduleData scheduleData);
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 import static com.enterprise.util.DateUtil.getNow;
-import static java.util.Objects.isNull;
 
 /**
  * 推送数据的工具类
@@ -47,9 +46,9 @@ public class PushDataUtil {
      */
     public ParameterListVo getParameterList() {
 
-        if (isNull(parameterList.getWeatherVo())) {
+        // if (isNull(parameterList.getWeatherVo())) {
             resetParameterList();
-        }
+        // }
 
         System.out.println("获取了参数列表：" + parameterList);
         return parameterList;

@@ -7,9 +7,9 @@ import java.sql.Blob;
 @Data
 public class TeacherData {
 
-    private int teacherId;
-    private String teacherName,teacherPhone,teacherInstitute;
-    private boolean teacherSpecialized;
+    public int teacherId;
+    public String teacherName,teacherPhone,teacherInstitute;
+    public boolean teacherSpecialized;
     public byte[] teacherAvatar;
 
 }

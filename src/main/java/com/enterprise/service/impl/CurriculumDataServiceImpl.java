@@ -20,6 +20,11 @@ public class CurriculumDataServiceImpl implements CurriculumDataService {
     }
 
     @Override
+    public List<CurriculumData> queryNowCurriculumData(int curriculumPeriod, int curriculumWeek) {
+        return curriculumDataMapper.queryNowCurriculumData(curriculumPeriod,curriculumWeek);
+    }
+
+    @Override
     public List<CurriculumData> queryCurriculumDataByTime(int curriculumPeriod, int curriculumWeek) {
         return curriculumDataMapper.queryCurriculumDataByTime(curriculumPeriod, curriculumWeek);
     }

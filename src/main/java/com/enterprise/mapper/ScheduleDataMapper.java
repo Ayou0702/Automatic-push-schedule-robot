@@ -1,6 +1,5 @@
 package com.enterprise.mapper;
 
-import com.enterprise.entity.CourseData;
 import com.enterprise.entity.ScheduleData;
 import org.apache.ibatis.annotations.*;
 
@@ -19,7 +18,7 @@ public interface ScheduleDataMapper {
     List<ScheduleData> queryScheduleDataByCourseId(int courseId);
 
     @Select("SELECT * FROM schedule_data WHERE teacher_id=#{teacherId}")
-    ScheduleData queryScheduleDataByTeacherId(int teacherId);
+    List<ScheduleData> queryScheduleDataByTeacherId(int teacherId);
 
     @Update("UPDATE schedule_data SET course_id = #{courseId}, teacher_id = #{teacherId}, schedule_period = #{schedulePeriod}, schedule_week = #{scheduleWeek}, schedule_section = #{scheduleSection} WHERE schedule_id = #{scheduleId}")
     boolean updateScheduleData(ScheduleData scheduleData);

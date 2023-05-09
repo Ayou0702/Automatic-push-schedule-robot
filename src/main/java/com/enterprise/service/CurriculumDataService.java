@@ -10,6 +10,8 @@ public interface CurriculumDataService {
 
     List<CurriculumData> queryAllCurriculumData();
 
+    List<CurriculumData> queryNowCurriculumData(int curriculumPeriod,int curriculumWeek);
+
     List<CurriculumData> queryCurriculumDataByTime(int curriculumPeriod, int curriculumWeek);
 
     CurriculumData preciseQueryCurriculumDataByTime(int curriculumPeriod, int curriculumWeek, int curriculumSection);
