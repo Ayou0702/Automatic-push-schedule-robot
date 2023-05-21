@@ -1,20 +1,17 @@
 package com.enterprise.controller;
 
-import com.enterprise.entity.CourseData;
 import com.enterprise.entity.CurriculumData;
-import com.enterprise.entity.TeacherData;
+import com.enterprise.entity.vo.PageVo;
 import com.enterprise.entity.vo.ResultVo;
-import com.enterprise.service.CourseDataService;
 import com.enterprise.service.CurriculumDataService;
-import com.enterprise.service.TeacherDataService;
 import com.enterprise.util.CurriculumDataUtil;
 import com.enterprise.util.DateUtil;
+import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +26,6 @@ public class CurriculumDataController {
 
     @Resource
     CurriculumDataUtil curriculumDataUtil;
-
-    @Resource
-    TeacherDataService teacherDataService;
-
-    @Resource
-    CourseDataService courseDataService;
 
     @Resource
     CurriculumDataService curriculumDataService;
@@ -53,36 +44,60 @@ public class CurriculumDataController {
     }
 
     @GetMapping("/resetCurriculumData")
-    public void resetCurriculumData() {
-        curriculumDataUtil.resetCurriculumData();
+    public ResultVo resetCurriculumData() {
+        try {
+            curriculumDataUtil.resetCurriculumData();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result.success("重置课程推送队列成功");
     }
 
-    @GetMapping("/queryNowCurriculumData")
-    public ResultVo queryNowCurriculumData() {
+    @PostMapping("/queryNowCurriculumData")
+    public ResultVo queryNowCurriculumData(@RequestBody Map<String, Integer> pageIndexMap) {
 
+        int pageIndex = pageIndexMap.get("pageIndex");
         int week = dateUtil.getW();
         int period = dateUtil.getPeriod();
 
-        System.out.println(period+"-"+week);
+        System.out.println("当前查询的是 "+period+"周 星期"+week+" 及以后的课程");
 
-        List<CurriculumData> curriculumDataList = curriculumDataService.queryNowCurriculumData(period,week);
+        List<CurriculumData> curriculumDataList = curriculumDataService.queryNowCurriculumData(period, week, 6, pageIndex * 6);
 
-        List<CourseData> courseDataList = courseDataService.queryAllCourseIdAndCourseName();
-
-        List<TeacherData> teacherDataList = teacherDataService.queryAllTeacherIdAndTeacherName();
-
-        if (curriculumDataList.isEmpty()||courseDataList.isEmpty()||teacherDataList.isEmpty()) {
+        if (curriculumDataList.isEmpty()) {
             return result.failed("课表数据加载失败");
         }
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("curriculumDataList", curriculumDataList);
-        map.put("courseDataList", courseDataList);
-        map.put("teacherDataList", teacherDataList);
+        PageVo pageVo = new PageVo();
 
-        return result.success("课表数据加载成功", map);
+        pageVo.setPageSize(6);
+        pageVo.setPageIndex(pageIndex * 6);
+        pageVo.setTotalCount(curriculumDataService.queryNowCurriculumDataCount(period, week));
+        pageVo.setCurriculumDataList(curriculumDataList);
 
+        return result.success("课表数据加载成功", pageVo);
 
+    }
+
+    @Transactional
+    @PostMapping("/deleteCurriculumData")
+    public ResultVo deleteCurriculumData(@RequestBody Map<String, Integer> map) {
+
+        int curriculumId = map.get("id");
+
+        try {
+            boolean deleteResult = curriculumDataService.deleteCurriculumDataByCurriculumId(curriculumId);
+            if (!deleteResult) {
+                LogUtil.error("序列ID为" + curriculumId + "的课表信息删除失败");
+                throw new Exception("删除课表信息失败");
+            } else {
+                LogUtil.info("序列ID为" + curriculumId + "的课表信息被删除");
+            }
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+        return result.success("课表信息删除成功");
     }
 
 }

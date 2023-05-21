@@ -88,10 +88,12 @@ public class CourseDataController {
 
             platformTransactionManager.commit(transaction);
         } catch (CustomException e) {
+            LogUtil.error("触发了CustomException："+e.getMessage());
             platformTransactionManager.rollback(transaction);
             return result.failed(e.getExceptionVo().getErrorCode(),e.getExceptionVo().getErrorMessage(),e.getExceptionVo().getErrorState());
 
         } catch (Exception e) {
+            LogUtil.error("触发了Exception："+e.getMessage());
             platformTransactionManager.rollback(transaction);
             return result.failed(e.getMessage());
         }
@@ -106,14 +108,14 @@ public class CourseDataController {
                 boolean updateResult = courseDataService.updateCourseData(courseData);
                 if (!updateResult) {
                     LogUtil.error("ID为" + courseData.getCourseId() + "的课程信息修改失败");
-                    throw new Exception("修改课程信息失败,操作已回滚");
+                    throw new CustomException("修改课程信息失败,操作已回滚");
                 } else {
                     record.add("课程信息被修改，课程信息：" + courseData);
                 }
             }
             record.forEach(LogUtil::info);
             LogUtil.info(courseDataList.size() + "条课程数据被修改");
-        } catch (Exception e) {
+        } catch (CustomException e) {
             LogUtil.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
@@ -127,14 +129,14 @@ public class CourseDataController {
                 boolean deleteResult = courseDataService.deleteCourseData(courseId);
                 if (!deleteResult) {
                     LogUtil.error("ID为" + courseId + "的课程信息删除失败");
-                    throw new Exception("删除课程信息失败,操作已回滚");
+                    throw new CustomException("删除课程信息失败,操作已回滚");
                 } else {
                     record.add("课程信息被删除，课程信息：" + courseId);
                 }
             }
             record.forEach(LogUtil::info);
             LogUtil.info(courseIdList.size() + "条课程数据被删除");
-        } catch (Exception e) {
+        } catch (CustomException e) {
             LogUtil.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
@@ -147,14 +149,14 @@ public class CourseDataController {
                 boolean addResult = courseDataService.addCourseData(courseData);
                 if (!addResult) {
                     LogUtil.error("新增课程信息失败，课程信息：" + courseData);
-                    throw new Exception("新增课程信息失败,操作已回滚");
+                    throw new CustomException("新增课程信息失败,操作已回滚");
                 } else {
                     record.add("新增课程信息，课程信息：" + courseData);
                 }
             }
             record.forEach(LogUtil::info);
             LogUtil.info("新增" + courseDataList.size() + "条课程信息");
-        } catch (Exception e) {
+        } catch (CustomException e) {
             LogUtil.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
@@ -248,14 +250,14 @@ public class CourseDataController {
 
             if (!deleteResult) {
                 LogUtil.error("ID为" + courseId + "的课程头像删除失败");
-                throw new Exception("删除课程头像失败,操作已回滚");
+                throw new CustomException("删除课程头像失败,操作已回滚");
             } else {
                 LogUtil.info("课程头像被删除，教师ID：" + courseId);
             }
 
             return result.success("课程头像删除成功");
 
-        } catch (Exception e) {
+        } catch (CustomException e) {
             LogUtil.error(e.getMessage());
             return result.failed("课程头像删除失败");
         }

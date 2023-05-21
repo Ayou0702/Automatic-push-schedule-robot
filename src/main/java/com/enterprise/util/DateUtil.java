@@ -60,7 +60,7 @@ public class DateUtil {
         }
 
         // 根据推送时间偏移星期
-        w = (w + pushDataUtil.getParameterList().getPushTime()) % 7;
+        w = (w + pushDataUtil.getPushTime()) % 8;
 
         return w;
     }
@@ -80,8 +80,7 @@ public class DateUtil {
 
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue(), date);
 
-        period = ((periods + pushDataUtil.getParameterList().getPushTime()) / 7) + 1;
-
+        period = ((periods + pushDataUtil.getPushTime()) / 7) + 1;
 
         // 调试，用于指定周数与当前星期
         if (!enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue().isEmpty()) {

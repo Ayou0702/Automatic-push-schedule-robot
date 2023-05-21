@@ -2,8 +2,10 @@ package com.enterprise.util;
 
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.ScheduleData;
+import com.enterprise.entity.vo.ScheduleInfo;
 import com.enterprise.service.*;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -20,24 +22,19 @@ public class CurriculumDataUtil {
     final String splitString = "-";
 
     @Resource
-    PushDataUtil pushDataUtil;
-
-    @Resource
     CurriculumDataService curriculumDataService;
-
-    @Resource
-    CourseDataService courseDataService;
 
     @Resource
     EnterpriseDataService enterpriseDataService;
 
     @Resource
-    ScheduleDataService scheduleDataService;
+    MultilistMapperService multilistMapperService;
 
-    ScheduleData[][][] scheduleDataArray;
+    ScheduleInfo[][][] scheduleDataArray;
 
     ArrayList<CurriculumData> curriculumDataArrayList = new ArrayList<>();
 
+    @Transactional
     public void resetCurriculumData() {
 
         boolean isEmpty = true;
@@ -46,14 +43,12 @@ public class CurriculumDataUtil {
             isEmpty = curriculumDataService.deleteAllCurriculumData();
         }
 
-        List<ScheduleData> scheduleDataList = scheduleDataService.queryAllScheduleData();
+        List<ScheduleInfo> scheduleDataList = multilistMapperService.resetCurriculumData();
 
-        scheduleDataArray = new ScheduleData[PushDataUtil.PERIOD_MAX][PushDataUtil.WEEK_MAX][PushDataUtil.SECTION_MAX];
+        scheduleDataArray = new ScheduleInfo[PushDataUtil.PERIOD_MAX][PushDataUtil.WEEK_MAX][PushDataUtil.SECTION_MAX];
 
         // 通过for循环将课表数据按照上课时间填入数组中
         scheduleDataList.forEach(scheduleData -> {
-
-
 
             // 读取每个课表数据中的开始时间和结束时间
             int[] period = getClassTime(scheduleData.getSchedulePeriod());
@@ -70,8 +65,8 @@ public class CurriculumDataUtil {
                 for (int p = section[0]; p <= section[1]; p++) {
                     // 检测课表时间是否有冲突
                     if (!isNull(scheduleDataArray[i][week][p])) {
-                        System.out.println("警告：课程表中有课程时间冲突，请检查");
-                        System.out.println("冲突课程ID：" + scheduleData.getScheduleId() + ";冲突课程ID：" + scheduleDataArray[i][week][p].getScheduleId());
+                        LogUtil.warn("课程表中有课程时间冲突，请检查");
+                        LogUtil.warn("冲突课程名称：" + scheduleData.getCourseName() + ";冲突课程名称：" + scheduleDataArray[i][week][p].getCourseName());
                         // 直接跳出周期循环
                         break period;
                     }
@@ -89,8 +84,17 @@ public class CurriculumDataUtil {
 
                         CurriculumData curriculumData = new CurriculumData();
 
-                        curriculumData.setCourseId(scheduleDataArray[i][j][k].getCourseId());
-                        curriculumData.setTeacherId(scheduleDataArray[i][j][k].getTeacherId());
+                        curriculumData.setCourseName(scheduleDataArray[i][j][k].getCourseName());
+                        curriculumData.setCourseVenue(scheduleDataArray[i][j][k].getCourseVenue());
+                        curriculumData.setCourseSpecialized(scheduleDataArray[i][j][k].isCourseSpecialized());
+                        curriculumData.setCourseAvatar(scheduleDataArray[i][j][k].getCourseAvatar());
+
+                        curriculumData.setTeacherName(scheduleDataArray[i][j][k].getTeacherName());
+                        curriculumData.setTeacherPhone(scheduleDataArray[i][j][k].getTeacherPhone());
+                        curriculumData.setTeacherInstitute(scheduleDataArray[i][j][k].getTeacherInstitute());
+                        curriculumData.setTeacherAvatar(scheduleDataArray[i][j][k].getTeacherAvatar());
+                        curriculumData.setTeacherSpecialized(scheduleDataArray[i][j][k].isCourseSpecialized());
+
                         curriculumData.setCurriculumPeriod(i);
                         curriculumData.setCurriculumWeek(j);
                         curriculumData.setCurriculumSection(k);
@@ -104,7 +108,7 @@ public class CurriculumDataUtil {
 
         curriculumDataArrayList.forEach(curriculumDataService::addCurriculumData);
 
-        curriculumDataArrayList = null;
+        curriculumDataArrayList.clear();
     }
 
     /**
@@ -161,7 +165,7 @@ public class CurriculumDataUtil {
                 // 非空判断
                 if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week,i) != null) {
                     // 专业课程判断
-                    if (courseDataService.queryCourseDataByCourseId(curriculumDataService.preciseQueryCurriculumDataByTime(period, week,i).getCourseId()).isCourseSpecialized()) {
+                    if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week,i).isCourseSpecialized()) {
                         // 获取已上课的专业课程次数
                         Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue());
                         // 自增

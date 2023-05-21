@@ -51,20 +51,4 @@ public class CourseDataUtil {
 
     }
 
-    public CourseData[] getTodayCourseData(List<CurriculumData> curriculumDataList) {
-
-        CourseData[] courseDataArray = new CourseData[PushDataUtil.SECTION_MAX];
-
-        curriculumDataList.forEach(curriculumData -> {
-            if (!isNull(curriculumData)) {
-
-                int section = curriculumData.getCurriculumSection();
-                courseDataArray[section] = courseDataService.queryCourseDataByCourseId(curriculumData.getCourseId());
-
-            }
-        });
-
-        return courseDataArray;
-    }
-
 }

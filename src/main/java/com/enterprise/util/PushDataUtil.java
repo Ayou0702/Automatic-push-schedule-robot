@@ -31,11 +31,11 @@ public class PushDataUtil {
     @Resource
     EnterpriseDataService enterpriseDataService;
 
-    // 参数列表实体类
-    ParameterListVo parameterList = new ParameterListVo();
+    String weatherValue, apiKey, dateEnding, dateStarting;
 
-    String weatherValue,apiKey,dateEnding,dateStarting;
-    int pushTime;
+    public int getPushTime() {
+        return Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
+    }
 
     /**
      * 获取天气位置、彩虹屁api、开学日期、放假日期、推送时间并写入对象
@@ -46,29 +46,19 @@ public class PushDataUtil {
      */
     public ParameterListVo getParameterList() {
 
-        // if (isNull(parameterList.getWeatherVo())) {
-            resetParameterList();
-        // }
+        // 参数列表实体类
+        ParameterListVo parameterList = new ParameterListVo();
 
-        System.out.println("获取了参数列表：" + parameterList);
-        return parameterList;
-    }
-
-    public void resetParameterList() {
         // 通过Service层获取数据
         weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
         apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
         dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
         dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
-        pushTime = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
-
-        // 写入推送时间用以共享给其他方法
-        parameterList.setPushTime(pushTime);
 
         // 非空判断
         if (StringUtils.isNotEmpty(apiKey) && StringUtils.isNotEmpty(weatherValue)) {
             // 获取天气信息
-            parameterList.setWeatherVo(ApiUtil.getWeather(apiKey, weatherValue, parameterList.getPushTime()));
+            parameterList.setWeatherVo(ApiUtil.getWeather(apiKey, weatherValue, getPushTime()));
         }
         if (StringUtils.isNotEmpty(apiKey)) {
             // 获取彩虹屁
@@ -80,10 +70,12 @@ public class PushDataUtil {
         }
         if (StringUtils.isNotEmpty(dateStarting)) {
             // 计算已经开学的天数,并根据推送时间偏移
-            parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + parameterList.getPushTime()));
+            parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + getPushTime()));
         }
 
-        System.out.println("重置了参数列表：" + parameterList);
+        LogUtil.info("获取了网络参数列表：" + parameterList);
+
+        return parameterList;
     }
 
 }

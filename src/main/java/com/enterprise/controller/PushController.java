@@ -4,7 +4,6 @@ import com.enterprise.config.ScheduledConfig;
 import com.enterprise.entity.CourseData;
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.service.CourseDataService;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.impl.SendMessageServiceImpl;
 import com.enterprise.util.*;
@@ -77,7 +76,7 @@ public class PushController {
             System.out.println("开学天数：" + parameterList.getDateStarting());
 
             // 计算当前推送周期、获取推送时间、计算当前推送星期
-            int pushTime = parameterList.getPushTime();
+            int pushTime = pushDataUtil.getPushTime();
             int period = dateUtil.getPeriod();
             int week = dateUtil.getW();
 
@@ -103,12 +102,11 @@ public class PushController {
 
             // 根据推送时间设置标题
             if (ScheduledConfig.NIGHT_PUSH_MODE == pushTime) {
-                title = "\uD83C\uDF08晚上好~明天是";
+                title = "\uD83C\uDF19晚上好";
             } else {
-                title = "\uD83C\uDF08早上好~今天是";
+                title = "\uD83C\uDF1E早上好~";
             }
 
-            title = title + parameterList.getWeatherVo().getDate() + " 第" + period + "周 " + dateUtil.getWeek(pushTime);
             // 消息内容
             // 天气非空判断
             if (parameterList.getWeatherVo() != null) {
@@ -118,9 +116,6 @@ public class PushController {
                 message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("~").append(parameterList.getWeatherVo().getHighest()).append("\n");
 
             }
-
-            // 设置课程信息并统计课程节数
-            courseSet(message, curriculumDataList);
 
             // 距离开学日天数统计
             if (parameterList.getDateStarting() == 0) {
@@ -145,6 +140,23 @@ public class PushController {
             // 循环推送多个用户
             sendMessage.pushCourse(title, message.toString());
 
+            // 清空内容
+            title = "";
+            message.setLength(0);
+
+            // 根据推送时间设置标题
+            if (ScheduledConfig.NIGHT_PUSH_MODE == pushTime) {
+                title = "\uD83C\uDF08明天是";
+            } else {
+                title = "\uD83C\uDF08今天是";
+            }
+
+            title = title + parameterList.getWeatherVo().getDate() + " 第" + period + "周 " + dateUtil.getWeek(pushTime);
+            // 设置课程信息并统计课程节数
+            courseSet(message, curriculumDataList);
+
+            sendMessage.pushCourse(title, message.toString());
+
         } else if (parameterList.getDateStarting() == -1) {
             startPush(parameterList, message);
 
@@ -165,37 +177,36 @@ public class PushController {
      */
     private void courseSet(StringBuilder message, List<CurriculumData> curriculumDataList) {
 
-        CourseData[] todayCourseData = courseDataUtil.getTodayCourseData(curriculumDataList);
-
         String[] selectionStringArray = {"\n1️⃣第一大节：", "\n2️⃣第二大节：", "\n3️⃣第三大节：", "\n4️⃣第四大节：", "\n5️第五大节："};
-        for (int i = 1; i < PushDataUtil.SECTION_MAX; i++) {
-            if (!isNull(todayCourseData[i])) {
-                // 总课程数统计
-                courseDataUtil.courseCount();
-                message.append(selectionStringArray[i - 1]).append(todayCourseData[i].getCourseName());
-                message.append("\n\uD83D\uDE8F上课地点：").append(todayCourseData[i].getCourseVenue()).append("\n");
 
-                // 判断是否是debug中，如不是则计算早晚课天数
-                if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
-                    if (i == 1) {
+        curriculumDataList.forEach(curriculumData -> {
+            int curriculumSection = curriculumData.getCurriculumSection() - 1;
+            // 总课程数统计
+            courseDataUtil.courseCount();
+            message.append(selectionStringArray[curriculumSection]);
+            message.append(curriculumData.getCourseName());
+            message.append("\n\uD83D\uDE8F上课地点：").append(curriculumData.getCourseVenue()).append("\n");
 
-                        // 早课天数统计
-                        int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays").getDataValue());
-                        temp++;
-                        enterpriseDataService.updateEnterpriseDataByDataName("morningClassDays", String.valueOf(temp));
+            // 判断是否是debug中，如不是则计算早晚课天数
+            if (!enterpriseDataService.queryingEnterpriseData("debugPushMode").getDataValue().equals(enterpriseDataService.queryingEnterpriseData("departmentId").getDataValue())) {
+                if (curriculumSection == 0) {
 
-                    } else if (i == 5) {
+                    // 早课天数统计
+                    int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays").getDataValue());
+                    temp++;
+                    enterpriseDataService.updateEnterpriseDataByDataName("morningClassDays", String.valueOf(temp));
 
-                        // 晚课天数统计
-                        int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays").getDataValue());
-                        temp++;
-                        enterpriseDataService.updateEnterpriseDataByDataName("nightClassDays", String.valueOf(temp));
+                } else if (curriculumSection == 4) {
 
-                    }
+                    // 晚课天数统计
+                    int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays").getDataValue());
+                    temp++;
+                    enterpriseDataService.updateEnterpriseDataByDataName("nightClassDays", String.valueOf(temp));
+
                 }
             }
-        }
 
+        });
     }
 
     /**

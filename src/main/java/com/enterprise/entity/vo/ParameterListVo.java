@@ -31,9 +31,4 @@ public class ParameterListVo {
      */
     private Integer dateStarting;
 
-    /**
-     * 推送时间
-     */
-    private int pushTime;
-
 }

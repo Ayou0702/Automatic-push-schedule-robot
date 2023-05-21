@@ -1,5 +1,6 @@
 package com.enterprise.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.enterprise.entity.CurriculumData;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,9 @@ public interface CurriculumDataService {
 
     List<CurriculumData> queryAllCurriculumData();
 
-    List<CurriculumData> queryNowCurriculumData(int curriculumPeriod,int curriculumWeek);
+    List<CurriculumData> queryNowCurriculumData(int curriculumPeriod,int curriculumWeek,int limit,int offset);
+
+    int queryNowCurriculumDataCount(int curriculumPeriod,int curriculumWeek);
 
     List<CurriculumData> queryCurriculumDataByTime(int curriculumPeriod, int curriculumWeek);
 
@@ -19,5 +22,7 @@ public interface CurriculumDataService {
     boolean addCurriculumData(CurriculumData curriculumData);
 
     boolean deleteAllCurriculumData();
+
+    boolean deleteCurriculumDataByCurriculumId(int curriculumId);
 
 }
