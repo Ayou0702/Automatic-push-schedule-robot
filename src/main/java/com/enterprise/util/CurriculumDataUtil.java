@@ -1,7 +1,6 @@
 package com.enterprise.util;
 
 import com.enterprise.entity.CurriculumData;
-import com.enterprise.entity.ScheduleData;
 import com.enterprise.entity.vo.ScheduleInfo;
 import com.enterprise.service.*;
 import org.springframework.stereotype.Component;
@@ -87,12 +86,12 @@ public class CurriculumDataUtil {
                         curriculumData.setCourseName(scheduleDataArray[i][j][k].getCourseName());
                         curriculumData.setCourseVenue(scheduleDataArray[i][j][k].getCourseVenue());
                         curriculumData.setCourseSpecialized(scheduleDataArray[i][j][k].isCourseSpecialized());
-                        curriculumData.setCourseAvatar(scheduleDataArray[i][j][k].getCourseAvatar());
+                        curriculumData.setCourseId(scheduleDataArray[i][j][k].getCourseId());
 
                         curriculumData.setTeacherName(scheduleDataArray[i][j][k].getTeacherName());
                         curriculumData.setTeacherPhone(scheduleDataArray[i][j][k].getTeacherPhone());
                         curriculumData.setTeacherInstitute(scheduleDataArray[i][j][k].getTeacherInstitute());
-                        curriculumData.setTeacherAvatar(scheduleDataArray[i][j][k].getTeacherAvatar());
+                        curriculumData.setTeacherId(scheduleDataArray[i][j][k].getTeacherId());
                         curriculumData.setTeacherSpecialized(scheduleDataArray[i][j][k].isCourseSpecialized());
 
                         curriculumData.setCurriculumPeriod(i);

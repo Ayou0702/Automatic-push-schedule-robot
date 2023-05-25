@@ -31,7 +31,7 @@ public class PushDataUtil {
     @Resource
     EnterpriseDataService enterpriseDataService;
 
-    String weatherValue, apiKey, dateEnding, dateStarting;
+    String weatherValue, apiKey, dateEnding, dateStarting,amapKey;
 
     public int getPushTime() {
         return Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
@@ -54,11 +54,12 @@ public class PushDataUtil {
         apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
         dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
         dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
+        amapKey = enterpriseDataService.queryingEnterpriseData("amapKey").getDataValue();
 
         // 非空判断
         if (StringUtils.isNotEmpty(apiKey) && StringUtils.isNotEmpty(weatherValue)) {
             // 获取天气信息
-            parameterList.setWeatherVo(ApiUtil.getWeather(apiKey, weatherValue, getPushTime()));
+            parameterList.setWeatherVo(ApiUtil.getWeather(amapKey, weatherValue, getPushTime()));
         }
         if (StringUtils.isNotEmpty(apiKey)) {
             // 获取彩虹屁

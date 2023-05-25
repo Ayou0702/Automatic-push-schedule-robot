@@ -10,8 +10,10 @@ public class ScheduleInfo {
 
     private String courseName,courseVenue,courseAvatar;
     private boolean courseSpecialized;
+    private int courseId;
 
     public String teacherName,teacherPhone,teacherInstitute,teacherAvatar;
     public boolean teacherSpecialized;
+    private int teacherId;
 
 }

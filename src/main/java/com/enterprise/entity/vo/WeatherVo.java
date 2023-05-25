@@ -17,15 +17,15 @@ public class WeatherVo {
     /**
      * 当前天气
      */
-    private String weather;
+    private String dayWeather;
     /**
      * 最低温度
      */
-    private String lowest;
+    private String nightTemp;
     /**
      * 最高温度
      */
-    private String highest;
+    private String dayTemp;
     /**
      * 当前天气预报地区
      */

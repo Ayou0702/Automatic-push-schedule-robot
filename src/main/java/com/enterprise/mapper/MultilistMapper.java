@@ -14,7 +14,6 @@ public interface MultilistMapper {
             "\tcourse_data.course_name, \n" +
             "\tcourse_data.course_venue, \n" +
             "\tcourse_data.course_specialized, \n" +
-            "\tcourse_data.course_avatar, \n" +
             "\tschedule_data.schedule_id, \n" +
             "\tschedule_data.schedule_period, \n" +
             "\tschedule_data.schedule_week, \n" +
@@ -22,8 +21,9 @@ public interface MultilistMapper {
             "\tteacher_data.teacher_name, \n" +
             "\tteacher_data.teacher_phone, \n" +
             "\tteacher_data.teacher_institute, \n" +
-            "\tteacher_data.teacher_avatar, \n" +
-            "\tteacher_data.teacher_specialized\n" +
+            "\tteacher_data.teacher_specialized, \n" +
+            "\tschedule_data.course_id, \n" +
+            "\tschedule_data.teacher_id\n" +
             "FROM\n" +
             "\tschedule_data\n" +
             "\tINNER JOIN\n" +

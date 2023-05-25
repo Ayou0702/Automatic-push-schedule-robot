@@ -80,16 +80,18 @@ public class ApiUtil {
     public static WeatherVo getWeather(String key, String city, int pushMode) {
 
         JSONObject jsonObject;
-        // 固定请求地址，详见 https://www.tianapi.com/apiview/72
-        String url = "https://api.tianapi.com/tianqi/index?key=";
+        // 固定请求地址，详见 https://lbs.amap.com/api/webservice/guide/api/weatherinfo/#t1
+        String url = "https://restapi.amap.com/v3/weather/weatherInfo?key=";
         // 清空一下
-        WeatherVo weatherVo = null;
+        WeatherVo weatherVo = new WeatherVo();
 
         try {
             // 根据推送时间获取天气
-            jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city));
+            jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city + "&extensions=all"));
             assert jsonObject != null;
-            weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(pushMode).toString(), WeatherVo.class);
+            weatherVo = JSON.parseObject(jsonObject.getJSONArray("forecasts").getJSONObject(0).getJSONArray("casts").getJSONObject(pushMode).toString(), WeatherVo.class);
+            weatherVo.setArea(jsonObject.getJSONArray("forecasts").getJSONObject(0).getString("city"));
+
             System.out.println((ScheduledConfig.NIGHT_PUSH_MODE == pushMode) ? "当前推送的是明日天气" : "当前推送的是今日天气");
         } catch (IOException e) {
             e.printStackTrace();

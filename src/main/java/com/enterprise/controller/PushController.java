@@ -102,7 +102,7 @@ public class PushController {
 
             // 根据推送时间设置标题
             if (ScheduledConfig.NIGHT_PUSH_MODE == pushTime) {
-                title = "\uD83C\uDF19晚上好";
+                title = "\uD83C\uDF1F晚上好";
             } else {
                 title = "\uD83C\uDF1E早上好~";
             }
@@ -112,8 +112,8 @@ public class PushController {
             if (parameterList.getWeatherVo() != null) {
                 // 根据推送时间判断天气推送提示
                 message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(ScheduledConfig.NIGHT_PUSH_MODE == pushTime ? "明日" : "今日").append("天气");
-                message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getWeather());
-                message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("~").append(parameterList.getWeatherVo().getHighest()).append("\n");
+                message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getDayWeather());
+                message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("℃~").append(parameterList.getWeatherVo().getDayTemp()).append("℃\n");
 
             }
 
@@ -235,8 +235,8 @@ public class PushController {
         }
 
         // 提醒明天的天气与温度
-        message.append("\n\uD83C\uDF25明天的气象：").append(parameterList.getWeatherVo().getWeather());
-        message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("~").append(parameterList.getWeatherVo().getHighest()).append("\n");
+        message.append("\n\uD83C\uDF25明天的气象：").append(parameterList.getWeatherVo().getDayWeather());
+        message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("~").append(parameterList.getWeatherVo().getDayTemp()).append("\n");
 
         message.append("\n\uD83C\uDFC4\uD83C\uDFFB\u200D♀️新学期马上开始咯\n");
 
@@ -253,6 +253,7 @@ public class PushController {
      * @param message 传入的message
      */
     private void vacationPush(ParameterListVo parameterList, StringBuilder message) {
+
         title = "\uD83C\uDFC1本学期的课程到此结束啦，一起来回顾一下吧";
 
         message.append("\n\uD83D\uDCD7这学期你一共上了 ").append(parameterList.getDateStarting()).append(" 天的课\n");
@@ -268,6 +269,7 @@ public class PushController {
 
         // 循环推送多个用户
         sendMessage.pushCourse(title, message.toString());
+
     }
 
     /**

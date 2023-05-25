@@ -12,23 +12,14 @@ public interface CourseDataMapper {
     @Select("SELECT * FROM course_data")
     List<CourseData> queryAllCourseData();
 
-    @Select("SELECT course_id,course_name,course_specialized,course_avatar FROM course_data")
+    @Select("SELECT course_id,course_name,course_specialized FROM course_data")
     List<CourseData> queryAllCourseIdAndCourseName();
 
     @Select("SELECT * FROM course_data WHERE course_id=#{courseId}")
     CourseData queryCourseDataByCourseId(int courseId);
 
-    @Select("SELECT course_avatar FROM course_data WHERE course_id=#{courseId}")
-    CourseData queryCourseAvatarByTeacherId(int courseId);
-
     @Update("UPDATE course_data SET course_name = #{courseName}, course_venue = #{courseVenue}, course_specialized = #{courseSpecialized} WHERE course_id = #{courseId}")
     boolean updateCourseData(CourseData courseData);
-
-    @Update("UPDATE course_data SET course_avatar = #{courseAvatar} WHERE course_id = #{courseId}")
-    boolean modifyCourseAvatar(ByteArrayInputStream courseAvatar, int courseId);
-
-    @Update("UPDATE course_data SET course_avatar = NULL WHERE course_id = #{courseId}")
-    boolean deleteCourseAvatar(int courseId);
 
     @Delete("DELETE FROM course_data WHERE course_id = #{courseId}")
     boolean deleteCourseData(int courseId);

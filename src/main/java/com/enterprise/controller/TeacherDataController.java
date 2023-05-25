@@ -11,12 +11,9 @@ import com.enterprise.util.Result;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -193,88 +190,6 @@ public class TeacherDataController {
             throw new CustomException(message.toString(), "数据预检不通过，请检查", 901);
         }
 
-
-    }
-
-    @PostMapping("/modifyTeacherAvatar")
-    public ResultVo modifyTeacherAvatar(@RequestParam("file") MultipartFile file, @RequestParam("teacherId") int teacherId) {
-
-        if (file.isEmpty()) {
-            return result.failed("文件上传失败");
-        }
-
-        String fileName = file.getOriginalFilename();
-        String extension = StringUtils.getFilenameExtension(fileName); // 获取文件扩展名
-
-        if (extension == null) {
-            return result.failed("文件不是图片");
-        }
-
-        if (!extension.equalsIgnoreCase("png") && !extension.equalsIgnoreCase("jpg") && !extension.equalsIgnoreCase("jpeg")) {
-            return result.failed("文件不是图片");
-        }
-
-        try {
-
-            byte[] bytes = file.getBytes();
-
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-
-            boolean modifyResult = teacherDataService.modifyTeacherAvatar(inputStream,teacherId);
-
-            if (!modifyResult) {
-                LogUtil.error("ID为" + teacherId + "的教师头像修改失败");
-                throw new Exception("修改教师头像失败,操作已回滚");
-            } else {
-                LogUtil.info("教师头像被修改，教师ID：" + teacherId);
-            }
-
-            return result.success("教师头像上传成功",teacherId);
-
-        } catch (Exception e) {
-            LogUtil.error(e.getMessage());
-            return result.failed("教师头像上传失败");
-        }
-
-    }
-
-    @PostMapping("/deleteTeacherAvatar")
-    public ResultVo deleteTeacherAvatar(@RequestBody String teacherId) {
-
-        teacherId = JSONObject.parseObject(teacherId).getString("teacherId");
-
-        try {
-
-            boolean deleteResult = teacherDataService.deleteTeacherAvatar(Integer.parseInt(teacherId));
-
-            if (!deleteResult) {
-                LogUtil.error("ID为" + teacherId + "的教师头像删除失败");
-                throw new Exception("删除教师头像失败,操作已回滚");
-            } else {
-                LogUtil.info("教师头像被删除，教师ID：" + teacherId);
-            }
-
-            return result.success("教师头像删除成功");
-
-        } catch (Exception e) {
-            LogUtil.error(e.getMessage());
-            return result.failed("教师头像删除失败");
-        }
-
-    }
-
-    @PostMapping("/queryTeacherAvatarByTeacherId")
-    public ResultVo queryTeacherAvatarByTeacherId(@RequestBody String teacherId) {
-
-        teacherId = JSONObject.parseObject(teacherId).getString("teacherId");
-
-        TeacherData teacherData = teacherDataService.queryTeacherAvatarByTeacherId(Integer.parseInt(teacherId));
-
-        if (isNull(teacherData)) {
-            return result.failed("教师头像加载失败");
-        }
-
-        return result.success("教师头像加载成功", teacherData);
 
     }
 

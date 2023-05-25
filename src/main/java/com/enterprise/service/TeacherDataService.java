@@ -2,8 +2,6 @@ package com.enterprise.service;
 
 import com.enterprise.entity.TeacherData;
 
-import java.io.ByteArrayInputStream;
-import java.sql.Blob;
 import java.util.List;
 
 public interface TeacherDataService {
@@ -14,13 +12,7 @@ public interface TeacherDataService {
 
     TeacherData queryTeacherDataByTeacherId(int teacherId);
 
-    TeacherData queryTeacherAvatarByTeacherId(int teacherId);
-
     boolean updateTeacherData(TeacherData teacherData);
-
-    boolean modifyTeacherAvatar(ByteArrayInputStream teacherAvatar, int teacherId);
-
-    boolean deleteTeacherAvatar(int teacherId);
 
     boolean deleteTeacherData(int teacherId);
 

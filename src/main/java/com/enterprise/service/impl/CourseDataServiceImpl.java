@@ -31,23 +31,8 @@ public class CourseDataServiceImpl implements CourseDataService {
     }
 
     @Override
-    public CourseData queryCourseAvatarByTeacherId(int courseId) {
-        return courseDataMapper.queryCourseAvatarByTeacherId(courseId);
-    }
-
-    @Override
     public boolean updateCourseData(CourseData courseData) {
         return courseDataMapper.updateCourseData(courseData);
-    }
-
-    @Override
-    public boolean modifyCourseAvatar(ByteArrayInputStream courseAvatar, int courseId) {
-        return courseDataMapper.modifyCourseAvatar(courseAvatar, courseId);
-    }
-
-    @Override
-    public boolean deleteCourseAvatar(int courseId) {
-        return courseDataMapper.deleteCourseAvatar(courseId);
     }
 
     @Override

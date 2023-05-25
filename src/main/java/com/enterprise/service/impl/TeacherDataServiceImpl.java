@@ -6,7 +6,6 @@ import com.enterprise.service.TeacherDataService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @Service
@@ -31,23 +30,8 @@ public class TeacherDataServiceImpl implements TeacherDataService {
     }
 
     @Override
-    public TeacherData queryTeacherAvatarByTeacherId(int teacherId) {
-        return teacherDataMapper.queryTeacherAvatarByTeacherId(teacherId);
-    }
-
-    @Override
     public boolean updateTeacherData(TeacherData teacherData) {
         return teacherDataMapper.updateTeacherData(teacherData);
-    }
-
-    @Override
-    public boolean modifyTeacherAvatar(ByteArrayInputStream teacherAvatar , int teacherId) {
-        return teacherDataMapper.modifyTeacherAvatar(teacherAvatar,teacherId);
-    }
-
-    @Override
-    public boolean deleteTeacherAvatar(int teacherId) {
-        return teacherDataMapper.deleteTeacherAvatar(teacherId);
     }
 
     @Override
