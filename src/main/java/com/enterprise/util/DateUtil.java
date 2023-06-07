@@ -24,84 +24,13 @@ public class DateUtil {
      * 格式化
      */
     final static ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
-
+    @Resource
+    PushDataUtil pushDataUtil;
     /**
      * enterpriseData的接口，用于读取查询企业微信配置数据
      */
     @Resource
     private EnterpriseDataService enterpriseDataService;
-
-    @Resource
-    PushDataUtil pushDataUtil;
-
-    /**
-     * 获取当前的星期
-     *
-     * @author PrefersMin
-     *
-     * @return 当前的星期
-     */
-    public int getW() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0) {
-            w = 0;
-        }
-
-        w = w % 7;
-
-        // 判断是否需要调试星期
-        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue().isEmpty()) {
-            w = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue());
-            System.out.println("测试星期：" + w);
-        } else {
-            System.out.println("当前星期：" + w);
-        }
-
-        // 根据推送时间偏移星期
-        w = (w + pushDataUtil.getPushTime()) % 8;
-
-        return w;
-    }
-
-
-    /**
-     * 获取当前周数(int类型)
-     *
-     * @author PrefersMin
-     *
-     * @return 当前周数(int类型)
-     */
-    public int getPeriod() {
-
-        int period, periods;
-        String date = LOCAL_FORMAT.get().format(new Date());
-
-        periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue(), date);
-
-        period = ((periods + pushDataUtil.getPushTime()) / 7) + 1;
-
-        // 调试，用于指定周数与当前星期
-        if (!enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue().isEmpty()) {
-            period = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue());
-            System.out.println("测试周数：" + period);
-        } else {
-            System.out.println("当前周数：" + period);
-        }
-
-        // 周数校验
-        if (abs(period) > PushDataUtil.PERIOD_MAX) {
-            period = 0;
-            System.out.println("错误：周数超过课表最大周数限制，将会引发数组越界错误，已归零");
-        } else if (period < 0) {
-            period = abs(period);
-            System.out.println("错误：周数为负数将会引发数组越界错误，已取绝对值");
-        }
-
-        return period;
-
-    }
 
     /**
      * 计算两个日期(String类型)之间相差多少天
@@ -156,6 +85,74 @@ public class DateUtil {
     }
 
     /**
+     * 获取当前的星期
+     *
+     * @author PrefersMin
+     *
+     * @return 当前的星期
+     */
+    public int getW() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0) {
+            w = 0;
+        }
+
+        w = w % 7;
+
+        // 判断是否需要调试星期
+        if (!enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue().isEmpty()) {
+            w = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue());
+            LogUtil.info("测试星期：" + w);
+        } else {
+            LogUtil.info("当前星期：" + w);
+        }
+
+        // 根据推送时间偏移星期
+        w = (w + pushDataUtil.getPushTime()) % 8;
+
+        return w;
+    }
+
+    /**
+     * 获取当前周数(int类型)
+     *
+     * @author PrefersMin
+     *
+     * @return 当前周数(int类型)
+     */
+    public int getPeriod() {
+
+        int period, periods;
+        String date = LOCAL_FORMAT.get().format(new Date());
+
+        periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue(), date);
+
+        period = ((periods + pushDataUtil.getPushTime()) / 7) + 1;
+
+        // 调试，用于指定周数与当前星期
+        if (!enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue().isEmpty()) {
+            period = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue());
+            LogUtil.info("测试周数：" + period);
+        } else {
+            LogUtil.info("当前周数：" + period);
+        }
+
+        // 周数校验
+        if (abs(period) > PushDataUtil.PERIOD_MAX) {
+            period = 0;
+            LogUtil.error("错误：周数超过课表最大周数限制，将会引发数组越界错误，已归零");
+        } else if (period < 0) {
+            period = abs(period);
+            LogUtil.error("错误：周数为负数将会引发数组越界错误，已取绝对值");
+        }
+
+        return period;
+
+    }
+
+    /**
      * 根据日期判断当前星期
      *
      * @author PrefersMin
@@ -175,6 +172,7 @@ public class DateUtil {
             if (w < 0) {
                 w = 0;
             }
+            w = w % 7;
             return week[w];
         }
 

@@ -8,8 +8,6 @@ public interface TeacherDataService {
 
     List<TeacherData> queryAllTeacherData();
 
-    List<TeacherData> queryAllTeacherIdAndTeacherName();
-
     TeacherData queryTeacherDataByTeacherId(int teacherId);
 
     boolean updateTeacherData(TeacherData teacherData);

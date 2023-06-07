@@ -1,7 +1,6 @@
 package com.enterprise.controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.enterprise.entity.TeacherData;
 import com.enterprise.entity.UserData;
 import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.UserDataService;
@@ -23,7 +22,7 @@ import static java.util.Objects.isNull;
 
 @RestController
 public class UserDataController {
-    
+
     @Resource
     UserDataService userDataService;
 
@@ -42,7 +41,7 @@ public class UserDataController {
 
         List<UserData> userDataList = userDataService.queryAllUserData();
 
-        if (userDataList.isEmpty()) {
+        if (userDataList == null) {
             return result.failed("用户数据加载失败");
         }
 
@@ -172,7 +171,7 @@ public class UserDataController {
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 
-            boolean modifyResult = userDataService.modifyUserAvatar(inputStream,userId);
+            boolean modifyResult = userDataService.modifyUserAvatar(inputStream, userId);
 
             if (!modifyResult) {
                 LogUtil.error("ID为" + userId + "的用户头像修改失败");
@@ -181,7 +180,7 @@ public class UserDataController {
                 LogUtil.info("用户头像被修改，教师ID：" + userId);
             }
 
-            return result.success("用户头像上传成功",userId);
+            return result.success("用户头像上传成功", userId);
 
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
@@ -219,5 +218,5 @@ public class UserDataController {
         return result.success("用户数据加载成功", userData);
 
     }
-    
+
 }

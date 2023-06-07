@@ -11,6 +11,6 @@ public interface WxCoreService {
 
     void resetTokenAndJsApi(WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig);
 
-    public String getAccessToken();
+    String getAccessToken();
 
 }

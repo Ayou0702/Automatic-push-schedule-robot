@@ -3,7 +3,6 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.mapper.CurriculumDataMapper;
 import com.enterprise.service.CurriculumDataService;
-import com.enterprise.service.MultilistMapperService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,8 +25,18 @@ public class CurriculumDataServiceImpl implements CurriculumDataService {
     }
 
     @Override
+    public List<CurriculumData> getAllNowCurriculumData(int curriculumPeriod, int curriculumWeek) {
+        return curriculumDataMapper.getAllNowCurriculumData(curriculumPeriod, curriculumWeek);
+    }
+
+    @Override
+    public boolean updateCurriculumData(CurriculumData curriculumData) {
+        return curriculumDataMapper.updateCurriculumData(curriculumData);
+    }
+
+    @Override
     public int queryNowCurriculumDataCount(int curriculumPeriod, int curriculumWeek) {
-        return curriculumDataMapper.queryNowCurriculumDataCount(curriculumPeriod,curriculumWeek);
+        return curriculumDataMapper.queryNowCurriculumDataCount(curriculumPeriod, curriculumWeek);
     }
 
     @Override

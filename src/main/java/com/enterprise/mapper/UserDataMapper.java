@@ -1,6 +1,5 @@
 package com.enterprise.mapper;
 
-import com.enterprise.entity.TeacherData;
 import com.enterprise.entity.UserData;
 import org.apache.ibatis.annotations.*;
 

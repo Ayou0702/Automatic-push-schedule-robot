@@ -1,21 +1,23 @@
 package com.enterprise.controller;
 
-import com.enterprise.config.ScheduledConfig;
 import com.enterprise.entity.CourseData;
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.vo.ParameterListVo;
+import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.EnterpriseDataService;
-import com.enterprise.service.impl.SendMessageServiceImpl;
+import com.enterprise.service.SendMessageService;
 import com.enterprise.util.*;
+import com.enterprise.util.enums.PushMode;
+import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
 
 /**
  * 推送服务
@@ -31,6 +33,10 @@ public class PushController {
      */
     @Resource
     DateUtil dateUtil;
+
+    @Resource
+    Result result;
+
     @Resource
     CourseDataUtil courseDataUtil;
 
@@ -53,8 +59,9 @@ public class PushController {
      * 声明一个标题
      */
     String title;
+    WxCpMessageSendResult wxCpMessageSendResult;
     @Resource
-    private SendMessageServiceImpl sendMessage;
+    private SendMessageService sendMessageService;
 
     /**
      * 课程推送主方法
@@ -62,7 +69,7 @@ public class PushController {
      * @author PrefersMin
      */
     @GetMapping("/pushCourse")
-    public void pushCourse() {
+    public ResultVo pushCourse() {
 
         // 推送前刷新一遍数据(天气播报位置、彩虹屁Api、开学日期、放假日期)
         ParameterListVo parameterList = pushDataUtil.getParameterList();
@@ -73,7 +80,7 @@ public class PushController {
 
         // 根据开学日期进行判断
         if (parameterList.getDateStarting() >= 0) {
-            System.out.println("开学天数：" + parameterList.getDateStarting());
+            LogUtil.info("开学天数：" + parameterList.getDateStarting());
 
             // 计算当前推送周期、获取推送时间、计算当前推送星期
             int pushTime = pushDataUtil.getPushTime();
@@ -87,35 +94,29 @@ public class PushController {
             curriculumDataList = curriculumDataUtil.getTodayCurriculumData(period, week);
 
             // 非空判断五大节课程数据(与逻辑)
-            if (isNull(curriculumDataList)) {
+            if (curriculumDataList.size() == 0) {
                 // 五大节课程数据都为空，跳过当天的推送
-                System.out.println("当前没有课程，跳过推送");
-                return;
+                LogUtil.info("当前没有课程，跳过推送");
+                return result.success("当前没有课程，跳过推送");
             }
 
             // 假日信息推送，若距离假期天数为 0 触发
             if (parameterList.getDateEnding() == 0) {
-
-                vacationPush(parameterList, message);
-                return;
+                return vacationPush(parameterList, message);
             }
 
             // 根据推送时间设置标题
-            if (ScheduledConfig.NIGHT_PUSH_MODE == pushTime) {
+            if (PushMode.NIGHT.getValue() == pushTime) {
                 title = "\uD83C\uDF1F晚上好";
             } else {
                 title = "\uD83C\uDF1E早上好~";
             }
 
             // 消息内容
-            // 天气非空判断
-            if (parameterList.getWeatherVo() != null) {
-                // 根据推送时间判断天气推送提示
-                message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(ScheduledConfig.NIGHT_PUSH_MODE == pushTime ? "明日" : "今日").append("天气");
-                message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getDayWeather());
-                message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("℃~").append(parameterList.getWeatherVo().getDayTemp()).append("℃\n");
-
-            }
+            // 根据推送时间判断天气推送提示
+            message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(PushMode.NIGHT.getValue() == pushTime ? "明日" : "今日").append("天气");
+            message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getDayWeather());
+            message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("℃~").append(parameterList.getWeatherVo().getDayTemp()).append("℃\n");
 
             // 距离开学日天数统计
             if (parameterList.getDateStarting() == 0) {
@@ -138,14 +139,18 @@ public class PushController {
             }
 
             // 循环推送多个用户
-            sendMessage.pushCourse(title, message.toString());
+            try {
+                wxCpMessageSendResult = pushCourse(title, message);
+            } catch (Exception e) {
+                return result.failed(e.getMessage());
+            }
 
             // 清空内容
             title = "";
             message.setLength(0);
 
             // 根据推送时间设置标题
-            if (ScheduledConfig.NIGHT_PUSH_MODE == pushTime) {
+            if (PushMode.NIGHT.getValue() == pushTime) {
                 title = "\uD83C\uDF08明天是";
             } else {
                 title = "\uD83C\uDF08今天是";
@@ -155,14 +160,19 @@ public class PushController {
             // 设置课程信息并统计课程节数
             courseSet(message, curriculumDataList);
 
-            sendMessage.pushCourse(title, message.toString());
+            try {
+                wxCpMessageSendResult = pushCourse(title, message);
+            } catch (Exception e) {
+                return result.failed(e.getMessage());
+            }
+
+            return result.success("课程推送成功", wxCpMessageSendResult);
 
         } else if (parameterList.getDateStarting() == -1) {
-            startPush(parameterList, message);
-
+            return startPush(parameterList, message);
         } else {
-            System.out.println("开学日期" + parameterList.getDateStarting());
-            System.out.println("没有开学，停止推送");
+            LogUtil.info("开学日期" + parameterList.getDateStarting());
+            return result.success("没有开学，停止推送");
         }
 
     }
@@ -217,8 +227,8 @@ public class PushController {
      * @param parameterList 传入的参数列表
      * @param message 传入的message
      */
-    private void startPush(ParameterListVo parameterList, StringBuilder message) {
-        System.out.println("开学日期" + parameterList.getDateStarting());
+    private ResultVo startPush(ParameterListVo parameterList, StringBuilder message) {
+        LogUtil.info("开学日期" + parameterList.getDateStarting());
         // 标题
         title = "\uD83C\uDF92明天是开学日噢，明晚开始推送课程信息~";
 
@@ -240,8 +250,28 @@ public class PushController {
 
         message.append("\n\uD83C\uDFC4\uD83C\uDFFB\u200D♀️新学期马上开始咯\n");
 
+        try {
+            pushCourse(title, message);
+        } catch (Exception e) {
+            return result.failed(e.getMessage());
+        }
+
+        return result.success("开学日推送成功");
+    }
+
+    private WxCpMessageSendResult pushCourse(String title, StringBuilder message) {
+
         // 循环推送多个用户
-        sendMessage.pushCourse(title, message.toString());
+        wxCpMessageSendResult = sendMessageService.pushCourse(title, message.toString());
+
+        logMessageSendResult();
+
+        if (wxCpMessageSendResult.getErrCode() != 0) {
+            sendMessageService.sendTextMsg("课程推送失败", enterpriseDataService.queryingEnterpriseData("debugUser").getDataValue());
+        }
+
+        return wxCpMessageSendResult;
+
     }
 
     /**
@@ -252,7 +282,7 @@ public class PushController {
      * @param parameterList 传入的参数列表
      * @param message 传入的message
      */
-    private void vacationPush(ParameterListVo parameterList, StringBuilder message) {
+    private ResultVo vacationPush(ParameterListVo parameterList, StringBuilder message) {
 
         title = "\uD83C\uDFC1本学期的课程到此结束啦，一起来回顾一下吧";
 
@@ -268,8 +298,13 @@ public class PushController {
         message.append("\n\uD83D\uDE0A本学期的工作到此结束，同学们下学期再见~\n");
 
         // 循环推送多个用户
-        sendMessage.pushCourse(title, message.toString());
+        try {
+            pushCourse(title, message);
+        } catch (Exception e) {
+            return result.failed(e.getMessage());
+        }
 
+        return result.success("假日推送成功");
     }
 
     /**
@@ -281,7 +316,8 @@ public class PushController {
      */
     @GetMapping("/pushTextMsg")
     public void pushTextMsg(String message) {
-        sendMessage.sendTextMsg(message);
+        wxCpMessageSendResult = sendMessageService.sendTextMsg(message);
+        logMessageSendResult();
     }
 
     /**
@@ -294,7 +330,16 @@ public class PushController {
      */
     @GetMapping("/pushConferenceMsg")
     public void pushConferenceMsg(String title, String message) {
-        sendMessage.sendNewsMsg(title, message);
+        wxCpMessageSendResult = sendMessageService.sendNewsMsg(title, message);
+        logMessageSendResult();
+    }
+
+    private void logMessageSendResult() {
+        if (wxCpMessageSendResult.getErrCode() != 0) {
+            LogUtil.error(wxCpMessageSendResult.toString());
+        } else {
+            LogUtil.info(wxCpMessageSendResult.toString());
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.EnterpriseData;
 import com.enterprise.mapper.EnterpriseDataMapper;
 import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.util.LogUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -62,7 +63,7 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
         boolean state = enterpriseDataMapper.updateEnterpriseDataByDataName(dataName, dataValue);
 
         if (state) {
-            System.out.println(dataName + "修改失败");
+            LogUtil.error(dataName + "修改失败");
         }
 
     }

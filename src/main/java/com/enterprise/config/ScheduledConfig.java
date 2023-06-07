@@ -2,8 +2,10 @@ package com.enterprise.config;
 
 import com.enterprise.controller.PushController;
 import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.service.SendMessageService;
+import com.enterprise.util.LogUtil;
+import com.enterprise.util.enums.PushMode;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 
@@ -17,16 +19,13 @@ import javax.annotation.Resource;
 public class ScheduledConfig {
 
     /**
-     * 日夜推送模式
-     */
-    public static final int NIGHT_PUSH_MODE = 1;
-    public static final int DAY_PUSH_MODE = 0;
-
-    /**
      * enterpriseData的接口，用于读取查询企业微信配置数据
      */
     @Resource
     EnterpriseDataService enterpriseDataService;
+
+    @Resource
+    SendMessageService sendMessageService;
 
     @Resource
     private PushController pushController;
@@ -34,22 +33,30 @@ public class ScheduledConfig {
     /**
      * 每天的22:30触发推送
      */
-    @Scheduled(cron = "0 30 22 ? * *")
+    // @Scheduled(cron = "0 45 7 ? * *")
+    public void scheduledPushCourseDay() {
+        doPushIf(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue().equals(String.valueOf(PushMode.DAY.getValue())), "晨间推送");
+    }
+
+    // @Scheduled(cron = "0 30 22 ? * *")
     public void scheduledPushCourseNight() {
-        if (NIGHT_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue())) {
-            pushController.pushCourse();
+        doPushIf(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue().equals(String.valueOf(PushMode.NIGHT.getValue())), "夜间推送");
+    }
+
+    private void doPushIf(boolean condition, String timeDesc) {
+        if (condition) {
+            int code = 0;
+            try {
+                code = pushController.pushCourse().getCode();
+            } catch (Exception e) {
+                sendMessageService.sendTextMsg("课程推送失败", enterpriseDataService.queryingEnterpriseData("debugUser").getDataValue());
+            }
+            if (code != 200) {
+                LogUtil.error(timeDesc + "失败");
+            }
         }
     }
 
-    /**
-     * 每天的7:45触发推送
-     */
-    @Scheduled(cron = "0 45 7 ? * *")
-    public void scheduledPushCourseDay() {
-        if (DAY_PUSH_MODE == Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue())) {
-            pushController.pushCourse();
-        }
-    }
 
     /*
       cron值可以是

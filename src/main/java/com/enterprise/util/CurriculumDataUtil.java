@@ -19,19 +19,14 @@ public class CurriculumDataUtil {
      * 分割字符
      */
     final String splitString = "-";
-
+    final ArrayList<CurriculumData> curriculumDataArrayList = new ArrayList<>();
     @Resource
     CurriculumDataService curriculumDataService;
-
     @Resource
     EnterpriseDataService enterpriseDataService;
-
     @Resource
     MultilistMapperService multilistMapperService;
-
     ScheduleInfo[][][] scheduleDataArray;
-
-    ArrayList<CurriculumData> curriculumDataArrayList = new ArrayList<>();
 
     @Transactional
     public void resetCurriculumData() {
@@ -162,9 +157,9 @@ public class CurriculumDataUtil {
             // 根据courseInfo表中的totalSpecializedClassTimes字段判断今天是否有专业课程
             for (int i = 1; i < PushDataUtil.SECTION_MAX - 1; i++) {
                 // 非空判断
-                if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week,i) != null) {
+                if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week, i) != null) {
                     // 专业课程判断
-                    if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week,i).isCourseSpecialized()) {
+                    if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week, i).isCourseSpecialized()) {
                         // 获取已上课的专业课程次数
                         Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue());
                         // 自增

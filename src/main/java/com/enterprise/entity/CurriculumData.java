@@ -1,11 +1,16 @@
 package com.enterprise.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
 public class CurriculumData {
 
-    private int curriculumId,curriculumPeriod,curriculumWeek,curriculumSection;
+    @TableId(type = IdType.AUTO)
+    private Integer curriculumId;
+
+    private int curriculumPeriod,curriculumWeek,curriculumSection;
 
     private String courseName,courseVenue;
     private boolean courseSpecialized;

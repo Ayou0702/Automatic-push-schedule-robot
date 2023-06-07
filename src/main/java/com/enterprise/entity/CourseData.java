@@ -8,6 +8,5 @@ public class CourseData {
     private int courseId;
     private String courseName,courseVenue;
     private boolean courseSpecialized;
-    public byte[] courseAvatar;
 
 }

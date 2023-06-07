@@ -25,49 +25,51 @@ import java.util.List;
 @RestController
 public class EnterpriseDataController {
 
-  @Resource
-  Result result;
+    @Resource
+    Result result;
 
-  /**
-   * enterpriseData的接口，用于读取查询企业微信配置数据
-   */
-  @Resource
-  EnterpriseDataService enterpriseDataService;
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
+    @Resource
+    EnterpriseDataService enterpriseDataService;
 
-  @GetMapping("/getEnterpriseData")
-  public ResultVo getEnterpriseData() {
+    @GetMapping("/getEnterpriseData")
+    public ResultVo getEnterpriseData() {
 
-    List<EnterpriseData> enterpriseDataList = enterpriseDataService.queryingAllEnterpriseData();
-    if (enterpriseDataList.isEmpty()) {
-      return result.failed("配置数据加载失败");
-    }
-    return result.success("配置数据加载成功", enterpriseDataList);
+        List<EnterpriseData> enterpriseDataList = enterpriseDataService.queryingAllEnterpriseData();
 
-  }
-
-  @PostMapping("/updateEnterpriseData")
-  @Transactional(rollbackFor = Exception.class)
-  public ResultVo updateEnterpriseData(@RequestBody List<EnterpriseData> enterpriseDataList) {
-    List<String> record = new ArrayList<>();
-    try {
-      for (EnterpriseData enterpriseData : enterpriseDataList) {
-        boolean updateResult = enterpriseDataService.updateEnterpriseData(enterpriseData);
-        if (!updateResult) {
-          LogUtil.error("修改配置数据失败，数据项名称：" + enterpriseData.getDataName() + "，数据项值：" + enterpriseData.getDataValue());
-          throw new Exception("修改配置数据失败,操作已回滚");
+        if (enterpriseDataList == null) {
+            return result.failed("配置数据加载成功");
         }
-        record.add("配置数据被修改，数据信息：" + enterpriseData);
-      }
-      record.forEach(LogUtil::info);
 
-    } catch (Exception e) {
-      LogUtil.error(e.getMessage());
-      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-      return result.failed(e.getMessage());
+        return result.success("配置数据加载成功", enterpriseDataList);
+
     }
 
-    return result.success("配置数据修改成功");
-  }
+    @PostMapping("/updateEnterpriseData")
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVo updateEnterpriseData(@RequestBody List<EnterpriseData> enterpriseDataList) {
+        List<String> record = new ArrayList<>();
+        try {
+            for (EnterpriseData enterpriseData : enterpriseDataList) {
+                boolean updateResult = enterpriseDataService.updateEnterpriseData(enterpriseData);
+                if (!updateResult) {
+                    LogUtil.error("修改配置数据失败，数据项名称：" + enterpriseData.getDataName() + "，数据项值：" + enterpriseData.getDataValue());
+                    throw new Exception("修改配置数据失败,操作已回滚");
+                }
+                record.add("配置数据被修改，数据信息：" + enterpriseData);
+            }
+            record.forEach(LogUtil::info);
+
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return result.failed(e.getMessage());
+        }
+
+        return result.success("配置数据修改成功");
+    }
 
 
 }

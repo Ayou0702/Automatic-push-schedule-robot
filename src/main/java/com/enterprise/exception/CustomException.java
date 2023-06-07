@@ -42,14 +42,4 @@ public class CustomException extends Exception  {
         this.exceptionVo = exceptionVo;
     }
 
-    @Override
-    public String getMessage() {
-        return super.getMessage();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
 }

@@ -3,11 +3,12 @@ package com.enterprise.service.impl;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
 import com.enterprise.util.ApiUtil;
-import lombok.extern.slf4j.Slf4j;
+import com.enterprise.util.LogUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.impl.WxCpMessageServiceImpl;
 import me.chanjar.weixin.cp.bean.article.NewArticle;
 import me.chanjar.weixin.cp.bean.message.WxCpMessage;
+import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +22,6 @@ import java.util.List;
  * @version 1.1
  */
 @Service
-@Slf4j
 public class SendMessageServiceImpl implements SendMessageService {
 
     /**
@@ -47,7 +47,7 @@ public class SendMessageServiceImpl implements SendMessageService {
      * @param title 推送的标题
      * @param message 推送的消息
      */
-    public void pushCourse(String title, String message) {
+    public WxCpMessageSendResult pushCourse(String title, String message) {
 
         try {
             // 微信消息对象
@@ -65,12 +65,15 @@ public class SendMessageServiceImpl implements SendMessageService {
             // 设置跳转；可以自己制作一个网页
             pushCourse.setUrl(enterpriseDataService.queryingEnterpriseData("url").getDataValue());
             pushCourse.setBtnTxt("PrefersMin");
-            wxCpMessageService.send(pushCourse);
-            log.info(pushCourse.toString());
+            LogUtil.info(pushCourse.toString());
+
+            return wxCpMessageService.send(pushCourse);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        return null;
     }
 
     /**
@@ -80,7 +83,7 @@ public class SendMessageServiceImpl implements SendMessageService {
      *
      * @param message 推送的消息
      */
-    public void sendTextMsg(String message) {
+    public WxCpMessageSendResult sendTextMsg(String message) {
 
         try {
             WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(wxCoreService.getWxCpService());
@@ -91,8 +94,35 @@ public class SendMessageServiceImpl implements SendMessageService {
             // 设置发送用户
             textMsg.setToUser(apiUtil.getParticipants());
             textMsg.setContent(message);
+            LogUtil.info(textMsg.toString());
+            return wxCpMessageService.send(textMsg);
+        } catch (WxErrorException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * 用于发送纯文本消息
+     *
+     * @param message 推送的消息
+     *
+     * @author PrefersMin
+     */
+    public void sendTextMsg(String message, String sendUser) {
+
+        try {
+            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(wxCoreService.getWxCpService());
+            WxCpMessage textMsg = new WxCpMessage();
+            textMsg.setSafe("0");
+            // 设置消息类型
+            textMsg.setMsgType("text");
+            // 设置发送用户
+            textMsg.setToUser(sendUser);
+            textMsg.setContent(message);
+            LogUtil.info(textMsg.toString());
+
             wxCpMessageService.send(textMsg);
-            log.info(textMsg.toString());
         } catch (WxErrorException e) {
             throw new RuntimeException(e);
         }
@@ -107,7 +137,7 @@ public class SendMessageServiceImpl implements SendMessageService {
      * @param title 推送的标题
      * @param message 推送的消息
      */
-    public void sendNewsMsg(String title, String message) {
+    public WxCpMessageSendResult sendNewsMsg(String title, String message) {
 
         try {
             // 微信消息对象
@@ -134,13 +164,13 @@ public class SendMessageServiceImpl implements SendMessageService {
             // 添加到List集合
             articlesList.add(newArticle);
             newsMsg.setArticles(articlesList);
+            LogUtil.info(newsMsg.toString());
 
-            wxCpMessageService.send(newsMsg);
-
-            log.info(newsMsg.toString());
+            return wxCpMessageService.send(newsMsg);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }

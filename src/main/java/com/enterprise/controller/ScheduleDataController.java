@@ -34,12 +34,6 @@ public class ScheduleDataController {
     ScheduleDataService scheduleDataService;
 
     @Resource
-    CourseDataService courseDataService;
-
-    @Resource
-    TeacherDataService teacherDataService;
-
-    @Resource
     PlatformTransactionManager platformTransactionManager;
 
     List<Integer> deleteScheduleData;
@@ -51,20 +45,11 @@ public class ScheduleDataController {
 
         List<ScheduleData> scheduleDataList = scheduleDataService.queryAllScheduleData();
 
-        List<CourseData> courseDataList = courseDataService.queryAllCourseIdAndCourseName();
-
-        List<TeacherData> teacherDataList = teacherDataService.queryAllTeacherIdAndTeacherName();
-
-        if (scheduleDataList.isEmpty()||courseDataList.isEmpty()||teacherDataList.isEmpty()) {
+        if (scheduleDataList == null) {
             return result.failed("课表数据加载失败");
         }
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("scheduleDataList", scheduleDataList);
-        map.put("courseDataList", courseDataList);
-        map.put("teacherDataList", teacherDataList);
-
-        return result.success("课表数据加载成功", map);
+        return result.success("课表数据加载成功", scheduleDataList);
 
     }
 

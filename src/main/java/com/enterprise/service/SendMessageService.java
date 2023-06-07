@@ -1,11 +1,15 @@
 package com.enterprise.service;
 
+import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
+
 public interface SendMessageService {
 
-    void pushCourse(String title, String message);
+    WxCpMessageSendResult pushCourse(String title, String message);
 
-    public void sendTextMsg(String message);
+    WxCpMessageSendResult sendTextMsg(String message);
 
-    public void sendNewsMsg(String title, String message);
+    void sendTextMsg(String message, String sendUser);
+
+    WxCpMessageSendResult sendNewsMsg(String title, String message);
 
 }

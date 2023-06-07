@@ -11,9 +11,6 @@ public interface TeacherDataMapper {
     @Select("SELECT * FROM teacher_data")
     List<TeacherData> queryAllTeacherData();
 
-    @Select("SELECT teacher_id,teacher_name,teacher_specialized FROM teacher_data")
-    List<TeacherData> queryAllTeacherIdAndTeacherName();
-
     @Select("SELECT * FROM teacher_data WHERE teacher_id=#{teacherId}")
     TeacherData queryTeacherDataByTeacherId(int teacherId);
 

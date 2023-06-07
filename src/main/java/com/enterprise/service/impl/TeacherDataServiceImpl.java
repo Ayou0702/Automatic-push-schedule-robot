@@ -20,11 +20,6 @@ public class TeacherDataServiceImpl implements TeacherDataService {
     }
 
     @Override
-    public List<TeacherData> queryAllTeacherIdAndTeacherName() {
-        return teacherDataMapper.queryAllTeacherIdAndTeacherName();
-    }
-
-    @Override
     public TeacherData queryTeacherDataByTeacherId(int teacherId) {
         return teacherDataMapper.queryTeacherDataByTeacherId(teacherId);
     }
