@@ -3,10 +3,10 @@ package com.enterprise.entity.vo;
 import lombok.Data;
 
 /**
- * 天气参数
+ * 天气参数实体类
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @Data
 public class WeatherVo {

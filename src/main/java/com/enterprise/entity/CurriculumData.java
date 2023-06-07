@@ -4,6 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+/**
+ * 线性课程表对象实体类
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 @Data
 public class CurriculumData {
 

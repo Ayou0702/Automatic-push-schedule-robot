@@ -77,27 +77,21 @@ public class EnterpriseDataController {
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
 
-        try {
+        boolean updateResult = enterpriseDataService.updateEnterpriseData(enterpriseData);
 
-            boolean updateResult = enterpriseDataService.updateEnterpriseData(enterpriseData);
-
-            if (!updateResult) {
-                LogUtil.error("修改配置数据失败，数据项名称：" + enterpriseData.getDataName() + "，数据项值：" + enterpriseData.getDataValue());
-                throw new Exception("修改配置数据失败,操作已回滚");
-            }
-
+        if (updateResult) {
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
             LogUtil.info("配置数据被修改，数据信息：" + enterpriseData);
 
-            return result.success(200,"配置数据修改成功","名称为 " + enterpriseData.getDataName() + " 的配置数据修改成功");
+            return result.success(200, "配置数据修改成功", "名称为 " + enterpriseData.getDataName() + " 的配置数据修改成功");
 
-        } catch (Exception e) {
-            LogUtil.error(e.getMessage());
-            // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400,"修改失败",e.getMessage());
         }
+
+        LogUtil.error("修改配置数据失败，数据项名称：" + enterpriseData.getDataName() + "，数据项值：" + enterpriseData.getDataValue());
+        // 回滚事务
+        platformTransactionManager.rollback(transactionStatus);
+        return result.failed(400, "修改失败", "修改配置数据失败,操作已回滚");
 
     }
 

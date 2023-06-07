@@ -3,10 +3,10 @@ package com.enterprise.entity.vo;
 import lombok.Data;
 
 /**
- * 推送参数
+ * 推送参数实体类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Data
 public class ParameterListVo {

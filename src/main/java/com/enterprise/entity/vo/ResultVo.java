@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 /**
- * 统一返回对象
+ * 返回对象实体类
  *
  * @author PrefersMin
  * @version 1.0

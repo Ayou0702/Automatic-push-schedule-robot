@@ -3,10 +3,10 @@ package com.enterprise.entity;
 import lombok.Data;
 
 /**
- * enterpriseData表的实体类
+ * 配置数据对象实体类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Data
 public class EnterpriseData {

@@ -3,10 +3,10 @@ package com.enterprise.entity.vo;
 import lombok.Data;
 
 /**
- * 企业微信部门成员对象
+ * 企业微信部门成员对象实体类
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @Data
 public class UserListVo {

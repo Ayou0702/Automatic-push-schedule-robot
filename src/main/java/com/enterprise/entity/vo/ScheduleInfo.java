@@ -2,6 +2,12 @@ package com.enterprise.entity.vo;
 
 import lombok.Data;
 
+/**
+ * 课表详细信息实体类
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 @Data
 public class ScheduleInfo {
 

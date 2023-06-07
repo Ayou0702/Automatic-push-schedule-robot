@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Result implements Serializable {
 
     /**
-     * 封装返回结果
+     * 返回对象实体类
      */
     @Resource
     ResultVo resultVo;
