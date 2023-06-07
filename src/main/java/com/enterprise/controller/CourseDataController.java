@@ -54,11 +54,11 @@ public class CourseDataController {
     PlatformTransactionManager platformTransactionManager;
 
     /**
-     * 获取课程数据
+     * 查询所有课程数据
      *
      * @author PrefersMin
      *
-     * @return 返回获取到的课程数据
+     * @return 返回查询到的课程数据
      */
     @GetMapping("/getCourseData")
     public ResultVo getCourseData() {
@@ -157,9 +157,8 @@ public class CourseDataController {
                 // 回滚事务
                 platformTransactionManager.rollback(transactionStatus);
                 return result.failed(400, "删除课程数据失败", "ID为" + courseId + "的课程数据删除失败");
-            } else {
-                record.add("ID为" + courseId + "的课程数据删除成功");
             }
+            record.add("ID为" + courseId + "的课程数据删除成功");
         }
 
         record.forEach(LogUtil::info);

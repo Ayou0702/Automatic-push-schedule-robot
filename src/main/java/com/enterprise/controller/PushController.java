@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @RestController
 public class PushController {
@@ -195,6 +195,48 @@ public class PushController {
 
     }
 
+    /**
+     * 推送纯文本消息
+     *
+     * @author PrefersMin
+     *
+     * @param message 需要推送的消息内容
+     */
+    @GetMapping("/pushTextMsg")
+    public void pushTextMsg(String message) {
+        wxCpMessageSendResult = sendMessageService.sendTextMsg(message);
+        logMessageSendResult();
+    }
+
+    /**
+     * 推送图文消息
+     *
+     * @author PrefersMin
+     *
+     * @param title 需要推送的消息标题
+     * @param message 需要推送的消息内容
+     */
+    @GetMapping("/pushConferenceMsg")
+    public void pushConferenceMsg(String title, String message) {
+        wxCpMessageSendResult = sendMessageService.sendNewsMsg(title, message);
+        logMessageSendResult();
+    }
+
+    /**
+     * 打印推送日志
+     *
+     * @author PrefersMin
+     *
+     */
+    private void logMessageSendResult() {
+
+        if (wxCpMessageSendResult.getErrCode() != 0) {
+            LogUtil.error(wxCpMessageSendResult.toString());
+        } else {
+            LogUtil.info(wxCpMessageSendResult.toString());
+        }
+
+    }
 
     /**
      * 五大节课程非空判断、统计早晚课天数与总课程数
@@ -277,6 +319,15 @@ public class PushController {
         return result.success("开学日推送成功");
     }
 
+    /**
+     * 获取推送结果
+     *
+     * @author PrefersMin
+     *
+     * @param title 推送标题
+     * @param message 推送消息
+     * @return 推送结果
+     */
     private WxCpMessageSendResult pushCourse(String title, StringBuilder message) {
 
         // 循环推送多个用户
@@ -323,41 +374,6 @@ public class PushController {
         }
 
         return result.success("假日推送成功");
-    }
-
-    /**
-     * 推送纯文本消息
-     *
-     * @author PrefersMin
-     *
-     * @param message 需要推送的消息内容
-     */
-    @GetMapping("/pushTextMsg")
-    public void pushTextMsg(String message) {
-        wxCpMessageSendResult = sendMessageService.sendTextMsg(message);
-        logMessageSendResult();
-    }
-
-    /**
-     * 推送图文消息
-     *
-     * @author PrefersMin
-     *
-     * @param title 需要推送的消息标题
-     * @param message 需要推送的消息内容
-     */
-    @GetMapping("/pushConferenceMsg")
-    public void pushConferenceMsg(String title, String message) {
-        wxCpMessageSendResult = sendMessageService.sendNewsMsg(title, message);
-        logMessageSendResult();
-    }
-
-    private void logMessageSendResult() {
-        if (wxCpMessageSendResult.getErrCode() != 0) {
-            LogUtil.error(wxCpMessageSendResult.toString());
-        } else {
-            LogUtil.info(wxCpMessageSendResult.toString());
-        }
     }
 
 }

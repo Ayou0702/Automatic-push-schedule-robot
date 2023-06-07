@@ -87,6 +87,19 @@ public class CurriculumDataServiceImpl implements CurriculumDataService {
     }
 
     /**
+     * 查询指定队列ID的课程推送队列数据
+     *
+     * @author PrefersMin
+     *
+     * @param curriculumId 队列ID
+     * @return 返回查询结果
+     */
+    @Override
+    public CurriculumData queryCurriculumDataByCurriculumId(int curriculumId){
+        return curriculumDataMapper.queryCurriculumDataByCurriculumId(curriculumId);
+    }
+
+    /**
      * 查询指定周期和星期之后指定页大小与页数的课程推送队列数据
      *
      * @author PrefersMin

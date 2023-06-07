@@ -69,6 +69,17 @@ public interface CurriculumDataMapper extends BaseMapper<CurriculumData> {
     List<CurriculumData> queryAllCurriculumData();
 
     /**
+     * 查询指定队列ID的课程推送队列数据
+     *
+     * @author PrefersMin
+     *
+     * @param curriculumId 队列ID
+     * @return 返回查询结果
+     */
+    @Select("SELECT * FROM curriculum_data WHERE curriculum_id=#{curriculumId}")
+    CurriculumData queryCurriculumDataByCurriculumId(int curriculumId);
+
+    /**
      * 查询指定周期和星期之后指定页大小与页数的课程推送队列数据
      *
      * @author PrefersMin
