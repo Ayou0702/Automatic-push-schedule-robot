@@ -24,13 +24,15 @@ public class DateUtil {
      * 格式化
      */
     final static ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+
     @Resource
     PushDataUtil pushDataUtil;
+
     /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
+     * 企业数据接口
      */
     @Resource
-    private EnterpriseDataService enterpriseDataService;
+    EnterpriseDataService enterpriseDataService;
 
     /**
      * 计算两个日期(String类型)之间相差多少天

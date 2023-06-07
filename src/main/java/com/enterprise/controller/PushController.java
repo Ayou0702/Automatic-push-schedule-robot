@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class PushController {
 
     /**
-     * 工具类
+     * 日期工具类
      */
     @Resource
     DateUtil dateUtil;
@@ -40,19 +40,23 @@ public class PushController {
     @Resource
     Result result;
 
+    /**
+     * 课程数据工具类
+     */
     @Resource
     CourseDataUtil courseDataUtil;
 
+    /**
+     * 线性课程表数据工具类
+     */
     @Resource
     CurriculumDataUtil curriculumDataUtil;
 
     @Resource
     PushDataUtil pushDataUtil;
+
     /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
-     */
-    /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
+     * 企业数据接口
      */
     @Resource
     EnterpriseDataService enterpriseDataService;

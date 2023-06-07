@@ -19,7 +19,7 @@ import java.util.List;
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
 
     /**
-     * 负责enterpriseData表的数据交互
+     * 负责enterpriseData表的Mapper
      */
     @Resource
     private EnterpriseDataMapper enterpriseDataMapper;

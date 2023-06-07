@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 public class ScheduledConfig {
 
     /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
+     * 企业数据接口
      */
     @Resource
     EnterpriseDataService enterpriseDataService;

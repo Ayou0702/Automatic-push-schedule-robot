@@ -30,14 +30,14 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Resource
     WxCoreServiceImpl wxCoreService;
 
+    /**
+     * api工具类
+     */
     @Resource
     ApiUtil apiUtil;
 
     /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
-     */
-    /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
+     * 企业数据接口
      */
     @Resource
     EnterpriseDataService enterpriseDataService;

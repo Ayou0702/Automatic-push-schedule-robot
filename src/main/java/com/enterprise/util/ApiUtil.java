@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 获取推送所需参数的api工具类
+ * api工具类
  *
  * @author PrefersMin
  * @version 1.6
@@ -30,10 +30,7 @@ public class ApiUtil {
     WxCoreServiceImpl wxCoreService;
 
     /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
-     */
-    /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
+     * 企业数据接口
      */
     @Resource
     EnterpriseDataService enterpriseDataService;

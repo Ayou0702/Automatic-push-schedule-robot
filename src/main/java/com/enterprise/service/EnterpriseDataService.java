@@ -4,7 +4,7 @@ import com.enterprise.entity.EnterpriseData;
 import java.util.List;
 
 /**
- * 负责enterpriseData表业务的接口
+ * 企业数据接口
  *
  * @author PrefersMin
  * @version 1.1
@@ -49,4 +49,5 @@ public interface EnterpriseDataService {
      * @return 返回受影响的行数，若为 -1 则操作失败
      */
     boolean updateEnterpriseData(EnterpriseData enterpriseData);
+
 }

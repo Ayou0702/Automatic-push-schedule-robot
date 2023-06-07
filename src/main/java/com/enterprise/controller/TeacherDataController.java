@@ -1,6 +1,5 @@
 package com.enterprise.controller;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.enterprise.entity.TeacherData;
 import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.ScheduleDataService;
@@ -8,7 +7,10 @@ import com.enterprise.service.TeacherDataService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,15 +27,17 @@ public class TeacherDataController {
     @Resource
     Result result;
 
+    /**
+     * teacherData的接口，用于查询教师数据
+     */
     @Resource
     TeacherDataService teacherDataService;
 
+    /**
+     * scheduleData的接口，用于查询课表数据
+     */
     @Resource
     ScheduleDataService scheduleDataService;
-
-    List<Integer> deleteTeacherData;
-    List<TeacherData> diffTeacher;
-    List<TeacherData> addTeacherData;
 
     @GetMapping("/getTeacherData")
     public ResultVo getTeacherData() {
@@ -49,88 +53,61 @@ public class TeacherDataController {
     }
 
     @Transactional
-    @PostMapping("/modifyTeacherData")
-    public ResultVo modifyTeacherData(@RequestBody String teacherData) {
-
-        try {
-            deleteTeacherData = JSONObject.parseObject(teacherData).getJSONArray("deleteTeacherData").toList(Integer.class);
-            diffTeacher = JSONObject.parseObject(teacherData).getJSONArray("diffTeacher").toJavaList(TeacherData.class);
-            addTeacherData = JSONObject.parseObject(teacherData).getJSONArray("addTeacherData").toJavaList(TeacherData.class);
-        } catch (Exception e) {
-            return result.failed(e.getMessage());
-        }
-
-        try {
-
-            if (!deleteTeacherData.isEmpty()) {
-                deleteTeacherData(deleteTeacherData);
-            }
-
-            if (!diffTeacher.isEmpty()) {
-                updateTeacherData(diffTeacher);
-            }
-
-            if (!addTeacherData.isEmpty()) {
-                addTeacherData(addTeacherData);
-            }
-
-        } catch (Exception e) {
-            return result.failed(e.getMessage());
-        }
-        return result.success("教师数据修改成功");
-
-    }
-
-    @Transactional
     @PostMapping("/updateTeacherData")
-    public ResultVo updateTeacherData(@RequestBody List<TeacherData> teacherDataList) {
-        List<String> record = new ArrayList<>();
-        List<String> failedRecord = new ArrayList<>();
-        try {
-            for (TeacherData teacherData : teacherDataList) {
+    public ResultVo updateTeacherData(@RequestBody TeacherData teacherData) {
 
-                if (isNull(teacherDataService.queryTeacherDataByTeacherId(teacherData.getTeacherId()))) {
-                    LogUtil.error("ID为" + teacherData.getTeacherId() + "的教师数据更新失败,教师数据不存在");
-                    failedRecord.add(teacherDataService.queryTeacherDataByTeacherId(teacherData.getTeacherId()).getTeacherName()+" 的教师数据不存在，请刷新页面");
+        try {
+
+            String message;
+
+            if (isNull(teacherDataService.queryTeacherDataByTeacherId(teacherData.getTeacherId()))) {
+
+                message = "ID为" + teacherData.getTeacherId() + "的教师数据更新失败,教师数据不存在";
+                LogUtil.error(message);
+                return result.failed(400, "更新教师数据失败", message);
+
+            }  else {
+
+                boolean updateResult = teacherDataService.updateTeacherData(teacherData);
+
+                if (!updateResult) {
+
+                    LogUtil.error("ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
+                    throw new Exception("修改教师数据失败");
+
+                } else {
+
+                    message = "课程ID为 " + teacherData.getTeacherId() + " 的课程数据被修改";
+                    LogUtil.info(message);
+                    return result.success(200, "修改教师数据成功", message);
+
                 }
-                
+
             }
-            if (failedRecord.size() > 0) {
-                failedRecord.forEach(LogUtil::error);
-                return result.failed(400, "教师数据更新失败", failedRecord);
-            } else {
-                for (TeacherData teacherData : teacherDataList) {
-                    boolean updateResult = teacherDataService.updateTeacherData(teacherData);
-                    if (!updateResult) {
-                        LogUtil.error("ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
-                        throw new Exception("修改教师数据失败,操作已回滚");
-                    } else {
-                        record.add("教师数据被修改，课程信息：" + teacherData);
-                    }
-                }
-            }
-            record.forEach(LogUtil::info);
-            LogUtil.info(teacherDataList.size() + "条教师数据被修改");
-            return result.success(200,"教师数据修改成功",teacherDataList.size() + "条教师数据被修改");
+
         } catch (Exception e) {
+
             LogUtil.error(e.getMessage());
-            return  result.failed(e.getMessage());
+            return result.failed(400, e.getMessage(), "ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
+
         }
+
     }
-    
+
     @Transactional
     @PostMapping("/deleteTeacherData")
     public ResultVo deleteTeacherData(@RequestBody List<Integer> teacherIdList) {
+
+        // 记录操作结果
         List<String> record = new ArrayList<>();
         List<String> failedRecord = new ArrayList<>();
+
         try {
             for (int teacherId : teacherIdList) {
-
                 if (!scheduleDataService.queryScheduleDataByTeacherId(teacherId).isEmpty()) {
                     LogUtil.error("ID为" + teacherId + "的教师数据删除失败,外键完整性约束检查失败");
-                    failedRecord.add(teacherDataService.queryTeacherDataByTeacherId(teacherId).getTeacherName()+" 已在课表中任教，不可删除");
+                    failedRecord.add(teacherDataService.queryTeacherDataByTeacherId(teacherId).getTeacherName() + " 已在课表中任教，不可删除");
                 }
-
             }
             if (failedRecord.size() > 0) {
                 failedRecord.forEach(LogUtil::error);
@@ -153,6 +130,7 @@ public class TeacherDataController {
             LogUtil.error(e.getMessage());
             return result.failed(e.getMessage());
         }
+
     }
 
     @Transactional
@@ -171,7 +149,7 @@ public class TeacherDataController {
             }
             record.forEach(LogUtil::info);
             LogUtil.info("新增" + teacherDataList.size() + "条教师数据");
-            return result.success(200,"教师数据新增成功","新增" + teacherDataList.size() + "条教师数据");
+            return result.success(200, "教师数据新增成功", "新增" + teacherDataList.size() + "条教师数据");
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
             return result.failed(e.getMessage());

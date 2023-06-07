@@ -4,6 +4,12 @@ import com.enterprise.entity.CourseData;
 
 import java.util.List;
 
+/**
+ * 课程数据接口
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 public interface CourseDataService {
 
     boolean addCourseData(CourseData courseData);

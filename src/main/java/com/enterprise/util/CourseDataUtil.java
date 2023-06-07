@@ -8,14 +8,26 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * 课程数据工具类
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 @Component
 public class CourseDataUtil {
 
+    /**
+     * 课程数据接口
+     */
     @Resource
-    private CourseDataService courseDataService;
+    CourseDataService courseDataService;
 
+    /**
+     * 企业数据接口
+     */
     @Resource
-    private EnterpriseDataService enterpriseDataService;
+    EnterpriseDataService enterpriseDataService;
 
     public List<CourseData> queryAllCourseData() {
         return courseDataService.queryAllCourseData();

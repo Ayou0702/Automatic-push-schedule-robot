@@ -26,12 +26,21 @@ public class CurriculumDataController {
     @Resource
     Result result;
 
+    /**
+     * 日期工具类
+     */
     @Resource
     DateUtil dateUtil;
 
+    /**
+     * 线性课程表数据工具类
+     */
     @Resource
     CurriculumDataUtil curriculumDataUtil;
 
+    /**
+     * 线性课程表数据接口
+     */
     @Resource
     CurriculumDataService curriculumDataService;
 
@@ -50,12 +59,13 @@ public class CurriculumDataController {
 
     @GetMapping("/resetCurriculumData")
     public ResultVo resetCurriculumData() {
-        try {
-            curriculumDataUtil.resetCurriculumData();
-        } catch (Exception e) {
-            return result.failed(e.getMessage());
+
+        boolean resetResult = curriculumDataUtil.resetCurriculumData().getCode() == 200;
+        if (!resetResult) {
+            return result.failed(400, "重置失败", "课程推送队列重置失败");
         }
         return result.success(200, "重置成功", "课程推送队列重置成功");
+
     }
 
     @PostMapping("/queryNowCurriculumData")
@@ -105,6 +115,7 @@ public class CurriculumDataController {
     @Transactional
     @PostMapping("/deleteCurriculumData")
     public ResultVo deleteCurriculumData(@RequestBody List<Integer> curriculumIdList) {
+
         try {
             for (Integer curriculumId : curriculumIdList) {
                 boolean deleteResult = curriculumDataService.deleteCurriculumDataByCurriculumId(curriculumId);
@@ -119,7 +130,9 @@ public class CurriculumDataController {
             LogUtil.error(e.getMessage());
             return result.failed(400, "删除失败", e.getMessage());
         }
+
         return result.success(200, "删除成功", curriculumIdList.size() + "条课程推送队列数据被删除");
+
     }
 
     @Transactional

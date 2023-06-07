@@ -4,6 +4,12 @@ import com.enterprise.entity.CurriculumData;
 
 import java.util.List;
 
+/**
+ * 线性课程表数据接口
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 public interface CurriculumDataService {
 
     List<CurriculumData> queryAllCurriculumData();

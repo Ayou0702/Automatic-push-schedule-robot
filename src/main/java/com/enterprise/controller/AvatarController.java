@@ -56,6 +56,7 @@ public class AvatarController {
 
         // 尝试读取头像二进制数据
         byte[] imageBytes;
+
         try {
             imageBytes = Files.readAllBytes(imagePath);
         } catch (IOException e) {
@@ -66,7 +67,6 @@ public class AvatarController {
 
         // 转Base64
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
         return result.success(200, "加载头像成功", "data:image/jpeg;base64," + base64Image);
 
     }

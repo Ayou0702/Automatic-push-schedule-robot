@@ -32,11 +32,14 @@ public class EnterpriseDataController {
     Result result;
 
     /**
-     * enterpriseData的接口，用于读取查询企业微信配置数据
+     * 企业数据接口
      */
     @Resource
     EnterpriseDataService enterpriseDataService;
 
+    /**
+     * 事务管理器
+     */
     @Resource
     PlatformTransactionManager platformTransactionManager;
 
@@ -83,9 +86,9 @@ public class EnterpriseDataController {
                 throw new Exception("修改配置数据失败,操作已回滚");
             }
 
-            LogUtil.info("配置数据被修改，数据信息：" + enterpriseData);
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
+            LogUtil.info("配置数据被修改，数据信息：" + enterpriseData);
 
             return result.success(200,"配置数据修改成功","名称为 " + enterpriseData.getDataName() + " 的配置数据修改成功");
 

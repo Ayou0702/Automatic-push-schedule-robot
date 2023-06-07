@@ -1,13 +1,9 @@
 package com.enterprise.controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.enterprise.entity.CourseData;
 import com.enterprise.entity.ScheduleData;
-import com.enterprise.entity.TeacherData;
 import com.enterprise.entity.vo.ResultVo;
-import com.enterprise.service.CourseDataService;
 import com.enterprise.service.ScheduleDataService;
-import com.enterprise.service.TeacherDataService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class ScheduleDataController {
@@ -33,6 +27,9 @@ public class ScheduleDataController {
     @Resource
     Result result;
 
+    /**
+     * scheduleData的接口，用于查询课表数据
+     */
     @Resource
     ScheduleDataService scheduleDataService;
 
