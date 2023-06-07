@@ -92,6 +92,8 @@ public class CourseDataController {
         if (isNull(courseDataService.queryCourseDataByCourseId(courseData.getCourseId()))) {
             message = "ID为" + courseData.getCourseId() + "的课程数据更新失败,课程数据不存在";
             LogUtil.error(message);
+            // 回滚事务
+            platformTransactionManager.rollback(transactionStatus);
             return result.failed(400, "更新课程数据失败", message);
         }
 
