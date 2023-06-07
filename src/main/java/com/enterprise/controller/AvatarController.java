@@ -30,6 +30,9 @@ public class AvatarController {
 
     final ApplicationHome applicationHome = new ApplicationHome(this.getClass());
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     Result result;
 

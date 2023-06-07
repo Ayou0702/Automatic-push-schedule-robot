@@ -28,6 +28,9 @@ public class PushDataUtil {
     /**
      * enterpriseData的接口，用于读取查询企业微信配置数据
      */
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
     @Resource
     EnterpriseDataService enterpriseDataService;
 

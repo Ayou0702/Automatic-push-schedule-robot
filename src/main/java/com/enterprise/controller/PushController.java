@@ -34,6 +34,9 @@ public class PushController {
     @Resource
     DateUtil dateUtil;
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     Result result;
 
@@ -45,6 +48,9 @@ public class PushController {
 
     @Resource
     PushDataUtil pushDataUtil;
+    /**
+     * enterpriseData的接口，用于读取查询企业微信配置数据
+     */
     /**
      * enterpriseData的接口，用于读取查询企业微信配置数据
      */

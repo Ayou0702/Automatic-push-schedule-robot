@@ -20,6 +20,9 @@ import java.util.List;
 @RestController
 public class CurriculumDataController {
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     Result result;
 

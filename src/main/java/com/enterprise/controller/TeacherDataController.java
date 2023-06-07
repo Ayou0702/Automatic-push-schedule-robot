@@ -19,6 +19,9 @@ import static java.util.Objects.isNull;
 @RestController
 public class TeacherDataController {
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     Result result;
 

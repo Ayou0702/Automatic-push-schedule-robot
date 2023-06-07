@@ -28,6 +28,9 @@ import static java.util.Objects.isNull;
 @RestController
 public class CourseDataController {
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     Result result;
 

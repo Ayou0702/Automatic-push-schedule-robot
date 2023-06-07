@@ -27,6 +27,9 @@ import java.util.Map;
 @RestController
 public class ScheduleDataController {
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     Result result;
 
