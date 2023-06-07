@@ -16,6 +16,9 @@ import java.io.Serializable;
 @Component
 public class Result implements Serializable {
 
+    /**
+     * 封装返回结果
+     */
     @Resource
     ResultVo resultVo;
 

@@ -16,7 +16,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import javax.annotation.Resource;
 
 /**
- * 企业微信主服务
+ * 企业微信核心服务实现类
  *
  * @author PrefersMin
  * @version 1.4
@@ -134,4 +134,5 @@ public class WxCoreServiceImpl implements WxCoreService {
         }
         return accessToken;
     }
+
 }

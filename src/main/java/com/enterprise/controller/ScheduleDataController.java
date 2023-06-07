@@ -28,7 +28,7 @@ public class ScheduleDataController {
     Result result;
 
     /**
-     * scheduleData的接口，用于查询课表数据
+     * 课表数据接口
      */
     @Resource
     ScheduleDataService scheduleDataService;

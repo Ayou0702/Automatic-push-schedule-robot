@@ -24,6 +24,9 @@ public class ScheduledConfig {
     @Resource
     EnterpriseDataService enterpriseDataService;
 
+    /**
+     * 企业微信消息接口
+     */
     @Resource
     SendMessageService sendMessageService;
 

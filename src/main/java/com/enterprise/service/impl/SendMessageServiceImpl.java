@@ -2,6 +2,7 @@ package com.enterprise.service.impl;
 
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
+import com.enterprise.service.WxCoreService;
 import com.enterprise.util.ApiUtil;
 import com.enterprise.util.LogUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 快速构建并发送消息类
+ * 企业微信消息接口实现类
  *
  * @author PrefersMin
  * @version 1.1
@@ -25,10 +26,10 @@ import java.util.List;
 public class SendMessageServiceImpl implements SendMessageService {
 
     /**
-     * 工具类
+     * 企业微信核心服务
      */
     @Resource
-    WxCoreServiceImpl wxCoreService;
+    WxCoreService wxCoreService;
 
     /**
      * api工具类

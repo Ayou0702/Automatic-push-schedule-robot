@@ -6,10 +6,22 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
+/**
+ * 多表联动接口
+ *
+ * @author PrefersMin
+ * @version 1.1
+ */
 @Mapper
 public interface MultilistMapper {
 
-
+    /**
+     * 联合课程表、教师表、课表表查询所有的数据
+     *
+     * @author PrefersMin
+     *
+     * @return 返回查询结果
+     */
     @Select("SELECT\n" +
             "\tcourse_data.course_name, \n" +
             "\tcourse_data.course_venue, \n" +

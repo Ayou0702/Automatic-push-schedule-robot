@@ -25,6 +25,9 @@ public class DateUtil {
      */
     final static ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 
+    /**
+     * 推送数据的工具类
+     */
     @Resource
     PushDataUtil pushDataUtil;
 

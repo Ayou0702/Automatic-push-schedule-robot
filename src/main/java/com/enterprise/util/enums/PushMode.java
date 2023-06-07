@@ -1,5 +1,11 @@
 package com.enterprise.util.enums;
 
+/**
+ * 推送模式的枚举类
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 public enum PushMode {
 
     // 日夜推送模式

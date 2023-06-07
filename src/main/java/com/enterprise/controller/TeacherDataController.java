@@ -28,13 +28,13 @@ public class TeacherDataController {
     Result result;
 
     /**
-     * teacherData的接口，用于查询教师数据
+     * 教师数据接口
      */
     @Resource
     TeacherDataService teacherDataService;
 
     /**
-     * scheduleData的接口，用于查询课表数据
+     * 课表数据接口
      */
     @Resource
     ScheduleDataService scheduleDataService;

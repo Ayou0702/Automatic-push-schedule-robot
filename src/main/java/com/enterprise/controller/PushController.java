@@ -52,6 +52,9 @@ public class PushController {
     @Resource
     CurriculumDataUtil curriculumDataUtil;
 
+    /**
+     * 推送数据的工具类
+     */
     @Resource
     PushDataUtil pushDataUtil;
 
@@ -65,13 +68,18 @@ public class PushController {
      * 五大节课程实体类
      */
     List<CurriculumData> curriculumDataList;
+
     /**
      * 声明一个标题
      */
     String title;
     WxCpMessageSendResult wxCpMessageSendResult;
+
+    /**
+     * 企业微信消息接口
+     */
     @Resource
-    private SendMessageService sendMessageService;
+    SendMessageService sendMessageService;
 
     /**
      * 课程推送主方法

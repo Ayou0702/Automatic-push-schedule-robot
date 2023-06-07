@@ -31,8 +31,18 @@ public class PushDataUtil {
     @Resource
     EnterpriseDataService enterpriseDataService;
 
-    String weatherValue, apiKey, dateEnding, dateStarting,amapKey;
+    /**
+     * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
+     */
+    String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
 
+    /**
+     * 获取推送模式
+     *
+     * @author PrefersMin
+     *
+     * @return 返回推送模式
+     */
     public int getPushTime() {
         return Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
     }
@@ -49,7 +59,7 @@ public class PushDataUtil {
         // 参数列表实体类
         ParameterListVo parameterList = new ParameterListVo();
 
-        // 通过Service层获取数据
+        // 获取数据
         weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
         apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
         dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
@@ -74,9 +84,9 @@ public class PushDataUtil {
             parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + getPushTime()));
         }
 
-        LogUtil.info("获取了网络参数列表：" + parameterList);
-
+        LogUtil.info("获取了参数列表：" + parameterList);
         return parameterList;
+
     }
 
 }
