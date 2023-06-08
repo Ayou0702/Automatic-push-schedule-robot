@@ -7,7 +7,6 @@ import com.enterprise.service.*;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.annotation.Resource;
@@ -62,7 +61,7 @@ public class CurriculumDataUtil {
      * 多表联动接口
      */
     @Resource
-    MultilistMapperService multilistMapperService;
+    MultilistService multilistService;
 
     /**
      * 事务管理器
@@ -88,7 +87,7 @@ public class CurriculumDataUtil {
                 isEmpty = curriculumDataService.deleteAllCurriculumData();
             }
 
-            List<ScheduleInfo> scheduleDataList = multilistMapperService.resetCurriculumData();
+            List<ScheduleInfo> scheduleDataList = multilistService.resetCurriculumData();
 
             scheduleDataArray = new ScheduleInfo[PushDataUtil.PERIOD_MAX][PushDataUtil.WEEK_MAX][PushDataUtil.SECTION_MAX];
 

@@ -10,7 +10,7 @@ import java.util.List;
  * @author PrefersMin
  * @version 1.1
  */
-public interface MultilistMapperService {
+public interface MultilistService {
 
     /**
      * 联合课程表、教师表、课表表查询所有的数据

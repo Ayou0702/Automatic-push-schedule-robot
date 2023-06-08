@@ -2,7 +2,7 @@ package com.enterprise.service.impl;
 
 import com.enterprise.entity.vo.ScheduleInfo;
 import com.enterprise.mapper.MultilistMapper;
-import com.enterprise.service.MultilistMapperService;
+import com.enterprise.service.MultilistService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ import java.util.List;
  * @version 1.0
  */
 @Service
-public class MultilistMapperServiceImpl implements MultilistMapperService {
+public class MultilistServiceImpl implements MultilistService {
 
     /**
      * 多表联动接口
