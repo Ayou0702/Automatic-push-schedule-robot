@@ -188,7 +188,7 @@ public class CourseDataController {
         if (addResult) {
             LogUtil.info("新增课程数据，课程数据：" + courseData);
             // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
+            platformTransactionManager.commit(transactionStatus);
             return result.success(200, "新增课程数据成功", "课程名称为 " + courseData.getCourseName() + " 的课程数据新增成功");
         }
 
