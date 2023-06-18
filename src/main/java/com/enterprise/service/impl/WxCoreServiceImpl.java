@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * 企业微信核心服务实现类
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @Service
 public class WxCoreServiceImpl implements WxCoreService {
@@ -26,7 +26,6 @@ public class WxCoreServiceImpl implements WxCoreService {
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
-    String accessToken = null;
 
     /**
      * 构造器注入Bean
@@ -40,7 +39,7 @@ public class WxCoreServiceImpl implements WxCoreService {
     }
 
     /**
-     * 核心服务
+     * 核心服务，获取企业微信主服务对象
      *
      * @author PrefersMin
      *
@@ -58,7 +57,7 @@ public class WxCoreServiceImpl implements WxCoreService {
     }
 
     /**
-     * 核心服务
+     * 核心服务，获取企业微信配置对象
      *
      * @author PrefersMin
      *
@@ -74,7 +73,6 @@ public class WxCoreServiceImpl implements WxCoreService {
         config.setCorpId(enterpriseDataService.queryingEnterpriseData("corpId").getDataValue());
 
         return config;
-
     }
 
     /**
@@ -86,40 +84,42 @@ public class WxCoreServiceImpl implements WxCoreService {
      * @param wxCpDefaultConfig 企业微信配置
      */
     public void resetTokenAndJsApi(WxCpService wxCpService, WxCpDefaultConfigImpl wxCpDefaultConfig) {
-        // 配置redis
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(8);
-        jedisPoolConfig.setMaxTotal(18);
-        // redis启动后，默认启动的是6379端口
-        Jedis jedis = new JedisPool(jedisPoolConfig, "localhost", 6379, 5000).getResource();
 
-        wxCpService.setWxCpConfigStorage(wxCpDefaultConfig);
-        String wxAccessToken = "wx" + enterpriseDataService.queryingEnterpriseData("corpId").getDataValue();
-        String json = jedis.get(wxAccessToken);
-        if (!StringUtils.isEmpty(json)) {
-            wxCpDefaultConfig = JSON.parseObject(json, WxCpDefaultConfigImpl.class);
-        }
-        if (wxCpDefaultConfig.isAccessTokenExpired()) {
-            try {
-                // 配置token
-                accessToken = wxCpService.getAccessToken(false);
-                wxCpDefaultConfig.setAccessToken(accessToken);
-            } catch (WxErrorException e) {
-                e.printStackTrace();
-            }
-        }
-        if (wxCpDefaultConfig.isJsapiTicketExpired()) {
-            String jsApi;
-            try {
-                jsApi = wxCpService.getJsapiTicket();
-                wxCpDefaultConfig.setJsapiTicket(jsApi);
-            } catch (WxErrorException e) {
-                e.printStackTrace();
-            }
-        }
+        // 配置redis，默认启动的是6379端口
+        try (JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), "localhost", 6379, 5000); Jedis jedis = jedisPool.getResource()) {
 
-        jedis.set(wxAccessToken, JSON.toJSONString(wxCpDefaultConfig));
-        jedis.close();
+            String wxAccessToken = "wx" + enterpriseDataService.queryingEnterpriseData("corpId").getDataValue();
+            wxCpService.setWxCpConfigStorage(wxCpDefaultConfig);
+            String json = jedis.get(wxAccessToken);
+
+            if (!StringUtils.isEmpty(json)) {
+                wxCpDefaultConfig = JSON.parseObject(json, WxCpDefaultConfigImpl.class);
+            }
+
+            if (wxCpDefaultConfig.isAccessTokenExpired()) {
+                try {
+                    // 配置token
+                    String accessToken = wxCpService.getAccessToken(false);
+                    wxCpDefaultConfig.setAccessToken(accessToken);
+                } catch (WxErrorException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (wxCpDefaultConfig.isJsapiTicketExpired()) {
+
+                try {
+                    String jsApiTicket = wxCpService.getJsapiTicket();
+                    wxCpDefaultConfig.setJsapiTicket(jsApiTicket);
+                } catch (WxErrorException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            jedis.set(wxAccessToken, JSON.toJSONString(wxCpDefaultConfig));
+
+        }
 
     }
 
@@ -132,14 +132,16 @@ public class WxCoreServiceImpl implements WxCoreService {
      * @return 返回token
      */
     public String getAccessToken() {
+
         WxCpService wxCpService = getWxCpService();
         wxCpService.setWxCpConfigStorage(getWxCpDefaultConfig());
+
         try {
-            accessToken = wxCpService.getAccessToken(false);
+            return wxCpService.getAccessToken(false);
         } catch (WxErrorException e) {
             throw new RuntimeException(e);
         }
-        return accessToken;
+
     }
 
 }
