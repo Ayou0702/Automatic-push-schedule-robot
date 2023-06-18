@@ -19,7 +19,7 @@ import java.util.List;
  * 企业微信消息接口实现类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Service
 public class SendMessageServiceImpl implements SendMessageService {
@@ -61,6 +61,7 @@ public class SendMessageServiceImpl implements SendMessageService {
      *
      * @param title 推送的标题
      * @param message 推送的消息
+     * @return 返回推送结果
      */
     public WxCpMessageSendResult pushCourse(String title, String message) {
 
@@ -97,6 +98,7 @@ public class SendMessageServiceImpl implements SendMessageService {
      * @author PrefersMin
      *
      * @param message 推送的消息
+     * @return 返回推送结果
      */
     public WxCpMessageSendResult sendTextMsg(String message) {
 
@@ -120,9 +122,11 @@ public class SendMessageServiceImpl implements SendMessageService {
     /**
      * 用于发送纯文本消息
      *
+     * @author PrefersMin
+     *
      * @param message 推送的消息
      *
-     * @author PrefersMin
+     * @param sendUser 推送的用户
      */
     public void sendTextMsg(String message, String sendUser) {
 
@@ -151,6 +155,7 @@ public class SendMessageServiceImpl implements SendMessageService {
      *
      * @param title 推送的标题
      * @param message 推送的消息
+     * @return 返回推送结果
      */
     public WxCpMessageSendResult sendNewsMsg(String title, String message) {
 

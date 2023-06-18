@@ -334,13 +334,13 @@ public class PushController {
     }
 
     /**
-     * 获取推送结果
+     * 推送课程
      *
      * @author PrefersMin
      *
      * @param title 推送标题
      * @param message 推送消息
-     * @return 推送结果
+     * @return 返回推送结果
      */
     private WxCpMessageSendResult pushCourse(String title, StringBuilder message) {
 
