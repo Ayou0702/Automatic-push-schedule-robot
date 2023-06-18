@@ -3,20 +3,15 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.ScheduleData;
 import com.enterprise.mapper.ScheduleDataMapper;
 import com.enterprise.service.ScheduleDataService;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * 课表数据接口实现类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Service
 public class ScheduleDataServiceImpl implements ScheduleDataService {
@@ -24,8 +19,18 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     /**
      * 课表数据接口
      */
-    @Resource
-    private ScheduleDataMapper scheduleDataMapper;
+    private final ScheduleDataMapper scheduleDataMapper;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param scheduleDataMapper 课表数据接口
+     */
+    public ScheduleDataServiceImpl(ScheduleDataMapper scheduleDataMapper) {
+        this.scheduleDataMapper = scheduleDataMapper;
+    }
 
     /**
      * 查询所有课表数据

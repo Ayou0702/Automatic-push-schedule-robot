@@ -5,14 +5,13 @@ import com.enterprise.mapper.CourseDataMapper;
 import com.enterprise.service.CourseDataService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * 课程数据接口实现类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Service
 public class CourseDataServiceImpl implements CourseDataService {
@@ -20,8 +19,18 @@ public class CourseDataServiceImpl implements CourseDataService {
     /**
      * 课程数据接口
      */
-    @Resource
-    private CourseDataMapper courseDataMapper;
+    private final CourseDataMapper courseDataMapper;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param courseDataMapper 课程数据接口
+     */
+    public CourseDataServiceImpl(CourseDataMapper courseDataMapper) {
+        this.courseDataMapper = courseDataMapper;
+    }
 
     /**
      * 新增课程数据

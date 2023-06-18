@@ -20,17 +20,17 @@ public class ScheduledConfig {
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 企业微信消息接口
      */
-    final SendMessageService sendMessageService;
+    private final SendMessageService sendMessageService;
 
     /**
      * 推送服务
      */
-    final PushController pushController;
+    private final PushController pushController;
 
     /**
      * 构造器注入Bean

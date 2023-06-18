@@ -17,7 +17,7 @@ import java.util.List;
  * api工具类
  *
  * @author PrefersMin
- * @version 1.7
+ * @version 1.8
  */
 @Component
 public class ApiUtil {
@@ -25,12 +25,12 @@ public class ApiUtil {
     /**
      * 企业微信核心服务
      */
-    final WxCoreService wxCoreService;
+    private final WxCoreService wxCoreService;
 
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 构造器注入Bean

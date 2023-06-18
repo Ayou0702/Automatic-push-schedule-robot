@@ -3,20 +3,15 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.TeacherData;
 import com.enterprise.mapper.TeacherDataMapper;
 import com.enterprise.service.TeacherDataService;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * 教师数据接口实现类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Service
 public class TeacherDataServiceImpl implements TeacherDataService {
@@ -24,8 +19,18 @@ public class TeacherDataServiceImpl implements TeacherDataService {
     /**
      * 教师数据接口
      */
-    @Resource
-    TeacherDataMapper teacherDataMapper;
+    private final TeacherDataMapper teacherDataMapper;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param teacherDataMapper 教师数据接口
+     */
+    public TeacherDataServiceImpl(TeacherDataMapper teacherDataMapper) {
+        this.teacherDataMapper = teacherDataMapper;
+    }
 
     /**
      * 查询所有教师数据

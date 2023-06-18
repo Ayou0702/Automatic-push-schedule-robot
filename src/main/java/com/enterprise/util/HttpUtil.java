@@ -18,12 +18,12 @@ import java.io.IOException;
  * http工具类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 public class HttpUtil {
 
-    static final PoolingHttpClientConnectionManager CONNECTION_MANAGER = new PoolingHttpClientConnectionManager();
-    static final ConnectionKeepAliveStrategy MY_STRATEGY;
+    private static final PoolingHttpClientConnectionManager CONNECTION_MANAGER = new PoolingHttpClientConnectionManager();
+    private static final ConnectionKeepAliveStrategy MY_STRATEGY;
 
     static {
         CONNECTION_MANAGER.setMaxTotal(1000);

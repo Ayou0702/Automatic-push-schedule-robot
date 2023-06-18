@@ -14,7 +14,7 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @Component
 public class DateUtil {
@@ -22,17 +22,17 @@ public class DateUtil {
     /**
      * 格式化
      */
-    final static ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+    private static final ThreadLocal<SimpleDateFormat> LOCAL_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 
     /**
      * 推送数据的工具类
      */
-    final PushDataUtil pushDataUtil;
+    private final PushDataUtil pushDataUtil;
 
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 构造器注入Bean

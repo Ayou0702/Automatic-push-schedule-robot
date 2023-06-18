@@ -22,7 +22,7 @@ import static java.util.Objects.isNull;
  * 负责课表数据的Controller
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @RestController
 public class ScheduleDataController {
@@ -30,17 +30,17 @@ public class ScheduleDataController {
     /**
      * 封装返回结果
      */
-    final Result result;
+    private final Result result;
 
     /**
      * 课表数据接口
      */
-    final ScheduleDataService scheduleDataService;
+    private final ScheduleDataService scheduleDataService;
 
     /**
      * 事务管理器
      */
-    final PlatformTransactionManager platformTransactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
 
     /**
      * 构造器注入Bean

@@ -11,7 +11,7 @@ import java.util.List;
  * 课程数据工具类
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @Component
 public class CourseDataUtil {
@@ -19,12 +19,12 @@ public class CourseDataUtil {
     /**
      * 课程数据接口
      */
-    final CourseDataService courseDataService;
+    private final CourseDataService courseDataService;
 
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 构造器注入Bean
@@ -49,7 +49,6 @@ public class CourseDataUtil {
     public List<CourseData> queryAllCourseData() {
         return courseDataService.queryAllCourseData();
     }
-
 
     /**
      * 统计总课程数

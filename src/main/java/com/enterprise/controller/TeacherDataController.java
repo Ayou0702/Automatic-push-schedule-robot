@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
  * 负责教师数据的Controller
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @RestController
 public class TeacherDataController {
@@ -31,22 +31,22 @@ public class TeacherDataController {
     /**
      * 封装返回结果
      */
-    final Result result;
+    private final Result result;
 
     /**
      * 教师数据接口
      */
-    final TeacherDataService teacherDataService;
+    private final TeacherDataService teacherDataService;
 
     /**
      * 课表数据接口
      */
-    final ScheduleDataService scheduleDataService;
+    private final ScheduleDataService scheduleDataService;
 
     /**
      * 事务管理器
      */
-    final PlatformTransactionManager platformTransactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
 
     /**
      * 构造器注入Bean

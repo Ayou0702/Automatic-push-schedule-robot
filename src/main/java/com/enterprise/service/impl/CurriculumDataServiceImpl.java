@@ -5,14 +5,13 @@ import com.enterprise.mapper.CurriculumDataMapper;
 import com.enterprise.service.CurriculumDataService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * 线性课程表数据接口实现类
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @Service
 public class CurriculumDataServiceImpl implements CurriculumDataService {
@@ -20,8 +19,18 @@ public class CurriculumDataServiceImpl implements CurriculumDataService {
     /**
      * 线性课程表数据接口
      */
-    @Resource
-    private CurriculumDataMapper curriculumDataMapper;
+    private final CurriculumDataMapper curriculumDataMapper;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param curriculumDataMapper 线性课程表数据接口
+     */
+    public CurriculumDataServiceImpl(CurriculumDataMapper curriculumDataMapper) {
+        this.curriculumDataMapper = curriculumDataMapper;
+    }
 
     /**
      * 新增课程推送队列数据

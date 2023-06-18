@@ -11,7 +11,7 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Component
 public class PushDataUtil {
@@ -26,17 +26,17 @@ public class PushDataUtil {
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * api工具类
      */
-    final ApiUtil apiUtil;
+    private final ApiUtil apiUtil;
 
     /**
      * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
      */
-    String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
+    public String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
 
     /**
      * 构造器注入Bean

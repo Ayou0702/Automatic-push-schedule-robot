@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +25,7 @@ import java.util.List;
  * 负责头像数据的Controller
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @RestController
 public class AvatarController {
@@ -34,13 +33,12 @@ public class AvatarController {
     /**
      * 当前程序的路径
      */
-    final ApplicationHome applicationHome = new ApplicationHome(this.getClass());
+    private final ApplicationHome applicationHome = new ApplicationHome(this.getClass());
 
     /**
      * 封装返回结果
      */
-    @Resource
-    Result result;
+    private final Result result;
 
     /**
      * 构造器注入Bean

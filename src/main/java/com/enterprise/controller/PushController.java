@@ -22,60 +22,55 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @RestController
 public class PushController {
 
     /**
-     * 五大节课程实体类
-     */
-    List<CurriculumData> curriculumDataList;
-
-    /**
      * 声明一个标题
      */
-    String title;
+    private String title;
     
     /**
      * 微信服务返回结果
      */
-    WxCpMessageSendResult wxCpMessageSendResult;
+    private WxCpMessageSendResult wxCpMessageSendResult;
 
     /**
      * 封装返回结果
      */
-    final Result result;
+    private final Result result;
     
     /**
      * 日期工具类
      */
-    final DateUtil dateUtil;
+    private final DateUtil dateUtil;
 
     /**
      * 推送数据的工具类
      */
-    final PushDataUtil pushDataUtil;
+    private final PushDataUtil pushDataUtil;
     
     /**
      * 课程数据工具类
      */
-    final CourseDataUtil courseDataUtil;
+    private final CourseDataUtil courseDataUtil;
 
     /**
      * 线性课程表数据工具类
      */
-    final CurriculumDataUtil curriculumDataUtil;
+    private final CurriculumDataUtil curriculumDataUtil;
     
     /**
      * 企业微信消息接口
      */
-    final SendMessageService sendMessageService;
+    private final SendMessageService sendMessageService;
 
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 构造器注入Bean
@@ -128,7 +123,7 @@ public class PushController {
             // curriculumDataUtil.resetCurriculumData();
 
             // 根据周期与星期获取五大节课程数据
-            curriculumDataList = curriculumDataUtil.getTodayCurriculumData(period, week);
+            List<CurriculumData> curriculumDataList = curriculumDataUtil.getTodayCurriculumData(period, week);
 
             // 非空判断五大节课程数据(与逻辑)
             if (curriculumDataList.size() == 0) {

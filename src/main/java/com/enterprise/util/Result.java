@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 封装类、统一返回格式
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Component
 public class Result implements Serializable {
@@ -18,7 +18,7 @@ public class Result implements Serializable {
     /**
      * 返回对象实体类
      */
-    final ResultVo resultVo;
+    private final ResultVo resultVo;
 
     /**
      * 构造器注入Bean

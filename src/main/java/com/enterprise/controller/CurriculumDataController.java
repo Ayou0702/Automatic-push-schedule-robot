@@ -25,7 +25,7 @@ import static java.util.Objects.isNull;
  * 负责线性课程表数据的Controller
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @RestController
 public class CurriculumDataController {
@@ -33,27 +33,27 @@ public class CurriculumDataController {
     /**
      * 封装返回结果
      */
-    final Result result;
+    private final Result result;
 
     /**
      * 日期工具类
      */
-    final DateUtil dateUtil;
+    private final DateUtil dateUtil;
 
     /**
      * 线性课程表数据工具类
      */
-    final CurriculumDataUtil curriculumDataUtil;
+    private final CurriculumDataUtil curriculumDataUtil;
 
     /**
      * 线性课程表数据接口
      */
-    final CurriculumDataService curriculumDataService;
+    private final CurriculumDataService curriculumDataService;
 
     /**
      * 事务管理器
      */
-    final PlatformTransactionManager platformTransactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
 
     /**
      * 构造器注入Bean

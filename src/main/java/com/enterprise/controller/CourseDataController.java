@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ import static java.util.Objects.isNull;
  * 负责课程数据的Controller
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @RestController
 public class CourseDataController {

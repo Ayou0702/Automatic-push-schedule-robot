@@ -1,21 +1,19 @@
 package com.enterprise.exception;
 
 import com.enterprise.entity.vo.ExceptionVo;
-import javax.annotation.Resource;
 
 /**
  * 自定义异常
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 public class CustomException extends Exception  {
 
     /**
      * 异常对象实体类
      */
-    @Resource
-    ExceptionVo exceptionVo;
+    private final ExceptionVo exceptionVo;
 
     /**
      * 自定义异常

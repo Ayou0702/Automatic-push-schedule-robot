@@ -11,7 +11,7 @@ import java.util.List;
  * 配置数据接口实现类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Service
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
@@ -19,7 +19,7 @@ public class EnterpriseDataServiceImpl implements EnterpriseDataService {
     /**
      * 配置数据接口
      */
-    final EnterpriseDataMapper enterpriseDataMapper;
+    private final EnterpriseDataMapper enterpriseDataMapper;
 
     /**
      * 构造器注入Bean

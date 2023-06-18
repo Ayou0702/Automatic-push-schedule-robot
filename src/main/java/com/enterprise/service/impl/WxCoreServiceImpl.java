@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * 企业微信核心服务实现类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Service
 public class WxCoreServiceImpl implements WxCoreService {
@@ -25,7 +25,7 @@ public class WxCoreServiceImpl implements WxCoreService {
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
     String accessToken = null;
 
     /**

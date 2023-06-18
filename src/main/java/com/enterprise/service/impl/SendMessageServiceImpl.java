@@ -19,7 +19,7 @@ import java.util.List;
  * 企业微信消息接口实现类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Service
 public class SendMessageServiceImpl implements SendMessageService {
@@ -27,17 +27,17 @@ public class SendMessageServiceImpl implements SendMessageService {
     /**
      * 企业微信核心服务
      */
-    final WxCoreService wxCoreService;
+    private final WxCoreService wxCoreService;
 
     /**
      * api工具类
      */
-    final ApiUtil apiUtil;
+    private final ApiUtil apiUtil;
 
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 构造器注入Bean

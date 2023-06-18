@@ -18,7 +18,7 @@ import static java.util.Objects.isNull;
  * 线性课程表数据工具类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Component
 public class CurriculumDataUtil {
@@ -26,42 +26,37 @@ public class CurriculumDataUtil {
     /**
      * 封装返回结果
      */
-    final Result result;
-
-    /**
-     * 分割字符
-     */
-    final String splitString = "-";
+    private final Result result;
 
     /**
      * 课表数据
      */
-    ScheduleInfo[][][] scheduleDataArray;
+    private ScheduleInfo[][][] scheduleDataArray;
 
     /**
      * 将课表数据填入线性课程表的临时存储
      */
-    ArrayList<CurriculumData> curriculumDataArrayList = new ArrayList<>();
+    private final ArrayList<CurriculumData> curriculumDataArrayList = new ArrayList<>();
 
     /**
      * 线性课程表数据接口
      */
-    final CurriculumDataService curriculumDataService;
+    private final CurriculumDataService curriculumDataService;
 
     /**
      * 配置数据接口
      */
-    final EnterpriseDataService enterpriseDataService;
+    private final EnterpriseDataService enterpriseDataService;
 
     /**
      * 多表联动接口
      */
-    final MultilistService multilistService;
+    private final MultilistService multilistService;
 
     /**
      * 事务管理器
      */
-    final PlatformTransactionManager platformTransactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
 
     /**
      * 构造器注入Bean
@@ -193,6 +188,9 @@ public class CurriculumDataUtil {
 
         // 开始时间与结束时间实体类
         int[] time = new int[2];
+
+        // 分割字符
+        String splitString = "-";
 
         // 判断是否属于时间段
         if (classStringTime.contains(splitString)) {
