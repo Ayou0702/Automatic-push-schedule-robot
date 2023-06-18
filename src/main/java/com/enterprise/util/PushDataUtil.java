@@ -29,6 +29,11 @@ public class PushDataUtil {
     final EnterpriseDataService enterpriseDataService;
 
     /**
+     * api工具类
+     */
+    final ApiUtil apiUtil;
+
+    /**
      * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
      */
     String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
@@ -36,12 +41,14 @@ public class PushDataUtil {
     /**
      * 构造器注入Bean
      *
-     * @author PrefersMin
-     *
      * @param enterpriseDataService 配置数据接口
+     * @param apiUtil api工具类
+     *
+     * @author PrefersMin
      */
-    public PushDataUtil(EnterpriseDataService enterpriseDataService) {
+    public PushDataUtil(EnterpriseDataService enterpriseDataService, ApiUtil apiUtil) {
         this.enterpriseDataService = enterpriseDataService;
+        this.apiUtil = apiUtil;
     }
 
     /**
@@ -77,11 +84,11 @@ public class PushDataUtil {
         // 非空判断
         if (StringUtils.isNotEmpty(apiKey) && StringUtils.isNotEmpty(weatherValue)) {
             // 获取天气信息
-            parameterList.setWeatherVo(ApiUtil.getWeather(amapKey, weatherValue, getPushTime()));
+            parameterList.setWeatherVo(apiUtil.getWeather(amapKey, weatherValue, getPushTime()));
         }
         if (StringUtils.isNotEmpty(apiKey)) {
             // 获取彩虹屁
-            parameterList.setCaiHongPi(ApiUtil.getCaiHongPi(apiKey));
+            parameterList.setCaiHongPi(apiUtil.getCaiHongPi(apiKey));
         }
         if (StringUtils.isNotEmpty(dateEnding)) {
             // 计算离放假的天数

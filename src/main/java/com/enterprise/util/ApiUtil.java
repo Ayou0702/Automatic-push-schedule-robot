@@ -53,7 +53,7 @@ public class ApiUtil {
      * @param key 天行数据彩虹屁api密钥
      * @return 返回彩虹屁
      */
-    public static String getCaiHongPi(String key) {
+    public String getCaiHongPi(String key) {
 
         // 固定请求地址，详见 https://www.tianapi.com/apiview/181
         String url = "https://api.tianapi.com/pyqwenan/index?key=";
@@ -87,7 +87,7 @@ public class ApiUtil {
      * @param pushMode 推送时间
      * @return 返回天气实体对象
      */
-    public static WeatherVo getWeather(String key, String city, int pushMode) {
+    public WeatherVo getWeather(String key, String city, int pushMode) {
 
         JSONObject jsonObject;
         // 固定请求地址，详见 https://lbs.amap.com/api/webservice/guide/api/weatherinfo/#t1
