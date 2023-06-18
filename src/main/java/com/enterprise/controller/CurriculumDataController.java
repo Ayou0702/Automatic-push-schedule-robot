@@ -16,44 +16,63 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.isNull;
 
+/**
+ * 负责线性课程表数据的Controller
+ *
+ * @author PrefersMin
+ * @version 1.1
+ */
 @RestController
 public class CurriculumDataController {
 
     /**
      * 封装返回结果
      */
-    @Resource
-    Result result;
+    final Result result;
 
     /**
      * 日期工具类
      */
-    @Resource
-    DateUtil dateUtil;
+    final DateUtil dateUtil;
 
     /**
      * 线性课程表数据工具类
      */
-    @Resource
-    CurriculumDataUtil curriculumDataUtil;
+    final CurriculumDataUtil curriculumDataUtil;
 
     /**
      * 线性课程表数据接口
      */
-    @Resource
-    CurriculumDataService curriculumDataService;
+    final CurriculumDataService curriculumDataService;
 
     /**
      * 事务管理器
      */
-    @Resource
-    PlatformTransactionManager platformTransactionManager;
+    final PlatformTransactionManager platformTransactionManager;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     * @param dateUtil 日期工具类
+     * @param curriculumDataUtil 线性课程表数据工具类
+     * @param curriculumDataService 线性课程表数据接口
+     * @param platformTransactionManager 事务管理器
+     */
+    public CurriculumDataController(Result result, DateUtil dateUtil, CurriculumDataUtil curriculumDataUtil, CurriculumDataService curriculumDataService, PlatformTransactionManager platformTransactionManager) {
+        this.result = result;
+        this.dateUtil = dateUtil;
+        this.curriculumDataUtil = curriculumDataUtil;
+        this.curriculumDataService = curriculumDataService;
+        this.platformTransactionManager = platformTransactionManager;
+    }
 
     /**
      * 获取所有线性课程表数据

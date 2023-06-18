@@ -5,15 +5,13 @@ import com.enterprise.service.EnterpriseDataService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-
 import static com.enterprise.util.DateUtil.getNow;
 
 /**
  * 推送数据的工具类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Component
 public class PushDataUtil {
@@ -26,15 +24,25 @@ public class PushDataUtil {
     public static final int SECTION_MAX = 6;
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
 
     /**
      * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
      */
     String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param enterpriseDataService 配置数据接口
+     */
+    public PushDataUtil(EnterpriseDataService enterpriseDataService) {
+        this.enterpriseDataService = enterpriseDataService;
+    }
 
     /**
      * 获取推送模式

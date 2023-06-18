@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 负责前端页面的配置数据
+ * 负责配置数据的Controller
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @RestController
 public class EnterpriseDataController {
@@ -28,20 +27,32 @@ public class EnterpriseDataController {
     /**
      * 封装返回结果
      */
-    @Resource
-    Result result;
+    final Result result;
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
 
     /**
      * 事务管理器
      */
-    @Resource
-    PlatformTransactionManager platformTransactionManager;
+    final PlatformTransactionManager platformTransactionManager;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     * @param enterpriseDataService 配置数据接口
+     * @param platformTransactionManager 事务管理器
+     */
+    public EnterpriseDataController(Result result, EnterpriseDataService enterpriseDataService, PlatformTransactionManager platformTransactionManager) {
+        this.result = result;
+        this.enterpriseDataService = enterpriseDataService;
+        this.platformTransactionManager = platformTransactionManager;
+    }
 
     /**
      * 获取所有的配置数据

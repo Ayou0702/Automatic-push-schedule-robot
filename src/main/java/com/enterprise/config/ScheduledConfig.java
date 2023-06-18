@@ -6,46 +6,71 @@ import com.enterprise.service.SendMessageService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.enums.PushMode;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.Resource;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * 定时调用类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Configuration
 public class ScheduledConfig {
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
 
     /**
      * 企业微信消息接口
      */
-    @Resource
-    SendMessageService sendMessageService;
-
-    @Resource
-    private PushController pushController;
+    final SendMessageService sendMessageService;
 
     /**
-     * 每天的22:30触发推送
+     * 推送服务
      */
-    // @Scheduled(cron = "0 45 7 ? * *")
+    final PushController pushController;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param enterpriseDataService 配置数据接口
+     * @param sendMessageService 企业微信消息接口
+     * @param pushController 推送服务
+     */
+    public ScheduledConfig(EnterpriseDataService enterpriseDataService, SendMessageService sendMessageService, PushController pushController) {
+        this.enterpriseDataService = enterpriseDataService;
+        this.sendMessageService = sendMessageService;
+        this.pushController = pushController;
+    }
+
+    /**
+     * 每天的7:45触发推送
+     */
+    @Scheduled(cron = "0 45 7 ? * *")
     public void scheduledPushCourseDay() {
         doPushIf(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue().equals(String.valueOf(PushMode.DAY.getValue())), "晨间推送");
     }
 
-    // @Scheduled(cron = "0 30 22 ? * *")
+    /**
+     * 每天的22:30触发推送
+     */
+    @Scheduled(cron = "0 30 22 ? * *")
     public void scheduledPushCourseNight() {
         doPushIf(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue().equals(String.valueOf(PushMode.NIGHT.getValue())), "夜间推送");
     }
 
+    /**
+     * 判断是否触发推送
+     *
+     * @author PrefersMin
+     *
+     * @param condition 是否触发推送
+     * @param timeDesc 推送模式
+     */
     private void doPushIf(boolean condition, String timeDesc) {
         if (condition) {
             int code = 0;

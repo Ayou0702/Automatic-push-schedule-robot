@@ -24,7 +24,7 @@ import static java.util.Objects.isNull;
  * 负责课程数据的Controller
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 public class CourseDataController {
@@ -32,26 +32,39 @@ public class CourseDataController {
     /**
      * 封装返回结果
      */
-    @Resource
-    Result result;
+    private final Result result;
 
     /**
      * 课程数据接口
      */
-    @Resource
-    CourseDataService courseDataService;
+    private final CourseDataService courseDataService;
 
     /**
      * 课表数据接口
      */
-    @Resource
-    ScheduleDataService scheduleDataService;
+    private final ScheduleDataService scheduleDataService;
 
     /**
      * 事务管理器
      */
-    @Resource
-    PlatformTransactionManager platformTransactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     * @param courseDataService 课程数据接口
+     * @param scheduleDataService 课表数据接口
+     * @param platformTransactionManager 事务管理器
+     */
+    public CourseDataController(Result result, CourseDataService courseDataService, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
+        this.result = result;
+        this.courseDataService = courseDataService;
+        this.scheduleDataService = scheduleDataService;
+        this.platformTransactionManager = platformTransactionManager;
+    }
 
     /**
      * 查询所有课程数据

@@ -13,8 +13,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import javax.annotation.Resource;
-
 /**
  * 企业微信核心服务实现类
  *
@@ -24,13 +22,22 @@ import javax.annotation.Resource;
 @Service
 public class WxCoreServiceImpl implements WxCoreService {
 
+    /**
+     * 配置数据接口
+     */
+    final EnterpriseDataService enterpriseDataService;
     String accessToken = null;
 
     /**
-     * 企业数据接口
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param enterpriseDataService 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    public WxCoreServiceImpl(EnterpriseDataService enterpriseDataService) {
+        this.enterpriseDataService = enterpriseDataService;
+    }
 
     /**
      * 核心服务

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ import static java.util.Objects.isNull;
  * 负责教师数据的Controller
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 public class TeacherDataController {
@@ -32,26 +31,39 @@ public class TeacherDataController {
     /**
      * 封装返回结果
      */
-    @Resource
-    Result result;
+    final Result result;
 
     /**
      * 教师数据接口
      */
-    @Resource
-    TeacherDataService teacherDataService;
+    final TeacherDataService teacherDataService;
 
     /**
      * 课表数据接口
      */
-    @Resource
-    ScheduleDataService scheduleDataService;
+    final ScheduleDataService scheduleDataService;
 
     /**
      * 事务管理器
      */
-    @Resource
-    PlatformTransactionManager platformTransactionManager;
+    final PlatformTransactionManager platformTransactionManager;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     * @param teacherDataService 教师数据接口
+     * @param scheduleDataService 课表数据接口
+     * @param platformTransactionManager 事务管理器
+     */
+    public TeacherDataController(Result result, TeacherDataService teacherDataService, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
+        this.result = result;
+        this.teacherDataService = teacherDataService;
+        this.scheduleDataService = scheduleDataService;
+        this.platformTransactionManager = platformTransactionManager;
+    }
 
     /**
      * 获取所有教师数据

@@ -26,11 +26,14 @@ import java.util.List;
  * 负责头像数据的Controller
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 public class AvatarController {
 
+    /**
+     * 当前程序的路径
+     */
     final ApplicationHome applicationHome = new ApplicationHome(this.getClass());
 
     /**
@@ -38,6 +41,17 @@ public class AvatarController {
      */
     @Resource
     Result result;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     */
+    public AvatarController(Result result) {
+        this.result = result;
+    }
 
     /**
      * 获取头像数据

@@ -3,7 +3,6 @@ package com.enterprise.util;
 import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,7 +14,7 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Component
 public class DateUtil {
@@ -28,14 +27,25 @@ public class DateUtil {
     /**
      * 推送数据的工具类
      */
-    @Resource
-    PushDataUtil pushDataUtil;
+    final PushDataUtil pushDataUtil;
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param pushDataUtil 推送数据的工具类
+     * @param enterpriseDataService 配置数据接口
+     */
+    public DateUtil(PushDataUtil pushDataUtil, EnterpriseDataService enterpriseDataService) {
+        this.pushDataUtil = pushDataUtil;
+        this.enterpriseDataService = enterpriseDataService;
+    }
 
     /**
      * 计算两个日期(String类型)之间相差多少天

@@ -5,7 +5,6 @@ import com.enterprise.service.CourseDataService;
 import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,15 +19,33 @@ public class CourseDataUtil {
     /**
      * 课程数据接口
      */
-    @Resource
-    CourseDataService courseDataService;
+    final CourseDataService courseDataService;
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
 
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param courseDataService 课程数据接口
+     * @param enterpriseDataService 配置数据接口
+     */
+    public CourseDataUtil(CourseDataService courseDataService, EnterpriseDataService enterpriseDataService) {
+        this.courseDataService = courseDataService;
+        this.enterpriseDataService = enterpriseDataService;
+    }
+
+    /**
+     * 查询所有课程数据
+     *
+     * @author PrefersMin
+     *
+     * @return 返回查询结果
+     */
     public List<CourseData> queryAllCourseData() {
         return courseDataService.queryAllCourseData();
     }

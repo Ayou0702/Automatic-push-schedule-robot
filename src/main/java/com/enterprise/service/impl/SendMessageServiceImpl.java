@@ -12,7 +12,6 @@ import me.chanjar.weixin.cp.bean.message.WxCpMessage;
 import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
  * 企业微信消息接口实现类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Service
 public class SendMessageServiceImpl implements SendMessageService {
@@ -28,20 +27,32 @@ public class SendMessageServiceImpl implements SendMessageService {
     /**
      * 企业微信核心服务
      */
-    @Resource
-    WxCoreService wxCoreService;
+    final WxCoreService wxCoreService;
 
     /**
      * api工具类
      */
-    @Resource
-    ApiUtil apiUtil;
+    final ApiUtil apiUtil;
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param wxCoreService 企业微信核心服务
+     * @param apiUtil api工具类
+     * @param enterpriseDataService 配置数据接口
+     */
+    public SendMessageServiceImpl(WxCoreService wxCoreService, ApiUtil apiUtil, EnterpriseDataService enterpriseDataService) {
+        this.wxCoreService = wxCoreService;
+        this.apiUtil = apiUtil;
+        this.enterpriseDataService = enterpriseDataService;
+    }
 
     /**
      * 用于构建并发送课程相关消息

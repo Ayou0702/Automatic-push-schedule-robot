@@ -5,23 +5,32 @@ import com.enterprise.mapper.EnterpriseDataMapper;
 import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 企业数据接口实现类
+ * 配置数据接口实现类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Service
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    private EnterpriseDataMapper enterpriseDataMapper;
+    final EnterpriseDataMapper enterpriseDataMapper;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param enterpriseDataMapper 配置数据接口
+     */
+    public EnterpriseDataServiceImpl(EnterpriseDataMapper enterpriseDataMapper) {
+        this.enterpriseDataMapper = enterpriseDataMapper;
+    }
 
     /**
      * 修改指定配置项的配置数据

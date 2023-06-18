@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -23,46 +22,10 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @RestController
 public class PushController {
-
-    /**
-     * 日期工具类
-     */
-    @Resource
-    DateUtil dateUtil;
-
-    /**
-     * 封装返回结果
-     */
-    @Resource
-    Result result;
-
-    /**
-     * 课程数据工具类
-     */
-    @Resource
-    CourseDataUtil courseDataUtil;
-
-    /**
-     * 线性课程表数据工具类
-     */
-    @Resource
-    CurriculumDataUtil curriculumDataUtil;
-
-    /**
-     * 推送数据的工具类
-     */
-    @Resource
-    PushDataUtil pushDataUtil;
-
-    /**
-     * 企业数据接口
-     */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
 
     /**
      * 五大节课程实体类
@@ -73,13 +36,69 @@ public class PushController {
      * 声明一个标题
      */
     String title;
+    
+    /**
+     * 微信服务返回结果
+     */
     WxCpMessageSendResult wxCpMessageSendResult;
 
     /**
+     * 封装返回结果
+     */
+    final Result result;
+    
+    /**
+     * 日期工具类
+     */
+    final DateUtil dateUtil;
+
+    /**
+     * 推送数据的工具类
+     */
+    final PushDataUtil pushDataUtil;
+    
+    /**
+     * 课程数据工具类
+     */
+    final CourseDataUtil courseDataUtil;
+
+    /**
+     * 线性课程表数据工具类
+     */
+    final CurriculumDataUtil curriculumDataUtil;
+    
+    /**
      * 企业微信消息接口
      */
-    @Resource
-    SendMessageService sendMessageService;
+    final SendMessageService sendMessageService;
+
+    /**
+     * 配置数据接口
+     */
+    final EnterpriseDataService enterpriseDataService;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     * @param dateUtil 日期工具类
+     * @param pushDataUtil 推送数据的工具类
+     * @param courseDataUtil 课程数据工具类
+     * @param curriculumDataUtil 线性课程表数据工具类
+     * @param sendMessageService 企业微信消息接口
+     * @param enterpriseDataService 配置数据接口
+     */
+    public PushController(Result result, DateUtil dateUtil, PushDataUtil pushDataUtil, CourseDataUtil courseDataUtil, CurriculumDataUtil curriculumDataUtil, SendMessageService sendMessageService, EnterpriseDataService enterpriseDataService) {
+        this.result = result;
+        this.dateUtil = dateUtil;
+        this.pushDataUtil = pushDataUtil;
+        this.courseDataUtil = courseDataUtil;
+        this.curriculumDataUtil = curriculumDataUtil;
+        this.sendMessageService = sendMessageService;
+        this.enterpriseDataService = enterpriseDataService;
+    }
 
     /**
      * 课程推送主方法

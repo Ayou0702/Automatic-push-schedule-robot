@@ -9,7 +9,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import static java.util.Objects.isNull;
  * 线性课程表数据工具类
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @Component
 public class CurriculumDataUtil {
@@ -27,8 +26,7 @@ public class CurriculumDataUtil {
     /**
      * 封装返回结果
      */
-    @Resource
-    Result result;
+    final Result result;
 
     /**
      * 分割字符
@@ -48,26 +46,41 @@ public class CurriculumDataUtil {
     /**
      * 线性课程表数据接口
      */
-    @Resource
-    CurriculumDataService curriculumDataService;
+    final CurriculumDataService curriculumDataService;
 
     /**
-     * 企业数据接口
+     * 配置数据接口
      */
-    @Resource
-    EnterpriseDataService enterpriseDataService;
+    final EnterpriseDataService enterpriseDataService;
 
     /**
      * 多表联动接口
      */
-    @Resource
-    MultilistService multilistService;
+    final MultilistService multilistService;
 
     /**
      * 事务管理器
      */
-    @Resource
-    PlatformTransactionManager platformTransactionManager;
+    final PlatformTransactionManager platformTransactionManager;
+
+    /**
+     * 构造器注入Bean
+     *
+     * @author PrefersMin
+     *
+     * @param result 统一返回结果
+     * @param curriculumDataService 线性课程表数据接口
+     * @param enterpriseDataService 配置数据接口
+     * @param multilistService 多表联动接口
+     * @param platformTransactionManager 事务管理器
+     */
+    public CurriculumDataUtil(Result result, CurriculumDataService curriculumDataService, EnterpriseDataService enterpriseDataService, MultilistService multilistService, PlatformTransactionManager platformTransactionManager) {
+        this.result = result;
+        this.curriculumDataService = curriculumDataService;
+        this.enterpriseDataService = enterpriseDataService;
+        this.multilistService = multilistService;
+        this.platformTransactionManager = platformTransactionManager;
+    }
 
     /**
      * 重置线性课程表数据

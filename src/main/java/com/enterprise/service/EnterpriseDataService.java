@@ -5,7 +5,7 @@ import com.enterprise.entity.EnterpriseData;
 import java.util.List;
 
 /**
- * 企业数据接口
+ * 配置数据接口
  *
  * @author PrefersMin
  * @version 1.2
