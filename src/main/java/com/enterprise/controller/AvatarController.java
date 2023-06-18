@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * 负责头像数据的Controller
@@ -86,7 +89,7 @@ public class AvatarController {
 
         // 非空判断
         if (avatarFile.isEmpty()) {
-            return result.failed(400,"上传头像失败","头像数据为空");
+            return result.failed(400, "上传头像失败", "头像数据为空");
         }
 
         // 固定jpg后缀
@@ -101,11 +104,32 @@ public class AvatarController {
         // 尝试写入头像数据
         try {
             avatarFile.transferTo(new File(path));
-            return result.success(200,"上传头像成功","类型为" + avatarType + "、ID为" + avatarId + "的头像上传成功");
+            return result.success(200, "上传头像成功", "类型为" + avatarType + "、ID为" + avatarId + "的头像上传成功");
         } catch (IOException e) {
-            return result.failed(400,"上传头像失败",e.getMessage());
+            return result.failed(400, "上传头像失败", e.getMessage());
         }
 
+    }
+
+    /**
+     * 程序开启时自检是否存在头像目录，若不存在则自动创建
+     *
+     * @author PrefersMin
+     *
+     */
+    @PostConstruct
+    public void checkDirectory() {
+        List<String> directoryList = new ArrayList<>();
+
+        directoryList.add(applicationHome.getDir() + File.separator + "teacherAvatar" + File.separator);
+        directoryList.add(applicationHome.getDir() + File.separator + "courseAvatar" + File.separator);
+
+        directoryList.forEach(directory -> {
+            File directoryFile = new File(directory);
+            if (!directoryFile.exists()) {
+                directoryFile.mkdir();
+            }
+        });
     }
 
 }

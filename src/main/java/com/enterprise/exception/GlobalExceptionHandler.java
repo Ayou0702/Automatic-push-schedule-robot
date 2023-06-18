@@ -1,6 +1,6 @@
 package com.enterprise.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import com.enterprise.util.LogUtil;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author PrefersMin
  * @version 1.0
  */
-@Slf4j
 @RestControllerAdvice
 
 public class GlobalExceptionHandler {
@@ -24,7 +23,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = RuntimeException.class)
     public void handler(RuntimeException e) {
-        log.error("运行时异常:----------------{}", e.getMessage());
+        LogUtil.error("运行时异常:----------------{}\n"+ e.getMessage());
     }
 
     /**
@@ -36,7 +35,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = NullPointerException.class)
     public void handler(NullPointerException e) {
-        log.error("空指针异常:----------------{}", e.getMessage());
+        LogUtil.error("空指针异常:----------------{}\n"+ e.getMessage());
     }
 
 }

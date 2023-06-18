@@ -1,0 +1,58 @@
+spring:
+  application:
+    # 应用名称
+    name: enterprise-wx-push
+
+  datasource:
+    dynamic:
+      #设置默认的数据源或者数据源组,默认值即为master
+      primary: master
+      #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      strict: false
+      datasource:
+        master:
+          # 数据库驱动
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          # 数据库连接地址
+          url: jdbc:mysql://localhost/enterprise-wx-push?useSSL=false&allowPublicKeyRetrieval=true
+          # 数据库用户名 & 密码
+          username: root
+          password: 123456
+        slave_1:
+          # 数据库驱动
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          # 数据库连接地址
+          url: jdbc:mysql://localhost/qq_data?useSSL=false&allowPublicKeyRetrieval=true
+          # 数据库用户名 & 密码
+          username: root
+          password: 123456
+
+  devtools:
+    restart:
+      # 热更新配置
+      enabled: true
+  servlet:
+    multipart:
+      # 默认最大上传文件大小设置为16MB，最大multipart请求大小设置为16MB
+      max-file-size: 16MB
+      max-request-size: 16MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  jpa:
+    show-sql: true
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 30000
+    password: password
+    database: 0
+
+mybatis-plus:
+  configuration:
+    # MyBatis-Plus 驼峰转换配置
+    map-underscore-to-camel-case: true
+
+server:
+  # 应用服务 WEB 访问端口
+  port: 8089
