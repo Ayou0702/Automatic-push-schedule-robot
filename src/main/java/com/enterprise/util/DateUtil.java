@@ -94,7 +94,7 @@ public class DateUtil {
      *
      * @return 当前日期(String类型)
      */
-    static String getNow() {
+    public static String getNow() {
         Date now = new Date(System.currentTimeMillis());
         return LOCAL_FORMAT.get().format(now);
     }

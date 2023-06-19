@@ -41,6 +41,7 @@ public class HttpUtil {
      * @throws IOException IO异常
      */
     public static String getUrl(String url) throws IOException {
+
         HttpGet httpGet = new HttpGet(url);
         httpGet.addHeader("Connection", "close");
 
@@ -56,5 +57,7 @@ public class HttpUtil {
             EntityUtils.consume(entity);
             return result;
         }
+
     }
+
 }

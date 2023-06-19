@@ -1,9 +1,7 @@
 package com.enterprise.util;
 
 import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.entity.vo.WeatherVo;
 import com.enterprise.service.EnterpriseDataService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import static com.enterprise.util.DateUtil.getNow;
@@ -30,11 +28,6 @@ public class PushDataUtil {
     private final EnterpriseDataService enterpriseDataService;
 
     /**
-     * api工具类
-     */
-    private final ApiUtil apiUtil;
-
-    /**
      * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
      */
     public String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
@@ -43,13 +36,11 @@ public class PushDataUtil {
      * 构造器注入Bean
      *
      * @param enterpriseDataService 配置数据接口
-     * @param apiUtil api工具类
      *
      * @author PrefersMin
      */
-    public PushDataUtil(EnterpriseDataService enterpriseDataService, ApiUtil apiUtil) {
+    public PushDataUtil(EnterpriseDataService enterpriseDataService) {
         this.enterpriseDataService = enterpriseDataService;
-        this.apiUtil = apiUtil;
     }
 
     /**
@@ -82,8 +73,8 @@ public class PushDataUtil {
         // 参数列表实体类
         ParameterListVo parameterList = new ParameterListVo();
 
-        parameterList.setWeatherVo(apiUtil.getWeather(amapKey, weatherValue, getPushTime()));
-        parameterList.setCaiHongPi(apiUtil.getCaiHongPi(apiKey));
+        parameterList.setWeatherVo(ApiUtil.getWeather(amapKey, weatherValue, getPushTime()));
+        parameterList.setCaiHongPi(ApiUtil.getCaiHongPi(apiKey));
         parameterList.setDateEnding(DateUtil.daysBetween(getNow(), dateEnding));
         parameterList.setDateStarting(DateUtil.daysBetween(dateStarting, getNow()) + getPushTime());
 

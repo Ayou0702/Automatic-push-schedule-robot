@@ -184,7 +184,7 @@ public class CurriculumDataUtil {
      * @param classStringTime 上课时间数据
      * @return 返回两个int型的数据作为开始时间与结束时间
      */
-    public int[] getClassTime(String classStringTime) {
+    public static int[] getClassTime(String classStringTime) {
 
         // 开始时间与结束时间实体类
         int[] time = new int[2];

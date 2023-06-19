@@ -1,11 +1,7 @@
 package com.enterprise.util;
 
-import com.enterprise.entity.CourseData;
-import com.enterprise.service.CourseDataService;
 import com.enterprise.service.EnterpriseDataService;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 课程数据工具类
@@ -17,11 +13,6 @@ import java.util.List;
 public class CourseDataUtil {
 
     /**
-     * 课程数据接口
-     */
-    private final CourseDataService courseDataService;
-
-    /**
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
@@ -31,23 +22,10 @@ public class CourseDataUtil {
      *
      * @author PrefersMin
      *
-     * @param courseDataService 课程数据接口
      * @param enterpriseDataService 配置数据接口
      */
-    public CourseDataUtil(CourseDataService courseDataService, EnterpriseDataService enterpriseDataService) {
-        this.courseDataService = courseDataService;
+    public CourseDataUtil(EnterpriseDataService enterpriseDataService) {
         this.enterpriseDataService = enterpriseDataService;
-    }
-
-    /**
-     * 查询所有课程数据
-     *
-     * @author PrefersMin
-     *
-     * @return 返回查询结果
-     */
-    public List<CourseData> queryAllCourseData() {
-        return courseDataService.queryAllCourseData();
     }
 
     /**

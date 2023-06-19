@@ -4,6 +4,7 @@ import com.enterprise.entity.CourseData;
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.vo.ParameterListVo;
 import com.enterprise.entity.vo.ResultVo;
+import com.enterprise.service.CourseDataService;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
 import com.enterprise.util.*;
@@ -28,20 +29,10 @@ import java.util.stream.Collectors;
 public class PushController {
 
     /**
-     * 声明一个标题
-     */
-    private String title;
-    
-    /**
-     * 微信服务返回结果
-     */
-    private WxCpMessageSendResult wxCpMessageSendResult;
-
-    /**
      * 封装返回结果
      */
     private final Result result;
-    
+
     /**
      * 日期工具类
      */
@@ -51,7 +42,7 @@ public class PushController {
      * 推送数据的工具类
      */
     private final PushDataUtil pushDataUtil;
-    
+
     /**
      * 课程数据工具类
      */
@@ -61,7 +52,7 @@ public class PushController {
      * 线性课程表数据工具类
      */
     private final CurriculumDataUtil curriculumDataUtil;
-    
+
     /**
      * 企业微信消息接口
      */
@@ -73,19 +64,35 @@ public class PushController {
     private final EnterpriseDataService enterpriseDataService;
 
     /**
+     * 课程数据接口
+     */
+    private final CourseDataService courseDataService;
+
+    /**
+     * 声明一个标题
+     */
+    private String title;
+
+    /**
+     * 微信服务返回结果
+     */
+    private WxCpMessageSendResult wxCpMessageSendResult;
+
+    /**
      * 构造器注入Bean
      *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     * @param dateUtil 日期工具类
-     * @param pushDataUtil 推送数据的工具类
-     * @param courseDataUtil 课程数据工具类
-     * @param curriculumDataUtil 线性课程表数据工具类
-     * @param sendMessageService 企业微信消息接口
+     * @param result                统一返回结果
+     * @param dateUtil              日期工具类
+     * @param pushDataUtil          推送数据的工具类
+     * @param courseDataUtil        课程数据工具类
+     * @param curriculumDataUtil    线性课程表数据工具类
+     * @param sendMessageService    企业微信消息接口
      * @param enterpriseDataService 配置数据接口
+     * @param courseDataService 课程数据接口
+     *
+     * @author PrefersMin
      */
-    public PushController(Result result, DateUtil dateUtil, PushDataUtil pushDataUtil, CourseDataUtil courseDataUtil, CurriculumDataUtil curriculumDataUtil, SendMessageService sendMessageService, EnterpriseDataService enterpriseDataService) {
+    public PushController(Result result, DateUtil dateUtil, PushDataUtil pushDataUtil, CourseDataUtil courseDataUtil, CurriculumDataUtil curriculumDataUtil, SendMessageService sendMessageService, EnterpriseDataService enterpriseDataService, CourseDataService courseDataService) {
         this.result = result;
         this.dateUtil = dateUtil;
         this.pushDataUtil = pushDataUtil;
@@ -93,6 +100,7 @@ public class PushController {
         this.curriculumDataUtil = curriculumDataUtil;
         this.sendMessageService = sendMessageService;
         this.enterpriseDataService = enterpriseDataService;
+        this.courseDataService = courseDataService;
     }
 
     /**
@@ -118,9 +126,6 @@ public class PushController {
             int pushTime = pushDataUtil.getPushTime();
             int period = dateUtil.getPeriod();
             int week = dateUtil.getW();
-
-            // 推送前刷新一遍课表
-            // curriculumDataUtil.resetCurriculumData();
 
             // 根据周期与星期获取五大节课程数据
             List<CurriculumData> curriculumDataList = curriculumDataUtil.getTodayCurriculumData(period, week);
@@ -307,7 +312,7 @@ public class PushController {
         title = "\uD83C\uDF92明天是开学日噢，明晚开始推送课程信息~";
 
         // 获取所有课程信息，并提取其中的课程名称
-        List<CourseData> courseData = courseDataUtil.queryAllCourseData();
+        List<CourseData> courseData = courseDataService.queryAllCourseData();
         List<String> courseNames = courseData.stream().map(CourseData::getCourseName).collect(Collectors.toList());
         // 通过TreeSet对课程名称进行去重
         courseNames = new ArrayList<>(new TreeSet<>(courseNames));
