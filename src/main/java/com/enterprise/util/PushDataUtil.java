@@ -1,6 +1,7 @@
 package com.enterprise.util;
 
 import com.enterprise.entity.vo.ParameterListVo;
+import com.enterprise.entity.vo.WeatherVo;
 import com.enterprise.service.EnterpriseDataService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -71,9 +72,6 @@ public class PushDataUtil {
      */
     public ParameterListVo getParameterList() {
 
-        // 参数列表实体类
-        ParameterListVo parameterList = new ParameterListVo();
-
         // 获取数据
         weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
         apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
@@ -81,23 +79,13 @@ public class PushDataUtil {
         dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
         amapKey = enterpriseDataService.queryingEnterpriseData("amapKey").getDataValue();
 
-        // 非空判断
-        if (StringUtils.isNotEmpty(apiKey) && StringUtils.isNotEmpty(weatherValue)) {
-            // 获取天气信息
-            parameterList.setWeatherVo(apiUtil.getWeather(amapKey, weatherValue, getPushTime()));
-        }
-        if (StringUtils.isNotEmpty(apiKey)) {
-            // 获取彩虹屁
-            parameterList.setCaiHongPi(apiUtil.getCaiHongPi(apiKey));
-        }
-        if (StringUtils.isNotEmpty(dateEnding)) {
-            // 计算离放假的天数
-            parameterList.setDateEnding(DateUtil.daysBetween(getNow(), dateEnding));
-        }
-        if (StringUtils.isNotEmpty(dateStarting)) {
-            // 计算已经开学的天数,并根据推送时间偏移
-            parameterList.setDateStarting((DateUtil.daysBetween(dateStarting, getNow()) + getPushTime()));
-        }
+        // 参数列表实体类
+        ParameterListVo parameterList = new ParameterListVo();
+
+        parameterList.setWeatherVo(apiUtil.getWeather(amapKey, weatherValue, getPushTime()));
+        parameterList.setCaiHongPi(apiUtil.getCaiHongPi(apiKey));
+        parameterList.setDateEnding(DateUtil.daysBetween(getNow(), dateEnding));
+        parameterList.setDateStarting(DateUtil.daysBetween(dateStarting, getNow()) + getPushTime());
 
         LogUtil.info("获取了参数列表：" + parameterList);
         return parameterList;

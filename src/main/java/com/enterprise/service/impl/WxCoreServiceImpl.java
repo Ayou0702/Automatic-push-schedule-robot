@@ -96,7 +96,9 @@ public class WxCoreServiceImpl implements WxCoreService {
                 wxCpDefaultConfig = JSON.parseObject(json, WxCpDefaultConfigImpl.class);
             }
 
+            // 判断token是否过期
             if (wxCpDefaultConfig.isAccessTokenExpired()) {
+
                 try {
                     // 配置token
                     String accessToken = wxCpService.getAccessToken(false);
@@ -104,8 +106,10 @@ public class WxCoreServiceImpl implements WxCoreService {
                 } catch (WxErrorException e) {
                     e.printStackTrace();
                 }
+
             }
 
+            // 判断凭证是否过期
             if (wxCpDefaultConfig.isJsapiTicketExpired()) {
 
                 try {
