@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.EnterpriseData;
 import com.enterprise.mapper.EnterpriseDataMapper;
 import com.enterprise.service.EnterpriseDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,26 +12,16 @@ import java.util.List;
  * 配置数据接口实现类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Service
+@RequiredArgsConstructor
 public class EnterpriseDataServiceImpl implements EnterpriseDataService {
 
     /**
      * 配置数据接口
      */
     private final EnterpriseDataMapper enterpriseDataMapper;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param enterpriseDataMapper 配置数据接口
-     */
-    public EnterpriseDataServiceImpl(EnterpriseDataMapper enterpriseDataMapper) {
-        this.enterpriseDataMapper = enterpriseDataMapper;
-    }
 
     /**
      * 修改指定配置项的配置数据

@@ -5,6 +5,7 @@ import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.enums.PushMode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -12,9 +13,10 @@ import org.springframework.scheduling.annotation.Scheduled;
  * 定时调用类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Configuration
+@RequiredArgsConstructor
 public class ScheduledConfig {
 
     /**
@@ -31,21 +33,6 @@ public class ScheduledConfig {
      * 推送服务
      */
     private final PushController pushController;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param enterpriseDataService 配置数据接口
-     * @param sendMessageService 企业微信消息接口
-     * @param pushController 推送服务
-     */
-    public ScheduledConfig(EnterpriseDataService enterpriseDataService, SendMessageService sendMessageService, PushController pushController) {
-        this.enterpriseDataService = enterpriseDataService;
-        this.sendMessageService = sendMessageService;
-        this.pushController = pushController;
-    }
 
     /**
      * 每天的7:45触发推送

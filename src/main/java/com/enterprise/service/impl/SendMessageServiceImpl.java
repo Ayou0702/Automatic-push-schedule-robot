@@ -5,6 +5,7 @@ import com.enterprise.service.SendMessageService;
 import com.enterprise.service.WxCoreService;
 import com.enterprise.util.ApiUtil;
 import com.enterprise.util.LogUtil;
+import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.impl.WxCpMessageServiceImpl;
 import me.chanjar.weixin.cp.bean.article.NewArticle;
@@ -19,9 +20,10 @@ import java.util.List;
  * 企业微信消息接口实现类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Service
+@RequiredArgsConstructor
 public class SendMessageServiceImpl implements SendMessageService {
 
     /**
@@ -38,21 +40,6 @@ public class SendMessageServiceImpl implements SendMessageService {
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param wxCoreService 企业微信核心服务
-     * @param apiUtil api工具类
-     * @param enterpriseDataService 配置数据接口
-     */
-    public SendMessageServiceImpl(WxCoreService wxCoreService, ApiUtil apiUtil, EnterpriseDataService enterpriseDataService) {
-        this.wxCoreService = wxCoreService;
-        this.apiUtil = apiUtil;
-        this.enterpriseDataService = enterpriseDataService;
-    }
 
     /**
      * 用于构建并发送课程相关消息

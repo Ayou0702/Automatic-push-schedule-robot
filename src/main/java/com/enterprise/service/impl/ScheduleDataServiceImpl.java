@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.ScheduleData;
 import com.enterprise.mapper.ScheduleDataMapper;
 import com.enterprise.service.ScheduleDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,26 +12,16 @@ import java.util.List;
  * 课表数据接口实现类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Service
+@RequiredArgsConstructor
 public class ScheduleDataServiceImpl implements ScheduleDataService {
 
     /**
      * 课表数据接口
      */
     private final ScheduleDataMapper scheduleDataMapper;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param scheduleDataMapper 课表数据接口
-     */
-    public ScheduleDataServiceImpl(ScheduleDataMapper scheduleDataMapper) {
-        this.scheduleDataMapper = scheduleDataMapper;
-    }
 
     /**
      * 查询所有课表数据

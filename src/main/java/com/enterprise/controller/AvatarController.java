@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +26,10 @@ import java.util.List;
  * 负责头像数据的Controller
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @RestController
+@RequiredArgsConstructor
 public class AvatarController {
 
     /**
@@ -39,17 +41,6 @@ public class AvatarController {
      * 封装返回结果
      */
     private final Result result;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     */
-    public AvatarController(Result result) {
-        this.result = result;
-    }
 
     /**
      * 获取头像数据

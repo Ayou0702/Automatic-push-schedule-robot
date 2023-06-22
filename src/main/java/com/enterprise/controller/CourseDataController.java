@@ -6,6 +6,7 @@ import com.enterprise.service.CourseDataService;
 import com.enterprise.service.ScheduleDataService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -23,9 +24,10 @@ import static java.util.Objects.isNull;
  * 负责课程数据的Controller
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @RestController
+@RequiredArgsConstructor
 public class CourseDataController {
 
     /**
@@ -58,12 +60,12 @@ public class CourseDataController {
      * @param scheduleDataService 课表数据接口
      * @param platformTransactionManager 事务管理器
      */
-    public CourseDataController(Result result, CourseDataService courseDataService, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
-        this.result = result;
-        this.courseDataService = courseDataService;
-        this.scheduleDataService = scheduleDataService;
-        this.platformTransactionManager = platformTransactionManager;
-    }
+    // public CourseDataController(Result result, CourseDataService courseDataService, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
+    //     this.result = result;
+    //     this.courseDataService = courseDataService;
+    //     this.scheduleDataService = scheduleDataService;
+    //     this.platformTransactionManager = platformTransactionManager;
+    // }
 
     /**
      * 查询所有课程数据

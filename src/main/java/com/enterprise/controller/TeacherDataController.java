@@ -6,6 +6,7 @@ import com.enterprise.service.ScheduleDataService;
 import com.enterprise.service.TeacherDataService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -23,9 +24,10 @@ import static java.util.Objects.isNull;
  * 负责教师数据的Controller
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @RestController
+@RequiredArgsConstructor
 public class TeacherDataController {
 
     /**
@@ -47,23 +49,6 @@ public class TeacherDataController {
      * 事务管理器
      */
     private final PlatformTransactionManager platformTransactionManager;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     * @param teacherDataService 教师数据接口
-     * @param scheduleDataService 课表数据接口
-     * @param platformTransactionManager 事务管理器
-     */
-    public TeacherDataController(Result result, TeacherDataService teacherDataService, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
-        this.result = result;
-        this.teacherDataService = teacherDataService;
-        this.scheduleDataService = scheduleDataService;
-        this.platformTransactionManager = platformTransactionManager;
-    }
 
     /**
      * 获取所有教师数据

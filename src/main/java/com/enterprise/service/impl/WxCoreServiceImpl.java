@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.WxCoreService;
+import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.api.impl.WxCpServiceImpl;
@@ -17,26 +18,16 @@ import redis.clients.jedis.JedisPoolConfig;
  * 企业微信核心服务实现类
  *
  * @author PrefersMin
- * @version 1.6
+ * @version 1.7
  */
 @Service
+@RequiredArgsConstructor
 public class WxCoreServiceImpl implements WxCoreService {
 
     /**
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param enterpriseDataService 配置数据接口
-     */
-    public WxCoreServiceImpl(EnterpriseDataService enterpriseDataService) {
-        this.enterpriseDataService = enterpriseDataService;
-    }
 
     /**
      * 核心服务，获取企业微信主服务对象

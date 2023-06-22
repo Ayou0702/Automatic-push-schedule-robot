@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.TeacherData;
 import com.enterprise.mapper.TeacherDataMapper;
 import com.enterprise.service.TeacherDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,26 +12,16 @@ import java.util.List;
  * 教师数据接口实现类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Service
+@RequiredArgsConstructor
 public class TeacherDataServiceImpl implements TeacherDataService {
 
     /**
      * 教师数据接口
      */
     private final TeacherDataMapper teacherDataMapper;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param teacherDataMapper 教师数据接口
-     */
-    public TeacherDataServiceImpl(TeacherDataMapper teacherDataMapper) {
-        this.teacherDataMapper = teacherDataMapper;
-    }
 
     /**
      * 查询所有教师数据

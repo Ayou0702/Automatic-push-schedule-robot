@@ -1,13 +1,13 @@
 package com.enterprise.controller;
 
 import com.enterprise.entity.CurriculumData;
-import com.enterprise.entity.vo.PageVo;
 import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.CurriculumDataService;
 import com.enterprise.util.CurriculumDataUtil;
 import com.enterprise.util.DateUtil;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -25,9 +25,10 @@ import static java.util.Objects.isNull;
  * 负责线性课程表数据的Controller
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @RestController
+@RequiredArgsConstructor
 public class CurriculumDataController {
 
     /**
@@ -54,25 +55,6 @@ public class CurriculumDataController {
      * 事务管理器
      */
     private final PlatformTransactionManager platformTransactionManager;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     * @param dateUtil 日期工具类
-     * @param curriculumDataUtil 线性课程表数据工具类
-     * @param curriculumDataService 线性课程表数据接口
-     * @param platformTransactionManager 事务管理器
-     */
-    public CurriculumDataController(Result result, DateUtil dateUtil, CurriculumDataUtil curriculumDataUtil, CurriculumDataService curriculumDataService, PlatformTransactionManager platformTransactionManager) {
-        this.result = result;
-        this.dateUtil = dateUtil;
-        this.curriculumDataUtil = curriculumDataUtil;
-        this.curriculumDataService = curriculumDataService;
-        this.platformTransactionManager = platformTransactionManager;
-    }
 
     /**
      * 获取所有线性课程表数据
@@ -109,41 +91,6 @@ public class CurriculumDataController {
             return result.failed(400, "重置失败", "课程推送队列重置失败");
         }
         return result.success(200, "重置成功", "课程推送队列重置成功");
-
-    }
-
-    /**
-     * 查询今日以及之后的指定页数的线性课程表数据
-     *
-     * @author PrefersMin
-     *
-     * @param pageIndex 指定页数
-     * @return 返回查询结果
-     */
-    @PostMapping("/queryNowCurriculumData")
-    public ResultVo queryNowCurriculumData(@RequestBody Integer pageIndex) {
-
-        int week = dateUtil.getW();
-        int period = dateUtil.getPeriod();
-
-        int pageSize = 6;
-
-        LogUtil.info("当前查询的是 " + period + "周 星期" + week + " 及以后的" + pageSize + "条课程");
-
-        List<CurriculumData> curriculumDataList = curriculumDataService.queryNowCurriculumData(period, week, 6, pageIndex * pageSize);
-
-        if (curriculumDataList == null) {
-            return result.failed("课程推送队列数据加载失败");
-        }
-
-        PageVo pageVo = new PageVo();
-
-        pageVo.setPageSize(pageSize);
-        pageVo.setPageIndex(pageIndex * pageSize);
-        pageVo.setTotalCount(curriculumDataService.queryNowCurriculumDataCount(period, week));
-        pageVo.setCurriculumDataList(curriculumDataList);
-
-        return result.success("课程推送队列数据加载成功", pageVo);
 
     }
 

@@ -8,6 +8,7 @@ import com.enterprise.entity.vo.UserListVo;
 import com.enterprise.entity.vo.WeatherVo;
 import com.enterprise.service.WxCoreService;
 import com.enterprise.util.enums.PushMode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,9 +18,10 @@ import java.util.List;
  * api工具类
  *
  * @author PrefersMin
- * @version 1.8
+ * @version 1.9
  */
 @Component
+@RequiredArgsConstructor
 public class ApiUtil {
 
     /**
@@ -31,19 +33,6 @@ public class ApiUtil {
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param wxCoreService 企业微信核心服务
-     * @param enterpriseDataService 配置数据接口
-     */
-    public ApiUtil(WxCoreService wxCoreService, EnterpriseDataService enterpriseDataService) {
-        this.wxCoreService = wxCoreService;
-        this.enterpriseDataService = enterpriseDataService;
-    }
 
     /**
      * 获取彩虹屁

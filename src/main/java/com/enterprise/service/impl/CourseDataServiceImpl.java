@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.CourseData;
 import com.enterprise.mapper.CourseDataMapper;
 import com.enterprise.service.CourseDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,26 +12,16 @@ import java.util.List;
  * 课程数据接口实现类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Service
+@RequiredArgsConstructor
 public class CourseDataServiceImpl implements CourseDataService {
 
     /**
      * 课程数据接口
      */
     private final CourseDataMapper courseDataMapper;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param courseDataMapper 课程数据接口
-     */
-    public CourseDataServiceImpl(CourseDataMapper courseDataMapper) {
-        this.courseDataMapper = courseDataMapper;
-    }
 
     /**
      * 新增课程数据

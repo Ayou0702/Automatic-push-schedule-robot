@@ -1,6 +1,7 @@
 package com.enterprise.util;
 
 import com.enterprise.service.EnterpriseDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -14,9 +15,10 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author PrefersMin
- * @version 1.6
+ * @version 1.7
  */
 @Component
+@RequiredArgsConstructor
 public class DateUtil {
 
     /**
@@ -33,19 +35,6 @@ public class DateUtil {
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param pushDataUtil 推送数据的工具类
-     * @param enterpriseDataService 配置数据接口
-     */
-    public DateUtil(PushDataUtil pushDataUtil, EnterpriseDataService enterpriseDataService) {
-        this.pushDataUtil = pushDataUtil;
-        this.enterpriseDataService = enterpriseDataService;
-    }
 
     /**
      * 计算两个日期(String类型)之间相差多少天

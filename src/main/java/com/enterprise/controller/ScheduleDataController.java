@@ -5,6 +5,7 @@ import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.ScheduleDataService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -22,9 +23,10 @@ import static java.util.Objects.isNull;
  * 负责课表数据的Controller
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @RestController
+@RequiredArgsConstructor
 public class ScheduleDataController {
 
     /**
@@ -41,21 +43,6 @@ public class ScheduleDataController {
      * 事务管理器
      */
     private final PlatformTransactionManager platformTransactionManager;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     * @param scheduleDataService 课表数据接口
-     * @param platformTransactionManager 事务管理器
-     */
-    public ScheduleDataController(Result result, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
-        this.result = result;
-        this.scheduleDataService = scheduleDataService;
-        this.platformTransactionManager = platformTransactionManager;
-    }
 
     /**
      * 获取课表数据

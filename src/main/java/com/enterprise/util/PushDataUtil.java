@@ -2,6 +2,7 @@ package com.enterprise.util;
 
 import com.enterprise.entity.vo.ParameterListVo;
 import com.enterprise.service.EnterpriseDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static com.enterprise.util.DateUtil.getNow;
@@ -10,9 +11,10 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @Component
+@RequiredArgsConstructor
 public class PushDataUtil {
 
     /**
@@ -31,17 +33,6 @@ public class PushDataUtil {
      * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
      */
     public String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @param enterpriseDataService 配置数据接口
-     *
-     * @author PrefersMin
-     */
-    public PushDataUtil(EnterpriseDataService enterpriseDataService) {
-        this.enterpriseDataService = enterpriseDataService;
-    }
 
     /**
      * 获取推送模式

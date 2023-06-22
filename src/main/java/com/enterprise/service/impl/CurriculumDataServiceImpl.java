@@ -3,6 +3,7 @@ package com.enterprise.service.impl;
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.mapper.CurriculumDataMapper;
 import com.enterprise.service.CurriculumDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,26 +12,16 @@ import java.util.List;
  * 线性课程表数据接口实现类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Service
+@RequiredArgsConstructor
 public class CurriculumDataServiceImpl implements CurriculumDataService {
 
     /**
      * 线性课程表数据接口
      */
     private final CurriculumDataMapper curriculumDataMapper;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param curriculumDataMapper 线性课程表数据接口
-     */
-    public CurriculumDataServiceImpl(CurriculumDataMapper curriculumDataMapper) {
-        this.curriculumDataMapper = curriculumDataMapper;
-    }
 
     /**
      * 新增课程推送队列数据

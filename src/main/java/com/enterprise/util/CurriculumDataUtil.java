@@ -4,6 +4,7 @@ import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.entity.vo.ScheduleInfo;
 import com.enterprise.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -18,9 +19,10 @@ import static java.util.Objects.isNull;
  * 线性课程表数据工具类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Component
+@RequiredArgsConstructor
 public class CurriculumDataUtil {
 
     /**
@@ -57,25 +59,6 @@ public class CurriculumDataUtil {
      * 事务管理器
      */
     private final PlatformTransactionManager platformTransactionManager;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     * @param curriculumDataService 线性课程表数据接口
-     * @param enterpriseDataService 配置数据接口
-     * @param multilistService 多表联动接口
-     * @param platformTransactionManager 事务管理器
-     */
-    public CurriculumDataUtil(Result result, CurriculumDataService curriculumDataService, EnterpriseDataService enterpriseDataService, MultilistService multilistService, PlatformTransactionManager platformTransactionManager) {
-        this.result = result;
-        this.curriculumDataService = curriculumDataService;
-        this.enterpriseDataService = enterpriseDataService;
-        this.multilistService = multilistService;
-        this.platformTransactionManager = platformTransactionManager;
-    }
 
     /**
      * 重置线性课程表数据

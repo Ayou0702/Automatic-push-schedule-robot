@@ -9,6 +9,7 @@ import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
 import com.enterprise.util.*;
 import com.enterprise.util.enums.PushMode;
+import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,10 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.6
+ * @version 1.7
  */
 @RestController
+@RequiredArgsConstructor
 public class PushController {
 
     /**
@@ -77,31 +79,6 @@ public class PushController {
      * 微信服务返回结果
      */
     private WxCpMessageSendResult wxCpMessageSendResult;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @param result                统一返回结果
-     * @param dateUtil              日期工具类
-     * @param pushDataUtil          推送数据的工具类
-     * @param courseDataUtil        课程数据工具类
-     * @param curriculumDataUtil    线性课程表数据工具类
-     * @param sendMessageService    企业微信消息接口
-     * @param enterpriseDataService 配置数据接口
-     * @param courseDataService 课程数据接口
-     *
-     * @author PrefersMin
-     */
-    public PushController(Result result, DateUtil dateUtil, PushDataUtil pushDataUtil, CourseDataUtil courseDataUtil, CurriculumDataUtil curriculumDataUtil, SendMessageService sendMessageService, EnterpriseDataService enterpriseDataService, CourseDataService courseDataService) {
-        this.result = result;
-        this.dateUtil = dateUtil;
-        this.pushDataUtil = pushDataUtil;
-        this.courseDataUtil = courseDataUtil;
-        this.curriculumDataUtil = curriculumDataUtil;
-        this.sendMessageService = sendMessageService;
-        this.enterpriseDataService = enterpriseDataService;
-        this.courseDataService = courseDataService;
-    }
 
     /**
      * 课程推送主方法

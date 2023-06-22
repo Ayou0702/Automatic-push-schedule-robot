@@ -1,32 +1,23 @@
 package com.enterprise.util;
 
 import com.enterprise.service.EnterpriseDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * 课程数据工具类
  *
  * @author PrefersMin
- * @version 1.1
+ * @version 1.2
  */
 @Component
+@RequiredArgsConstructor
 public class CourseDataUtil {
 
     /**
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param enterpriseDataService 配置数据接口
-     */
-    public CourseDataUtil(EnterpriseDataService enterpriseDataService) {
-        this.enterpriseDataService = enterpriseDataService;
-    }
 
     /**
      * 统计总课程数

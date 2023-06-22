@@ -11,7 +11,19 @@ import lombok.Data;
 @Data
 public class ExceptionVo {
 
-    private String errorMessage,errorState;
+    /**
+     * 错误信息
+     */
+    private String errorMessage;
+
+    /**
+     * 错误状态
+     */
+    private String errorState;
+
+    /**
+     * 错误代码
+     */
     private int errorCode;
 
 }

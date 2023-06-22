@@ -1,6 +1,7 @@
 package com.enterprise.util;
 
 import com.enterprise.entity.vo.ResultVo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -10,26 +11,16 @@ import java.io.Serializable;
  * 封装类、统一返回格式
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Component
+@RequiredArgsConstructor
 public class Result implements Serializable {
 
     /**
      * 返回对象实体类
      */
     private final ResultVo resultVo;
-
-    /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param resultVo 返回对象实体类
-     */
-    public Result(ResultVo resultVo) {
-        this.resultVo = resultVo;
-    }
 
     public ResultVo success(String message,Object data) {
         return success(200, message, data);
