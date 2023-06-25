@@ -30,6 +30,10 @@ public class Result implements Serializable {
         return success(200, message, null);
     }
 
+    public ResultVo success(Object data) {
+        return success(200, "", data);
+    }
+
     public ResultVo success(int code, String message, Object data) {
 
         resultVo.setCode(code);

@@ -1,13 +1,21 @@
 package com.enterprise.util;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.enterprise.entity.vo.ResultVo;
+import lombok.RequiredArgsConstructor;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -17,6 +25,8 @@ import java.io.IOException;
  * @author PrefersMin
  * @version 1.3
  */
+@Component
+@RequiredArgsConstructor
 public class HttpUtil {
 
     private static final CloseableHttpClient HTTP_CLIENT;
@@ -30,6 +40,8 @@ public class HttpUtil {
 
         HTTP_CLIENT = HttpClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(requestConfig).build();
     }
+
+    private final Result result;
 
     /**
      * 将请求到的内容转换为String返回
@@ -57,6 +69,50 @@ public class HttpUtil {
             EntityUtils.consume(entity);
             return result;
         }
+
+    }
+
+    /**
+     * POST请求
+     *
+     * @author PrefersMin
+     *
+     * @param url 请求的url
+     * @param data 携带的参数
+     * @param header 头部信息
+     * @return 返回请求结果
+     * @throws IOException 可能存在的异常
+     */
+    public ResultVo postUrl(String url, String data, Header header) throws IOException {
+
+        // 创建HttpClient对象
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+        // 创建HttpPost请求对象
+        HttpPost httpPost = new HttpPost(url);
+
+        // 设置请求头信息
+        httpPost.setHeader(header);
+
+        // 设置请求参数
+        StringEntity requestEntity = new StringEntity(data, ContentType.APPLICATION_FORM_URLENCODED);
+        httpPost.setEntity(requestEntity);
+
+        // 发送POST请求
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+
+        // 处理响应结果
+        HttpEntity responseEntity = response.getEntity();
+
+        String res = responseEntity != null ? EntityUtils.toString(responseEntity) : null;
+
+        JSONObject dataObj = JSONObject.parseObject(res);
+
+        // 关闭连接
+        response.close();
+        httpClient.close();
+
+        return result.success(dataObj);
 
     }
 
