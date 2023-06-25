@@ -112,7 +112,7 @@ public class ScheduleDataController {
      * @return 返回删除结果
      */
     @PostMapping("/deleteScheduleData")
-    public ResultVo deleteScheduleData(List<Integer> scheduleIdList) {
+    public ResultVo deleteScheduleData(@RequestBody List<Integer> scheduleIdList) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -174,7 +174,7 @@ public class ScheduleDataController {
         if (addResult) {
             LogUtil.info("新增课表数据，课表数据：" + scheduleData);
             // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
+            platformTransactionManager.commit(transactionStatus);
             return result.success(200, "新增课表数据成功", "ID为 " + scheduleData.getScheduleId() + " 的课表数据新增成功");
         }
 

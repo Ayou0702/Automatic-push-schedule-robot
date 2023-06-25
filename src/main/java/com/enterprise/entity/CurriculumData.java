@@ -16,7 +16,8 @@ public class CurriculumData {
     /**
      * 推送队列ID
      */
-    private int curriculumId;
+    @TableId(type = IdType.AUTO)
+    private Integer curriculumId;
 
     /**
      * 详细的上课时间
