@@ -23,11 +23,16 @@ import java.io.IOException;
  * http工具类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Component
 @RequiredArgsConstructor
 public class HttpUtil {
+
+    /**
+     * 封装返回结果
+     */
+    private final Result result;
 
     private static final CloseableHttpClient HTTP_CLIENT;
 
@@ -40,8 +45,6 @@ public class HttpUtil {
 
         HTTP_CLIENT = HttpClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(requestConfig).build();
     }
-
-    private final Result result;
 
     /**
      * 将请求到的内容转换为String返回

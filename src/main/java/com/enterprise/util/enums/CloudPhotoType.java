@@ -1,6 +1,13 @@
 package com.enterprise.util.enums;
 
+/**
+ * 云图库的枚举类
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 public enum CloudPhotoType {
+
     WALLPAPER(1, "wallpaper"),
     AVATAR(2,"avatar"),
     LIVE_WALLPAPER(3, "liveWallpaper"),

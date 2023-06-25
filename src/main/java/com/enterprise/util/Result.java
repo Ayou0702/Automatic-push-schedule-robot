@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 封装类、统一返回格式
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Component
 @RequiredArgsConstructor
