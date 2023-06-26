@@ -107,16 +107,16 @@ public class PushController {
             // 根据周期与星期获取五大节课程数据
             List<CurriculumData> curriculumDataList = curriculumDataUtil.getTodayCurriculumData(period, week);
 
+            // 假日信息推送，若距离假期天数为 0 触发
+            if (parameterList.getDateEnding() == 0) {
+                return vacationPush(parameterList, message);
+            }
+
             // 非空判断五大节课程数据(与逻辑)
             if (curriculumDataList.size() == 0) {
                 // 五大节课程数据都为空，跳过当天的推送
                 LogUtil.info("当前没有课程，跳过推送");
                 return result.success("当前没有课程，跳过推送");
-            }
-
-            // 假日信息推送，若距离假期天数为 0 触发
-            if (parameterList.getDateEnding() == 0) {
-                return vacationPush(parameterList, message);
             }
 
             // 根据推送时间设置标题

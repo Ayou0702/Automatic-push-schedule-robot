@@ -58,7 +58,6 @@ public class HttpUtil {
     public static String getUrl(String url) throws IOException {
 
         HttpGet httpGet = new HttpGet(url);
-        httpGet.addHeader("Connection", "close");
 
         try (CloseableHttpResponse response = HTTP_CLIENT.execute(httpGet)) {
             if (response.getStatusLine().getStatusCode() != 200) {

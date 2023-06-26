@@ -1,4 +1,4 @@
-package com.enterprise.exception;
+package com.enterprise.common.exception;
 
 import com.enterprise.entity.vo.ExceptionVo;
 

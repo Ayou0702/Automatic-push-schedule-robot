@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @RestController
 @RequiredArgsConstructor
-public class PhotoUtilController {
+public class CloudPhotoController {
 
     /**
      * 封装返回结果

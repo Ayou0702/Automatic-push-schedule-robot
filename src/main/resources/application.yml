@@ -22,7 +22,7 @@ spring:
           # 数据库驱动
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 数据库连接地址
-          url: jdbc:mysql://localhost/qq_data?useSSL=false&allowPublicKeyRetrieval=true
+          url: jdbc:mysql://localhost/prefersmin_permission?useSSL=false&allowPublicKeyRetrieval=true
           # 数据库用户名 & 密码
           username: root
           password: 123456
@@ -56,3 +56,17 @@ mybatis-plus:
 server:
   # 应用服务 WEB 访问端口
   port: 8089
+
+# Sa-Token
+sa-token:
+  # token 类型
+  token-name: satoken
+  # token 有效时间
+  timeout: 2592000
+  # jwt秘钥
+  jwt-secret-key: lilingRSJ
+  activity-timeout: -1
+  is-concurrent: true
+  is-share: false
+  token-style: uuid
+  is-log: false
