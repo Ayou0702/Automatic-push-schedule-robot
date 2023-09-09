@@ -11,7 +11,7 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author PrefersMin
- * @version 1.7
+ * @version 1.8
  */
 @Component
 @RequiredArgsConstructor
@@ -30,9 +30,14 @@ public class PushDataUtil {
     private final EnterpriseDataService enterpriseDataService;
 
     /**
-     * 声明天气参数、天行数据api密钥、开学日期、放假日期、高德api密钥
+     * Api工具类
      */
-    public String weatherValue, tianApiKey, dateEnding, dateStarting, amapKey;
+    private final ApiUtil apiUtil;
+
+    /**
+     * 声明开学日期、放假日期
+     */
+    public String dateEnding, dateStarting;
 
     /**
      * 获取推送模式
@@ -55,17 +60,14 @@ public class PushDataUtil {
     public ParameterListVo getParameterList() {
 
         // 获取数据
-        weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
-        tianApiKey = enterpriseDataService.queryingEnterpriseData("tianApiKey").getDataValue();
         dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
         dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
-        amapKey = enterpriseDataService.queryingEnterpriseData("amapKey").getDataValue();
 
         // 参数列表实体类
         ParameterListVo parameterList = new ParameterListVo();
 
-        parameterList.setWeatherVo(ApiUtil.getWeather(amapKey, weatherValue, getPushMode()));
-        parameterList.setCaiHongPi(ApiUtil.getCaiHongPi(tianApiKey));
+        parameterList.setWeatherVo(apiUtil.getWeather());
+        parameterList.setCaiHongPi(apiUtil.getCaiHongPi());
         parameterList.setDateEnding(DateUtil.daysBetween(getNow(), dateEnding));
         parameterList.setDateStarting(DateUtil.daysBetween(dateStarting, getNow()) + getPushMode());
 

@@ -134,8 +134,8 @@ public class PushController {
             // 消息内容
             // 根据推送时间判断天气推送提示
             message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(PushMode.NIGHT.getValue() == pushMode ? "明日" : "今日").append("天气");
-            message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getDayWeather());
-            message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("℃~").append(parameterList.getWeatherVo().getDayTemp()).append("℃\n");
+            message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getWeather());
+            message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("℃~").append(parameterList.getWeatherVo().getHighest()).append("℃\n");
 
             // 距离开学日天数统计
             if (parameterList.getDateStarting() == 0) {
@@ -304,8 +304,8 @@ public class PushController {
         }
 
         // 提醒明天的天气与温度
-        message.append("\n\uD83C\uDF25明天的气象：").append(parameterList.getWeatherVo().getDayWeather());
-        message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("~").append(parameterList.getWeatherVo().getDayTemp()).append("\n");
+        message.append("\n\uD83C\uDF25明天的气象：").append(parameterList.getWeatherVo().getWeather());
+        message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getLowest()).append("~").append(parameterList.getWeatherVo().getHighest()).append("\n");
 
         message.append("\n\uD83C\uDFC4\uD83C\uDFFB\u200D♀️新学期马上开始咯\n");
 

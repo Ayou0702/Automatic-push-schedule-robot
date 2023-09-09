@@ -11,7 +11,7 @@ import java.util.List;
  * 配置数据接口
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Mapper
 public interface EnterpriseDataMapper {
@@ -37,7 +37,8 @@ public interface EnterpriseDataMapper {
      * @param enterpriseData  需要修改的配置数据
      * @return 返回修改结果
      */
-    @Update("UPDATE enterprise_data SET `data_value`=#{dataValue} ,`data_annotation`=#{dataAnnotation} WHERE `data_name` = #{dataName}")
+    // @Update("UPDATE enterprise_data SET `data_value`=#{dataValue} ,`data_annotation`=#{dataAnnotation} WHERE `data_name` = #{dataName}")
+    @Update("UPDATE enterprise_data SET `data_value`=#{dataValue} WHERE `data_name` = #{dataName}")
     boolean updateEnterpriseData(EnterpriseData enterpriseData);
 
     /**

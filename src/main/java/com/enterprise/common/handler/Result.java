@@ -7,10 +7,11 @@ import java.util.Map;
 
 @Data
 public class Result {
+
     /**
      * 返回结果
      */
-    private Boolean success;
+    private Boolean state;
 
     /**
      * 响应码
@@ -38,7 +39,7 @@ public class Result {
      */
     public static Result OK() {
         Result result = new Result();
-        result.setSuccess(true);
+        result.setState(true);
         result.setCode(ResultCode.SUCCESS);
         result.setMessage("访问成功");
         return result;
@@ -49,14 +50,14 @@ public class Result {
      */
     public static Result Error() {
         Result result = new Result();
-        result.setSuccess(false);
+        result.setState(false);
         result.setCode(ResultCode.ERROR);
         result.setMessage("访问失败");
         return result;
     }
 
     public Result success(Boolean success) {
-        this.setSuccess(success);
+        this.setState(success);
         return this;
     }
 

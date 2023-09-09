@@ -3,9 +3,9 @@ package com.enterprise.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.enterprise.entity.vo.WeatherVo;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.entity.vo.UserListVo;
-import com.enterprise.entity.vo.WeatherVo;
 import com.enterprise.service.WxCoreService;
 import com.enterprise.util.enums.PushMode;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.List;
  * api工具类
  *
  * @author PrefersMin
- * @version 1.9
+ * @version 2.0
  */
 @Component
 @RequiredArgsConstructor
@@ -39,14 +39,14 @@ public class ApiUtil {
      *
      * @author PrefersMin
      *
-     * @param key 天行数据彩虹屁api密钥
      * @return 返回彩虹屁
      */
-    public static String getCaiHongPi(String key) {
+    public String getCaiHongPi() {
 
         // 固定请求地址，详见 https://www.tianapi.com/apiview/181
         String url = "https://api.tianapi.com/pyqwenan/index?key=";
         String str = "阳光落在屋里，爱你藏在心里";
+        String key = enterpriseDataService.queryingEnterpriseData("tianApiKey").getDataValue();
 
         try {
             JSONObject jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key));
@@ -59,7 +59,6 @@ public class ApiUtil {
             LogUtil.error("返回码错误：获取彩虹屁失败");
         } catch (IOException e) {
             LogUtil.error("try异常：获取彩虹屁失败");
-            e.printStackTrace();
         }
         LogUtil.error("try失败：获取彩虹屁失败");
         return str;
@@ -71,29 +70,60 @@ public class ApiUtil {
      *
      * @author PrefersMin
      *
-     * @param key 天行数据天气预报api密钥
-     * @param city 需要预报的城市
-     * @param pushMode 推送时间
      * @return 返回天气实体对象
      */
-    public static WeatherVo getWeather(String key, String city, int pushMode) {
+    public WeatherVo getWeather() {
 
-        JSONObject jsonObject;
-        // 固定请求地址，详见 https://lbs.amap.com/api/webservice/guide/api/weatherinfo/#t1
-        String url = "https://restapi.amap.com/v3/weather/weatherInfo?key=";
-        // 清空一下
+        JSONObject jsonObject = null;
         WeatherVo weatherVo = new WeatherVo();
+        String key, url;
+        String city = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
+        int pushMode = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushMode").getDataValue());
+        boolean dataSources = enterpriseDataService.queryingEnterpriseData("dataSources").getDataValue().equals("1");
 
-        try {
-            // 根据推送时间获取天气
-            jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city + "&extensions=all"));
-            assert jsonObject != null;
-            weatherVo = JSON.parseObject(jsonObject.getJSONArray("forecasts").getJSONObject(0).getJSONArray("casts").getJSONObject(pushMode).toString(), WeatherVo.class);
-            weatherVo.setArea(jsonObject.getJSONArray("forecasts").getJSONObject(0).getString("city"));
-            LogUtil.info((PushMode.NIGHT.getValue() == pushMode) ? "当前推送的是明日天气" : "当前推送的是今日天气");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (dataSources) {
+            // 天行api固定请求地址，详见 https://www.tianapi.com/apiview/72
+            url = "https://api.tianapi.com/tianqi/index?key=";
+            key = enterpriseDataService.queryingEnterpriseData("tianApiKey").getDataValue();
+            // 天行请求
+            try {
+                jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city));
+            } catch (IOException e) {
+                LogUtil.error("天行数据获取失败");
+                LogUtil.error(e.getMessage());
+            }
+        } else {
+            // 高德api固定请求地址，详见 https://lbs.amap.com/api/webservice/guide/api/weatherinfo/#t1
+            url = "https://restapi.amap.com/v3/weather/weatherInfo?key=";
+            key = enterpriseDataService.queryingEnterpriseData("amapKey").getDataValue();
+            // 高德请求
+            try {
+                jsonObject = JSONObject.parseObject(HttpUtil.getUrl(url + key + "&city=" + city + "&extensions=all"));
+            } catch (IOException e) {
+                LogUtil.error("高德数据获取失败");
+                LogUtil.error(e.getMessage());
+            }
         }
+
+        // 非空断言
+        assert jsonObject != null;
+
+        if (dataSources) {
+            // 天行数据反序列化
+            weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(pushMode).toString(), WeatherVo.class);
+
+        } else {
+            // 高德数据反序列化
+            JSONObject Gao = jsonObject.getJSONArray("forecasts").getJSONObject(0).getJSONArray("casts").getJSONObject(pushMode);
+            weatherVo.setArea(jsonObject.getJSONArray("forecasts").getJSONObject(0).getString("city"));
+            weatherVo.setDate(Gao.getString("date"));
+            weatherVo.setWeather(Gao.getString("dayweather"));
+            weatherVo.setHighest(Gao.getString("daytemp_float"));
+            weatherVo.setLowest(Gao.getString("nighttemp_float"));
+        }
+
+        weatherVo.setState(pushMode);
+        LogUtil.info((PushMode.NIGHT.getValue() == pushMode) ? "当前推送的是明日天气" : "当前推送的是今日天气");
         return weatherVo;
     }
 
@@ -137,7 +167,6 @@ public class ApiUtil {
             LogUtil.error("返回码错误：获取部门成员列表失败");
         } catch (IOException e) {
             LogUtil.error("try异常：获取部门成员列表失败");
-            e.printStackTrace();
         }
         LogUtil.error("try失败：获取部门成员列表失败");
         return null;

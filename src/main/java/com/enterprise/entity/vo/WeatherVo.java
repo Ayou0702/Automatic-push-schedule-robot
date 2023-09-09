@@ -12,6 +12,11 @@ import lombok.Data;
 public class WeatherVo {
 
     /**
+     * 是今日天气还是明日天气
+     */
+    private int state;
+
+    /**
      * 日期
      */
     private String date;
@@ -19,17 +24,17 @@ public class WeatherVo {
     /**
      * 当前天气
      */
-    private String dayWeather;
+    private String weather;
 
     /**
      * 最低温度
      */
-    private String nightTemp;
+    private String lowest;
 
     /**
      * 最高温度
      */
-    private String dayTemp;
+    private String highest;
 
     /**
      * 当前天气预报地区
