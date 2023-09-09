@@ -11,7 +11,7 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author PrefersMin
- * @version 1.6
+ * @version 1.7
  */
 @Component
 @RequiredArgsConstructor
@@ -30,9 +30,9 @@ public class PushDataUtil {
     private final EnterpriseDataService enterpriseDataService;
 
     /**
-     * 声明天气参数、api密钥、开学日期、放假日期、高德api密钥
+     * 声明天气参数、天行数据api密钥、开学日期、放假日期、高德api密钥
      */
-    public String weatherValue, apiKey, dateEnding, dateStarting, amapKey;
+    public String weatherValue, tianApiKey, dateEnding, dateStarting, amapKey;
 
     /**
      * 获取推送模式
@@ -41,8 +41,8 @@ public class PushDataUtil {
      *
      * @return 返回推送模式
      */
-    public int getPushTime() {
-        return Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue());
+    public int getPushMode() {
+        return Integer.parseInt(enterpriseDataService.queryingEnterpriseData("pushMode").getDataValue());
     }
 
     /**
@@ -56,7 +56,7 @@ public class PushDataUtil {
 
         // 获取数据
         weatherValue = enterpriseDataService.queryingEnterpriseData("weatherValue").getDataValue();
-        apiKey = enterpriseDataService.queryingEnterpriseData("apiKey").getDataValue();
+        tianApiKey = enterpriseDataService.queryingEnterpriseData("tianApiKey").getDataValue();
         dateEnding = enterpriseDataService.queryingEnterpriseData("dateEnding").getDataValue();
         dateStarting = enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue();
         amapKey = enterpriseDataService.queryingEnterpriseData("amapKey").getDataValue();
@@ -64,10 +64,10 @@ public class PushDataUtil {
         // 参数列表实体类
         ParameterListVo parameterList = new ParameterListVo();
 
-        parameterList.setWeatherVo(ApiUtil.getWeather(amapKey, weatherValue, getPushTime()));
-        parameterList.setCaiHongPi(ApiUtil.getCaiHongPi(apiKey));
+        parameterList.setWeatherVo(ApiUtil.getWeather(amapKey, weatherValue, getPushMode()));
+        parameterList.setCaiHongPi(ApiUtil.getCaiHongPi(tianApiKey));
         parameterList.setDateEnding(DateUtil.daysBetween(getNow(), dateEnding));
-        parameterList.setDateStarting(DateUtil.daysBetween(dateStarting, getNow()) + getPushTime());
+        parameterList.setDateStarting(DateUtil.daysBetween(dateStarting, getNow()) + getPushMode());
 
         LogUtil.info("获取了参数列表：" + parameterList);
         return parameterList;

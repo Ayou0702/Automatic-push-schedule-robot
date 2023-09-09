@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 课程数据工具类
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 @Component
 @RequiredArgsConstructor
@@ -18,6 +18,11 @@ public class CourseDataUtil {
      * 配置数据接口
      */
     private final EnterpriseDataService enterpriseDataService;
+
+    /**
+     * 配置数据工具类
+     */
+    private final EnterpriseDataUtil enterpriseDataUtil;
 
     /**
      * 统计总课程数
@@ -31,12 +36,7 @@ public class CourseDataUtil {
             return;
         }
 
-        // 获取当前总课程数
-        int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("totalClassTimes").getDataValue());
-        // 自增
-        temp++;
-        // 回写
-        enterpriseDataService.updateEnterpriseDataByDataName("totalClassTimes", String.valueOf(temp));
+        enterpriseDataUtil.dataIncrement("totalClassTimes");
 
     }
 

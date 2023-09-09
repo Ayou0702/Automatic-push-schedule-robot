@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.7
+ * @version 1.8
  */
 @RestController
 @RequiredArgsConstructor
@@ -54,6 +54,11 @@ public class PushController {
      * 线性课程表数据工具类
      */
     private final CurriculumDataUtil curriculumDataUtil;
+
+    /**
+     * 配置数据工具类
+     */
+    private final EnterpriseDataUtil enterpriseDataUtil;
 
     /**
      * 企业微信消息接口
@@ -100,7 +105,7 @@ public class PushController {
             LogUtil.info("开学天数：" + parameterList.getDateStarting());
 
             // 计算当前推送周期、获取推送时间、计算当前推送星期
-            int pushTime = pushDataUtil.getPushTime();
+            int pushMode = pushDataUtil.getPushMode();
             int period = dateUtil.getPeriod();
             int week = dateUtil.getW();
 
@@ -113,14 +118,14 @@ public class PushController {
             }
 
             // 非空判断五大节课程数据(与逻辑)
-            if (curriculumDataList.size() == 0) {
+            if (curriculumDataList.isEmpty()) {
                 // 五大节课程数据都为空，跳过当天的推送
                 LogUtil.info("当前没有课程，跳过推送");
                 return result.success("当前没有课程，跳过推送");
             }
 
             // 根据推送时间设置标题
-            if (PushMode.NIGHT.getValue() == pushTime) {
+            if (PushMode.NIGHT.getValue() == pushMode) {
                 title = "\uD83C\uDF1F晚上好";
             } else {
                 title = "\uD83C\uDF1E早上好~";
@@ -128,7 +133,7 @@ public class PushController {
 
             // 消息内容
             // 根据推送时间判断天气推送提示
-            message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(PushMode.NIGHT.getValue() == pushTime ? "明日" : "今日").append("天气");
+            message.append("\n\uD83D\uDCCD").append(parameterList.getWeatherVo().getArea()).append(PushMode.NIGHT.getValue() == pushMode ? "明日" : "今日").append("天气");
             message.append("\n\uD83C\uDF25气象：").append(parameterList.getWeatherVo().getDayWeather());
             message.append("\n\uD83C\uDF21温度：").append(parameterList.getWeatherVo().getNightTemp()).append("℃~").append(parameterList.getWeatherVo().getDayTemp()).append("℃\n");
 
@@ -144,7 +149,7 @@ public class PushController {
             if (parameterList.getDateEnding() == 1) {
                 message.append("\n\n\uD83C\uDF92明天就放假咯~");
             } else {
-                message.append("\n\uD83C\uDFC1距离放假还有").append(parameterList.getDateEnding() - pushTime).append("天");
+                message.append("\n\uD83C\uDFC1距离放假还有").append(parameterList.getDateEnding() - pushMode).append("天");
             }
 
             // 彩虹屁非空判断
@@ -164,13 +169,13 @@ public class PushController {
             message.setLength(0);
 
             // 根据推送时间设置标题
-            if (PushMode.NIGHT.getValue() == pushTime) {
+            if (PushMode.NIGHT.getValue() == pushMode) {
                 title = "\uD83C\uDF08明天是";
             } else {
                 title = "\uD83C\uDF08今天是";
             }
 
-            title = title + parameterList.getWeatherVo().getDate() + " 第" + period + "周 " + dateUtil.getWeek(pushTime);
+            title = title + parameterList.getWeatherVo().getDate() + " 第" + period + "周 " + dateUtil.getWeek(pushMode);
             // 设置课程信息并统计课程节数
             courseSet(message, curriculumDataList);
 
@@ -179,6 +184,8 @@ public class PushController {
             } catch (Exception e) {
                 return result.failed(e.getMessage());
             }
+
+            enterpriseDataUtil.dataIncrement("classDays");
 
             return result.success("课程推送成功", wxCpMessageSendResult);
 
@@ -258,16 +265,12 @@ public class PushController {
                 if (curriculumSection == 0) {
 
                     // 早课天数统计
-                    int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("morningClassDays").getDataValue());
-                    temp++;
-                    enterpriseDataService.updateEnterpriseDataByDataName("morningClassDays", String.valueOf(temp));
+                    enterpriseDataUtil.dataIncrement("morningClassDays");
 
                 } else if (curriculumSection == 4) {
 
                     // 晚课天数统计
-                    int temp = Integer.parseInt(enterpriseDataService.queryingEnterpriseData("nightClassDays").getDataValue());
-                    temp++;
-                    enterpriseDataService.updateEnterpriseDataByDataName("nightClassDays", String.valueOf(temp));
+                    enterpriseDataUtil.dataIncrement("nightClassDays");
 
                 }
             }

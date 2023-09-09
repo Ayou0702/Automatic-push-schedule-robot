@@ -19,7 +19,7 @@ import static java.util.Objects.isNull;
  * 线性课程表数据工具类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Component
 @RequiredArgsConstructor
@@ -54,6 +54,11 @@ public class CurriculumDataUtil {
      * 多表联动接口
      */
     private final MultilistService multilistService;
+
+    /**
+     * 配置数据工具类
+     */
+    private final EnterpriseDataUtil enterpriseDataUtil;
 
     /**
      * 事务管理器
@@ -217,12 +222,7 @@ public class CurriculumDataUtil {
                 if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week, i) != null) {
                     // 专业课程判断
                     if (curriculumDataService.preciseQueryCurriculumDataByTime(period, week, i).isCourseSpecialized()) {
-                        // 获取已上课的专业课程次数
-                        Integer totalSpecializedClassTimes = Integer.valueOf(enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue());
-                        // 自增
-                        totalSpecializedClassTimes++;
-                        // 回写
-                        enterpriseDataService.updateEnterpriseDataByDataName("totalSpecializedClassTimes", String.valueOf(totalSpecializedClassTimes));
+                        enterpriseDataUtil.dataIncrement("totalSpecializedClassTimes");
                     }
                 }
             }

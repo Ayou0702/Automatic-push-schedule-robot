@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.control;
 
 import com.enterprise.common.handler.Result;
 import com.enterprise.entity.Permission;

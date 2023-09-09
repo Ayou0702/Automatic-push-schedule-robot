@@ -34,7 +34,7 @@ public class Permission {
 
     private String icon;
 
-    private Integer status;
+    private boolean status;
 
     @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;

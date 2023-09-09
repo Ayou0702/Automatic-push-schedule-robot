@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.control;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.enterprise.entity.Permission;

@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.data;
 
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.vo.ResultVo;

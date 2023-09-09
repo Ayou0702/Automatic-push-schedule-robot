@@ -15,7 +15,7 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author PrefersMin
- * @version 1.7
+ * @version 1.8
  */
 @Component
 @RequiredArgsConstructor
@@ -114,7 +114,7 @@ public class DateUtil {
         }
 
         // 根据推送时间偏移星期
-        w = (w + pushDataUtil.getPushTime()) % 8;
+        w = (w + pushDataUtil.getPushMode()) % 8;
 
         return w;
     }
@@ -133,7 +133,7 @@ public class DateUtil {
 
         periods = DateUtil.daysBetween(enterpriseDataService.queryingEnterpriseData("dateStarting").getDataValue(), date);
 
-        period = ((periods + pushDataUtil.getPushTime()) / 7) + 1;
+        period = ((periods + pushDataUtil.getPushMode()) / 7) + 1;
 
         // 调试，用于指定周数与当前星期
         if (!enterpriseDataService.queryingEnterpriseData("debugPeriod").getDataValue().isEmpty()) {
@@ -161,18 +161,18 @@ public class DateUtil {
      *
      * @author PrefersMin
      *
-     * @param pushTime 当前日期
+     * @param pushMode 当前日期
      * @return 返回当前星期
      */
-    public String getWeek(int pushTime) {
+    public String getWeek(int pushMode) {
 
         String[] week = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         if (!enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue().isEmpty()) {
-            return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue()) + pushTime) % 7];
+            return week[(Integer.parseInt(enterpriseDataService.queryingEnterpriseData("debugWeek").getDataValue()) + pushMode) % 7];
         } else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(System.currentTimeMillis()));
-            int w = cal.get(Calendar.DAY_OF_WEEK) - 1 + pushTime;
+            int w = cal.get(Calendar.DAY_OF_WEEK) - 1 + pushMode;
             if (w < 0) {
                 w = 0;
             }

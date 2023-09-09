@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.control;
 
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.StpUtil;

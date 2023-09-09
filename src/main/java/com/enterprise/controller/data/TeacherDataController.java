@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.data;
 
 import com.enterprise.entity.TeacherData;
 import com.enterprise.entity.vo.ResultVo;
@@ -99,7 +99,7 @@ public class TeacherDataController {
         boolean updateResult = teacherDataService.updateTeacherData(teacherData);
 
         if (updateResult) {
-            message = "课程ID为 " + teacherData.getTeacherId() + " 的课程数据被修改";
+            message = "ID为 " + teacherData.getTeacherId() + " 的教师数据被修改";
             LogUtil.info(message);
             // 提交事务
             platformTransactionManager.commit(transactionStatus);

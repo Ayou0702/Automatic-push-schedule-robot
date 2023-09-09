@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
  * 定时调用类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Configuration
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class ScheduledConfig {
      */
     @Scheduled(cron = "0 45 7 ? * *")
     public void scheduledPushCourseDay() {
-        doPushIf(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue().equals(String.valueOf(PushMode.DAY.getValue())), "晨间推送");
+        doPushIf(enterpriseDataService.queryingEnterpriseData("pushMode").getDataValue().equals(String.valueOf(PushMode.DAY.getValue())), "晨间推送");
     }
 
     /**
@@ -47,7 +47,7 @@ public class ScheduledConfig {
      */
     @Scheduled(cron = "0 30 22 ? * *")
     public void scheduledPushCourseNight() {
-        doPushIf(enterpriseDataService.queryingEnterpriseData("pushTime").getDataValue().equals(String.valueOf(PushMode.NIGHT.getValue())), "夜间推送");
+        doPushIf(enterpriseDataService.queryingEnterpriseData("pushMode").getDataValue().equals(String.valueOf(PushMode.NIGHT.getValue())), "夜间推送");
     }
 
     /**

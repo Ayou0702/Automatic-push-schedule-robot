@@ -1,4 +1,4 @@
-package com.enterprise.controller;
+package com.enterprise.controller.data;
 
 import com.enterprise.entity.ScheduleData;
 import com.enterprise.entity.vo.ResultVo;
