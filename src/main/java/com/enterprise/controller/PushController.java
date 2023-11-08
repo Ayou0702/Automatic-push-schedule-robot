@@ -3,10 +3,10 @@ package com.enterprise.controller;
 import com.enterprise.entity.CourseData;
 import com.enterprise.entity.CurriculumData;
 import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.CourseDataService;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.service.SendMessageService;
+import com.enterprise.common.handler.Result;
 import com.enterprise.util.*;
 import com.enterprise.util.enums.PushMode;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +24,11 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.8
+ * @version 1.9
  */
 @RestController
 @RequiredArgsConstructor
 public class PushController {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     /**
      * 日期工具类
@@ -91,7 +86,7 @@ public class PushController {
      * @author PrefersMin
      */
     @GetMapping("/pushCourse")
-    public ResultVo pushCourse() {
+    public Result pushCourse() {
 
         // 推送前刷新一遍数据(天气播报位置、彩虹屁Api、开学日期、放假日期)
         ParameterListVo parameterList = pushDataUtil.getParameterList();
@@ -121,7 +116,7 @@ public class PushController {
             if (curriculumDataList.isEmpty()) {
                 // 五大节课程数据都为空，跳过当天的推送
                 LogUtil.info("当前没有课程，跳过推送");
-                return result.success("当前没有课程，跳过推送");
+                return Result.success().message("触发推送成功").description("当前没有课程，跳过推送");
             }
 
             // 根据推送时间设置标题
@@ -161,7 +156,7 @@ public class PushController {
             try {
                 wxCpMessageSendResult = pushCourse(title, message);
             } catch (Exception e) {
-                return result.failed(e.getMessage());
+                return Result.failed().message(e.getMessage());
             }
 
             // 清空内容
@@ -182,18 +177,18 @@ public class PushController {
             try {
                 wxCpMessageSendResult = pushCourse(title, message);
             } catch (Exception e) {
-                return result.failed(e.getMessage());
+                return Result.failed().message(e.getMessage());
             }
 
             enterpriseDataUtil.dataIncrement("classDays");
 
-            return result.success("课程推送成功", wxCpMessageSendResult);
+            return Result.success().message("课程推送成功").description("ID为：" + wxCpMessageSendResult.getMsgId() + "的消息推送成功");
 
         } else if (parameterList.getDateStarting() == -1) {
             return startPush(parameterList, message);
         } else {
             LogUtil.info("开学日期" + parameterList.getDateStarting());
-            return result.success("没有开学，停止推送");
+            return Result.success().message("没有开学，停止推送");
         }
 
     }
@@ -286,7 +281,7 @@ public class PushController {
      * @param parameterList 传入的参数列表
      * @param message 传入的message
      */
-    private ResultVo startPush(ParameterListVo parameterList, StringBuilder message) {
+    private Result startPush(ParameterListVo parameterList, StringBuilder message) {
         LogUtil.info("开学日期" + parameterList.getDateStarting());
         // 标题
         title = "\uD83C\uDF92明天是开学日噢，明晚开始推送课程信息~";
@@ -312,10 +307,10 @@ public class PushController {
         try {
             pushCourse(title, message);
         } catch (Exception e) {
-            return result.failed(e.getMessage());
+            return Result.failed().message(e.getMessage());
         }
 
-        return result.success("开学日推送成功");
+        return Result.success().message("开学日推送成功");
     }
 
     /**
@@ -350,7 +345,7 @@ public class PushController {
      * @param parameterList 传入的参数列表
      * @param message 传入的message
      */
-    private ResultVo vacationPush(ParameterListVo parameterList, StringBuilder message) {
+    private Result vacationPush(ParameterListVo parameterList, StringBuilder message) {
 
         title = "\uD83C\uDFC1本学期的课程到此结束啦，一起来回顾一下吧";
 
@@ -369,10 +364,10 @@ public class PushController {
         try {
             pushCourse(title, message);
         } catch (Exception e) {
-            return result.failed(e.getMessage());
+            return Result.failed().message(e.getMessage());
         }
 
-        return result.success("假日推送成功");
+        return Result.success().message("假日推送成功");
     }
 
 }

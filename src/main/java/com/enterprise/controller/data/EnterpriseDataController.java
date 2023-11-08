@@ -1,10 +1,9 @@
 package com.enterprise.controller.data;
 
+import com.enterprise.common.handler.Result;
 import com.enterprise.entity.EnterpriseData;
-import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -21,16 +20,11 @@ import java.util.List;
  * 负责配置数据的Controller
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @RestController
 @RequiredArgsConstructor
 public class EnterpriseDataController {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     /**
      * 配置数据接口
@@ -50,15 +44,15 @@ public class EnterpriseDataController {
      * @return 返回获取到的配置数据
      */
     @GetMapping("/getEnterpriseData")
-    public ResultVo getEnterpriseData() {
+    public Result getEnterpriseData() {
 
         List<EnterpriseData> enterpriseDataList = enterpriseDataService.queryingAllEnterpriseData();
 
         if (enterpriseDataList == null) {
-            return result.failed("配置数据加载成功");
+            return Result.failed().message("配置数据加载失败");
         }
 
-        return result.success("配置数据加载成功", enterpriseDataList);
+        return Result.success().message("配置数据加载成功").data("enterpriseDataList", enterpriseDataList);
 
     }
 
@@ -71,13 +65,12 @@ public class EnterpriseDataController {
      * @return 返回修改结果
      */
     @PostMapping("/updateEnterpriseData")
-    public ResultVo updateEnterpriseData(@RequestBody List<EnterpriseData> enterpriseDataList) {
+    public Result updateEnterpriseData(@RequestBody List<EnterpriseData> enterpriseDataList) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
 
         // 记录操作结果
-        List<String> record = new ArrayList<>();
         List<String> failedRecord = new ArrayList<>();
 
         for (EnterpriseData enterpriseData : enterpriseDataList) {
@@ -95,7 +88,7 @@ public class EnterpriseDataController {
             failedRecord.forEach(LogUtil::error);
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400, "修改配置数据失败,操作已回滚", failedRecord);
+            return Result.failed().message("修改配置数据失败,操作已回滚").data("failedRecord",failedRecord);
         }
 
         LogUtil.info("配置数据修改成功");
@@ -103,7 +96,7 @@ public class EnterpriseDataController {
         // 提交事务
         platformTransactionManager.commit(transactionStatus);
 
-        return result.success("修改配置数据成功");
+        return Result.success().message("修改配置数据成功").description("配置数据已更新");
 
     }
 

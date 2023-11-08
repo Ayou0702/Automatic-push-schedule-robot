@@ -1,9 +1,11 @@
 package com.enterprise.util;
 
+import com.enterprise.common.handler.Result;
 import com.enterprise.entity.CurriculumData;
-import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.entity.vo.ScheduleInfo;
-import com.enterprise.service.*;
+import com.enterprise.service.CurriculumDataService;
+import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.service.MultilistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -19,16 +21,11 @@ import static java.util.Objects.isNull;
  * 线性课程表数据工具类
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @Component
 @RequiredArgsConstructor
 public class CurriculumDataUtil {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     /**
      * 课表数据
@@ -71,7 +68,7 @@ public class CurriculumDataUtil {
      * @author PrefersMin
      *
      */
-    public ResultVo resetCurriculumData() {
+    public Result resetCurriculumData() {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -91,54 +88,39 @@ public class CurriculumDataUtil {
             scheduleDataList.forEach(scheduleData -> {
 
                 // 读取每个课表数据中的开始时间和结束时间
-                int[] period = getClassTime(scheduleData.getSchedulePeriod());
-                int[] section = getClassTime(scheduleData.getScheduleSection());
+                int[] periodArray = getClassTime(scheduleData.getSchedulePeriod());
+                int[] sectionArray = getClassTime(scheduleData.getScheduleSection());
 
                 // 读取每个课表数据中的星期
                 int week = Integer.parseInt(scheduleData.getScheduleWeek());
 
                 // 以周期开始第一层循环
                 period:
-                for (int i = period[0]; i <= period[1]; i++) {
+                for (int period = periodArray[0]; period <= periodArray[1]; period++) {
 
                     // 以节次开始第二层循环
-                    for (int p = section[0]; p <= section[1]; p++) {
+                    for (int section = sectionArray[0]; section <= sectionArray[1]; section++) {
                         // 检测课表时间是否有冲突
-                        if (!isNull(scheduleDataArray[i][week][p])) {
+                        if (!isNull(scheduleDataArray[period][week][section])) {
                             LogUtil.warn("课程表中有课程时间冲突，请检查");
-                            LogUtil.warn("冲突课程名称：" + scheduleData.getCourseName() + ";冲突课程名称：" + scheduleDataArray[i][week][p].getCourseName());
+                            LogUtil.warn("冲突课程名称：" + scheduleData.getCourseName() + ";冲突课程名称：" + scheduleDataArray[period][week][section].getCourseName());
                             // 直接跳出周期循环
                             break period;
                         }
                         // 将对应周期、星期、节次的课程数据写入数组
-                        scheduleDataArray[i][week][p] = scheduleData;
+                        scheduleDataArray[period][week][section] = scheduleData;
                     }
 
                 }
             });
 
             // 遍历存放着课表数据的三维数组
-            for (int i = 0; i < scheduleDataArray.length; i++) {
-                for (int j = 0; j < scheduleDataArray[i].length; j++) {
-                    for (int k = 0; k < scheduleDataArray[i][j].length; k++) {
-                        if (!isNull(scheduleDataArray[i][j][k])) {
+            for (int period = 0; period < scheduleDataArray.length; period++) {
+                for (int week = 0; week < scheduleDataArray[period].length; week++) {
+                    for (int section = 0; section < scheduleDataArray[period][week].length; section++) {
+                        if (!isNull(scheduleDataArray[period][week][section])) {
 
-                            CurriculumData curriculumData = new CurriculumData();
-
-                            curriculumData.setCourseName(scheduleDataArray[i][j][k].getCourseName());
-                            curriculumData.setCourseVenue(scheduleDataArray[i][j][k].getCourseVenue());
-                            curriculumData.setCourseSpecialized(scheduleDataArray[i][j][k].isCourseSpecialized());
-                            curriculumData.setCourseId(scheduleDataArray[i][j][k].getCourseId());
-
-                            curriculumData.setTeacherName(scheduleDataArray[i][j][k].getTeacherName());
-                            curriculumData.setTeacherPhone(scheduleDataArray[i][j][k].getTeacherPhone());
-                            curriculumData.setTeacherInstitute(scheduleDataArray[i][j][k].getTeacherInstitute());
-                            curriculumData.setTeacherId(scheduleDataArray[i][j][k].getTeacherId());
-                            curriculumData.setTeacherSpecialized(scheduleDataArray[i][j][k].isCourseSpecialized());
-
-                            curriculumData.setCurriculumPeriod(i);
-                            curriculumData.setCurriculumWeek(j);
-                            curriculumData.setCurriculumSection(k);
+                            CurriculumData curriculumData = getCurriculumData(period, week, section);
 
                             // 存入临时变量
                             curriculumDataArrayList.add(curriculumData);
@@ -154,14 +136,42 @@ public class CurriculumDataUtil {
             curriculumDataArrayList.clear();
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success("重置线性课程表成功");
+            return Result.success().message("重置线性课程表成功");
 
         } catch (Exception e) {
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed("重置线性课程表失败");
+            return Result.failed().message("重置线性课程表失败");
         }
 
+    }
+
+    /**
+     * 返回课程数据
+     *
+     * @param period 周数
+     * @param week 星期
+     * @param section 节次
+     * @return 课程数据
+     */
+    private CurriculumData getCurriculumData(int period, int week, int section) {
+        CurriculumData curriculumData = new CurriculumData();
+
+        curriculumData.setCourseName(scheduleDataArray[period][week][section].getCourseName());
+        curriculumData.setCourseVenue(scheduleDataArray[period][week][section].getCourseVenue());
+        curriculumData.setCourseSpecialized(scheduleDataArray[period][week][section].isCourseSpecialized());
+        curriculumData.setCourseId(scheduleDataArray[period][week][section].getCourseId());
+
+        curriculumData.setTeacherName(scheduleDataArray[period][week][section].getTeacherName());
+        curriculumData.setTeacherPhone(scheduleDataArray[period][week][section].getTeacherPhone());
+        curriculumData.setTeacherInstitute(scheduleDataArray[period][week][section].getTeacherInstitute());
+        curriculumData.setTeacherId(scheduleDataArray[period][week][section].getTeacherId());
+        curriculumData.setTeacherSpecialized(scheduleDataArray[period][week][section].isCourseSpecialized());
+
+        curriculumData.setCurriculumPeriod(period);
+        curriculumData.setCurriculumWeek(week);
+        curriculumData.setCurriculumSection(section);
+        return curriculumData;
     }
 
     /**

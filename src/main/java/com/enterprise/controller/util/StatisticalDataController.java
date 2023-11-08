@@ -1,6 +1,7 @@
 package com.enterprise.controller.util;
 
 import com.enterprise.common.handler.Result;
+import com.enterprise.entity.vo.ParameterListVo;
 import com.enterprise.entity.vo.WeatherVo;
 import com.enterprise.service.EnterpriseDataService;
 import com.enterprise.util.PushDataUtil;
@@ -31,16 +32,18 @@ public class StatisticalDataController {
     @GetMapping("/getStatisticalData")
     public Result getStatisticalData() {
 
-        int dateStarting = pushDataUtil.getParameterList().getDateStarting();
-        int dateEnding = pushDataUtil.getParameterList().getDateEnding();
+        ParameterListVo parameterList = pushDataUtil.getParameterList();
+
+        int dateStarting = parameterList.getDateStarting();
+        int dateEnding = parameterList.getDateEnding();
         String classDays = enterpriseDataService.queryingEnterpriseData("classDays").getDataValue();
         String morningClassDays = enterpriseDataService.queryingEnterpriseData("morningClassDays").getDataValue();
         String nightClassDays = enterpriseDataService.queryingEnterpriseData("nightClassDays").getDataValue();
         String totalClassTimes = enterpriseDataService.queryingEnterpriseData("totalClassTimes").getDataValue();
         String totalSpecializedClassTimes = enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue();
-        WeatherVo weather = pushDataUtil.getParameterList().getWeatherVo();
+        WeatherVo weather = parameterList.getWeatherVo();
 
-        return Result.OK().message("统计数据加载成功")
+        return Result.success().message("统计数据加载成功")
                 .data("dateStarting", dateStarting)
                 .data("dateEnding", dateEnding)
                 .data("classDays", classDays)

@@ -2,10 +2,9 @@ package com.enterprise.controller.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.enterprise.entity.vo.ResultVo;
+import com.enterprise.common.handler.Result;
 import com.enterprise.util.HttpUtil;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import com.enterprise.util.enums.CloudPhotoType;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.Header;
@@ -24,16 +23,11 @@ import java.util.Map;
  * 负责图库解析的Controller
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 @RequiredArgsConstructor
 public class CloudPhotoController {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     /**
      * http工具类
@@ -50,7 +44,7 @@ public class CloudPhotoController {
      * @throws IOException IO异常
      */
     @PostMapping("/getCloudPhoto")
-    public ResultVo CloudPhotoUtilController(@RequestParam String code) throws IOException {
+    public Result CloudPhotoUtilController(@RequestParam String code) throws IOException {
 
         // V3固定参数
         String urlV3 = "https://dycloud.onlineweixin.com/wallpaper/selectShareUserIdByPopuWordV3.action";
@@ -120,7 +114,7 @@ public class CloudPhotoController {
         }
 
         // 返回map
-        return result.success(map);
+        return Result.success().data("map",map);
 
     }
 

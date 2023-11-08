@@ -14,18 +14,18 @@ spring:
           # 数据库驱动
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 数据库连接地址
-          url: jdbc:mysql://localhost/enterprise-wx-push?useSSL=false&allowPublicKeyRetrieval=true
+          url: jdbc:mysql://localhost:3306/enterprise-wx-push?useSSL=false&allowPublicKeyRetrieval=true
           # 数据库用户名 & 密码
           username: root
-          password: 123456
+          password: root
         slave_1:
           # 数据库驱动
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 数据库连接地址
-          url: jdbc:mysql://localhost/prefersmin_permission?useSSL=false&allowPublicKeyRetrieval=true
+          url: jdbc:mysql://localhost:3306/prefersmin_permission?useSSL=false&allowPublicKeyRetrieval=true
           # 数据库用户名 & 密码
           username: root
-          password: 123456
+          password: root
 
   devtools:
     restart:
@@ -64,7 +64,7 @@ sa-token:
   # token 有效时间
   timeout: 2592000
   # jwt秘钥
-  jwt-secret-key: lilingRSJ
+  jwt-secret-key: PrefersMin
   activity-timeout: -1
   is-concurrent: true
   is-share: false

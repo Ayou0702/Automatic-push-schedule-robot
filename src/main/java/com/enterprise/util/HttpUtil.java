@@ -1,7 +1,7 @@
 package com.enterprise.util;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.enterprise.entity.vo.ResultVo;
+import com.enterprise.common.handler.Result;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -28,11 +28,6 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class HttpUtil {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     private static final CloseableHttpClient HTTP_CLIENT;
 
@@ -85,7 +80,7 @@ public class HttpUtil {
      * @return 返回请求结果
      * @throws IOException 可能存在的异常
      */
-    public ResultVo postUrl(String url, String data, Header header) throws IOException {
+    public Result postUrl(String url, String data, Header header) throws IOException {
 
         // 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -114,7 +109,7 @@ public class HttpUtil {
         response.close();
         httpClient.close();
 
-        return result.success(dataObj);
+        return Result.success().data(dataObj);
 
     }
 

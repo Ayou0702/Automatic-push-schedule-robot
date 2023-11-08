@@ -1,10 +1,10 @@
 package com.enterprise.controller.data;
 
+import com.enterprise.common.handler.Result;
 import com.enterprise.entity.ScheduleData;
-import com.enterprise.entity.vo.ResultVo;
+import com.enterprise.service.CourseDataService;
 import com.enterprise.service.ScheduleDataService;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -23,21 +23,21 @@ import static java.util.Objects.isNull;
  * 负责课表数据的Controller
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @RestController
 @RequiredArgsConstructor
 public class ScheduleDataController {
 
     /**
-     * 封装返回结果
+     * 课程数据接口
      */
-    private final Result result;
+    private final ScheduleDataService scheduleDataService;
 
     /**
      * 课表数据接口
      */
-    private final ScheduleDataService scheduleDataService;
+    private final CourseDataService courseDataService;
 
     /**
      * 事务管理器
@@ -52,15 +52,15 @@ public class ScheduleDataController {
      * @return 返回获取到的课表数据
      */
     @GetMapping("/getScheduleData")
-    public ResultVo getScheduleData() {
+    public Result getScheduleData() {
 
         List<ScheduleData> scheduleDataList = scheduleDataService.queryAllScheduleData();
 
         if (scheduleDataList == null) {
-            return result.failed("课表数据加载失败");
+            return Result.failed().message("课表数据加载失败");
         }
 
-        return result.success("课表数据加载成功", scheduleDataList);
+        return Result.success().message("课表数据加载成功").data("scheduleDataList", scheduleDataList);
 
     }
 
@@ -73,7 +73,7 @@ public class ScheduleDataController {
      * @return 返回更新结果
      */
     @PostMapping("/updateScheduleData")
-    public ResultVo updateScheduleData(@RequestBody ScheduleData scheduleData) {
+    public Result updateScheduleData(@RequestBody ScheduleData scheduleData) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -83,7 +83,7 @@ public class ScheduleDataController {
         if (isNull(scheduleDataService.queryScheduleDataByScheduleId(scheduleData.getScheduleId()))) {
             message = "ID为" + scheduleData.getScheduleId() + "的课表数据更新失败,课表数据不存在";
             LogUtil.error(message);
-            return result.failed(400, "更新课表数据失败", message);
+            return Result.failed().code(400).message("更新课表数据失败").description(message);
         }
 
         boolean updateResult = scheduleDataService.updateScheduleData(scheduleData);
@@ -93,13 +93,13 @@ public class ScheduleDataController {
             LogUtil.info(message);
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success(200, "修改课表数据成功", message);
+            return Result.success().message("修改课表数据成功").description(message);
         }
 
         LogUtil.error("ID为" + scheduleData.getScheduleId() + "的课表数据修改失败");
         // 回滚事务
         platformTransactionManager.rollback(transactionStatus);
-        return result.failed(400, "修改课表数据失败", "ID为" + scheduleData.getScheduleId() + "的课表数据修改失败");
+        return Result.failed().message("修改课表数据失败").description("ID为" + scheduleData.getScheduleId() + "的课表数据修改失败");
 
     }
 
@@ -112,7 +112,7 @@ public class ScheduleDataController {
      * @return 返回删除结果
      */
     @PostMapping("/deleteScheduleData")
-    public ResultVo deleteScheduleData(@RequestBody List<Integer> scheduleIdList) {
+    public Result deleteScheduleData(@RequestBody List<Integer> scheduleIdList) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -120,6 +120,7 @@ public class ScheduleDataController {
         // 记录操作结果
         List<String> record = new ArrayList<>();
         List<String> failedRecord = new ArrayList<>();
+        String courseName = courseDataService.queryCourseDataByCourseId(scheduleDataService.queryScheduleDataByScheduleId(scheduleIdList.get(0)).getCourseId()).getCourseName();
 
         for (int scheduleId : scheduleIdList) {
             if (isNull(scheduleDataService.queryScheduleDataByScheduleId(scheduleId))) {
@@ -128,11 +129,11 @@ public class ScheduleDataController {
             }
         }
 
-        if (failedRecord.size() > 0) {
+        if (!failedRecord.isEmpty()) {
             failedRecord.forEach(LogUtil::error);
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400, "删除课表数据失败", failedRecord);
+            return Result.failed().message("删除课表数据失败").data("failedRecord", failedRecord);
         }
 
         for (int scheduleId : scheduleIdList) {
@@ -141,7 +142,7 @@ public class ScheduleDataController {
                 LogUtil.error("ID为" + scheduleId + "的课表数据删除失败");
                 // 回滚事务
                 platformTransactionManager.rollback(transactionStatus);
-                return result.failed(400, "删除课表数据失败", "ID为" + scheduleId + "的课表数据删除失败");
+                return Result.failed().message("删除课表数据失败").description("ID为" + scheduleId + "的课表数据删除失败");
             } else {
                 record.add("ID为" + scheduleId + "的课表数据删除成功");
             }
@@ -149,9 +150,15 @@ public class ScheduleDataController {
 
         record.forEach(LogUtil::info);
         LogUtil.info(scheduleIdList.size() + "条课表数据被删除");
+
         // 提交事务
         platformTransactionManager.commit(transactionStatus);
-        return result.success(200, "删除课表数据成功", scheduleIdList.size() + "条课表数据被删除");
+
+        if (scheduleIdList.size() > 1) {
+            return Result.success().message("删除课表数据成功").description(scheduleIdList.size() + "条课表数据被删除");
+        }
+
+        return Result.success().message("删除课表数据成功").description(courseName + " 已从课表中删除");
 
     }
 
@@ -164,24 +171,26 @@ public class ScheduleDataController {
      * @return 返回新增结果
      */
     @PostMapping("/addScheduleData")
-    public ResultVo addScheduleData(@RequestBody ScheduleData scheduleData) {
+    public Result addScheduleData(@RequestBody ScheduleData scheduleData) {
         
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
 
         boolean addResult = scheduleDataService.addScheduleData(scheduleData);
 
+        String courseName = courseDataService.queryCourseDataByCourseId(scheduleData.getCourseId()).getCourseName();
+
         if (addResult) {
             LogUtil.info("新增课表数据，课表数据：" + scheduleData);
             // 回滚事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success(200, "新增课表数据成功", "ID为 " + scheduleData.getScheduleId() + " 的课表数据新增成功");
+            return Result.success().message("新增课表数据成功").description(courseName + " 已添加到课表");
         }
 
         LogUtil.error("新增课表数据失败，课表数据：" + scheduleData);
         // 回滚事务
         platformTransactionManager.rollback(transactionStatus);
-        return result.failed(400, "新增课表数据失败", "ID为 " + scheduleData.getScheduleId() + " 的课表数据新增失败");
+        return Result.failed().message("新增课表数据失败").description(courseName + " 添加失败");
 
     }
 

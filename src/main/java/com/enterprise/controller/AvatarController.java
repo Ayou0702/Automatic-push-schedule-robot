@@ -1,9 +1,8 @@
 package com.enterprise.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.enterprise.entity.vo.ResultVo;
+import com.enterprise.common.handler.Result;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,7 @@ import java.util.List;
  * 负责头像数据的Controller
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @RestController
 @RequiredArgsConstructor
@@ -38,11 +37,6 @@ public class AvatarController {
     private final ApplicationHome applicationHome = new ApplicationHome(this.getClass());
 
     /**
-     * 封装返回结果
-     */
-    private final Result result;
-
-    /**
      * 获取头像数据
      *
      * @author PrefersMin
@@ -51,7 +45,7 @@ public class AvatarController {
      * @return 返回获取到的头像数据
      */
     @PostMapping("/getAvatar")
-    public ResultVo getAvatar(@RequestBody String avatarData) {
+    public Result getAvatar(@RequestBody String avatarData) {
 
         // 反序列化获取到的头像数据
         String avatarType = JSONObject.parseObject(avatarData).getString("avatarType");
@@ -66,14 +60,12 @@ public class AvatarController {
         try {
             imageBytes = Files.readAllBytes(imagePath);
         } catch (IOException e) {
-            String message = "ID为" + avatarId + "的图片加载异常，请检查";
-            LogUtil.error(message);
-            return result.failed(400, "加载头像失败", message);
+            return Result.failed();
         }
 
         // 转Base64
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-        return result.success(200, "加载头像成功", "data:image/jpeg;base64," + base64Image);
+        return Result.success().message("加载头像成功").data("avatar","data:image/jpeg;base64," + base64Image);
 
     }
 
@@ -88,11 +80,11 @@ public class AvatarController {
      * @return 返回上传结果
      */
     @PostMapping("/uploadAvatar")
-    public ResultVo uploadAvatar(@RequestParam("file") MultipartFile avatarFile, int avatarId, String avatarType) {
+    public Result uploadAvatar(@RequestParam("file") MultipartFile avatarFile, int avatarId, String avatarType) {
 
         // 非空判断
         if (avatarFile.isEmpty()) {
-            return result.failed(400, "上传头像失败", "头像数据为空");
+            return Result.failed().message("上传头像失败").description("头像数据为空");
         }
 
         // 固定jpg后缀
@@ -107,9 +99,9 @@ public class AvatarController {
         // 尝试写入头像数据
         try {
             avatarFile.transferTo(new File(path));
-            return result.success(200, "上传头像成功", "类型为" + avatarType + "、ID为" + avatarId + "的头像上传成功");
+            return Result.success().message("上传头像成功").description("类型为" + avatarType + "、ID为" + avatarId + "的头像上传成功");
         } catch (IOException e) {
-            return result.failed(400, "上传头像失败", e.getMessage());
+            return Result.failed().message("上传头像失败").description(e.getMessage());
         }
 
     }

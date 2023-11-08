@@ -1,11 +1,10 @@
 package com.enterprise.controller.data;
 
+import com.enterprise.common.handler.Result;
 import com.enterprise.entity.TeacherData;
-import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.ScheduleDataService;
 import com.enterprise.service.TeacherDataService;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -31,11 +30,6 @@ import static java.util.Objects.isNull;
 public class TeacherDataController {
 
     /**
-     * 封装返回结果
-     */
-    private final Result result;
-
-    /**
      * 教师数据接口
      */
     private final TeacherDataService teacherDataService;
@@ -58,15 +52,15 @@ public class TeacherDataController {
      * @return 返回查询到的教师数据
      */
     @GetMapping("/getTeacherData")
-    public ResultVo getTeacherData() {
+    public Result getTeacherData() {
 
         List<TeacherData> teacherDataList = teacherDataService.queryAllTeacherData();
 
         if (teacherDataList == null) {
-            return result.failed("教师数据加载失败");
+            return Result.failed().message("教师数据加载失败");
         }
 
-        return result.success("教师数据加载成功", teacherDataList);
+        return Result.success().message("教师数据加载成功").data("teacherDataList", teacherDataList);
 
     }
 
@@ -79,7 +73,7 @@ public class TeacherDataController {
      * @return 返回更新结果
      */
     @PostMapping("/updateTeacherData")
-    public ResultVo updateTeacherData(@RequestBody TeacherData teacherData) {
+    public Result updateTeacherData(@RequestBody TeacherData teacherData) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -92,7 +86,7 @@ public class TeacherDataController {
             LogUtil.error(message);
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400, "更新教师数据失败", message);
+            return Result.failed().message("更新教师数据失败").description(message);
 
         }
 
@@ -103,13 +97,13 @@ public class TeacherDataController {
             LogUtil.info(message);
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success(200, "修改教师数据成功", message);
+            return Result.success().message("修改教师数据成功").description(message);
         }
 
         LogUtil.error("ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
         // 回滚事务
         platformTransactionManager.rollback(transactionStatus);
-        return result.failed(400, "修改教师数据失败", "ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
+        return Result.failed().message("修改教师数据失败").description("ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
 
 
     }
@@ -123,7 +117,7 @@ public class TeacherDataController {
      * @return 返回删除结果
      */
     @PostMapping("/deleteTeacherData")
-    public ResultVo deleteTeacherData(@RequestBody List<Integer> teacherIdList) {
+    public Result deleteTeacherData(@RequestBody List<Integer> teacherIdList) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -140,11 +134,11 @@ public class TeacherDataController {
             }
         }
 
-        if (failedRecord.size() > 0) {
+        if (!failedRecord.isEmpty()) {
             failedRecord.forEach(LogUtil::error);
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400, "教师数据删除失败", failedRecord);
+            return Result.failed().message("教师数据删除失败").description(failedRecord.toString());
         }
 
         for (int teacherId : teacherIdList) {
@@ -153,7 +147,7 @@ public class TeacherDataController {
                 LogUtil.error("ID为" + teacherId + "的教师数据删除失败");
                 // 回滚事务
                 platformTransactionManager.rollback(transactionStatus);
-                return result.failed("删除教师数据失败,操作已回滚");
+                return Result.failed().message("删除教师数据失败,操作已回滚");
             }
             record.add("教师数据被删除，教师数据：" + teacherId);
         }
@@ -162,8 +156,12 @@ public class TeacherDataController {
         LogUtil.info(teacherIdList.size() + "条教师数据被删除");
         // 提交事务
         platformTransactionManager.commit(transactionStatus);
-        return result.success(200, "教师数据删除成功", teacherIdList.size() + "条教师数据被删除");
 
+        if (teacherIdList.size() > 1) {
+            return Result.success().message("教师数据删除成功").description(teacherIdList.size() + "条教师数据被删除");
+        }
+
+        return Result.success().message("教师数据删除成功").description("ID为 " + teacherIdList.get(0) + " 的教师数据被删除");
     }
 
     /**
@@ -175,7 +173,7 @@ public class TeacherDataController {
      * @return 返回新增结果
      */
     @PostMapping("/addTeacherData")
-    public ResultVo addTeacherData(@RequestBody TeacherData teacherData) {
+    public Result addTeacherData(@RequestBody TeacherData teacherData) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -186,13 +184,13 @@ public class TeacherDataController {
             LogUtil.info("新增教师数据，教师数据：" + teacherData);
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success(200, "新增教师数据成功", "课程名称为 " + teacherData.getTeacherName() + " 的教师数据新增成功");
+            return Result.success().message("新增教师数据成功").description("课程名称为 " + teacherData.getTeacherName() + " 的教师数据新增成功");
         }
 
         LogUtil.error("新增教师数据失败，课程信息：" + teacherData);
         // 回滚事务
         platformTransactionManager.rollback(transactionStatus);
-        return result.failed(400, "新增教师数据失败,操作已回滚", "教师名称为 " + teacherData.getTeacherName() + " 的教师数据新增失败");
+        return Result.failed().message("新增教师数据失败,操作已回滚").description("教师名称为 " + teacherData.getTeacherName() + " 的教师数据新增失败");
 
     }
 

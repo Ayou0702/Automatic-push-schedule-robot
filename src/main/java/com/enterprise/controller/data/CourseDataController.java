@@ -1,11 +1,10 @@
 package com.enterprise.controller.data;
 
+import com.enterprise.common.handler.Result;
 import com.enterprise.entity.CourseData;
-import com.enterprise.entity.vo.ResultVo;
 import com.enterprise.service.CourseDataService;
 import com.enterprise.service.ScheduleDataService;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -24,16 +23,11 @@ import static java.util.Objects.isNull;
  * 负责课程数据的Controller
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @RestController
 @RequiredArgsConstructor
 public class CourseDataController {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     /**
      * 课程数据接口
@@ -51,23 +45,6 @@ public class CourseDataController {
     private final PlatformTransactionManager platformTransactionManager;
 
     /**
-     * 构造器注入Bean
-     *
-     * @author PrefersMin
-     *
-     * @param result 统一返回结果
-     * @param courseDataService 课程数据接口
-     * @param scheduleDataService 课表数据接口
-     * @param platformTransactionManager 事务管理器
-     */
-    // public CourseDataController(Result result, CourseDataService courseDataService, ScheduleDataService scheduleDataService, PlatformTransactionManager platformTransactionManager) {
-    //     this.result = result;
-    //     this.courseDataService = courseDataService;
-    //     this.scheduleDataService = scheduleDataService;
-    //     this.platformTransactionManager = platformTransactionManager;
-    // }
-
-    /**
      * 查询所有课程数据
      *
      * @author PrefersMin
@@ -75,15 +52,15 @@ public class CourseDataController {
      * @return 返回查询到的课程数据
      */
     @GetMapping("/getCourseData")
-    public ResultVo getCourseData() {
+    public Result getCourseData() {
 
         List<CourseData> courseDataList = courseDataService.queryAllCourseData();
 
         if (courseDataList == null) {
-            return result.failed("加载课程数据失败");
+            return Result.failed().message("加载课程数据失败");
         }
 
-        return result.success("加载课程数据成功", courseDataList);
+        return Result.success().message("加载课程数据成功").data("courseDataList", courseDataList);
 
     }
 
@@ -96,7 +73,7 @@ public class CourseDataController {
      * @return 返回更新结果
      */
     @PostMapping("/updateCourseData")
-    public ResultVo updateCourseData(@RequestBody CourseData courseData) {
+    public Result updateCourseData(@RequestBody CourseData courseData) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -108,7 +85,7 @@ public class CourseDataController {
             LogUtil.error(message);
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400, "更新课程数据失败", message);
+            return Result.failed().message("更新课程数据失败").description(message);
         }
 
         boolean updateResult = courseDataService.updateCourseData(courseData);
@@ -118,13 +95,14 @@ public class CourseDataController {
             LogUtil.info(message);
             // 提交事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success(200, "修改课程数据成功", message);
+            return Result.success().message("修改课程数据成功").description(message);
         }
 
         LogUtil.error("ID为" + courseData.getCourseId() + "的课程数据修改失败");
         // 回滚事务
         platformTransactionManager.rollback(transactionStatus);
-        return result.failed(400, "修改课程数据失败", "ID为" + courseData.getCourseId() + "的课程数据修改失败");
+
+        return Result.failed().message("修改课程数据失败").description("ID为" + courseData.getCourseId() + "的课程数据修改失败");
 
     }
 
@@ -137,7 +115,7 @@ public class CourseDataController {
      * @return 返回删除结果
      */
     @PostMapping("/deleteCourseData")
-    public ResultVo deleteCourseData(@RequestBody List<Integer> courseIdList) {
+    public Result deleteCourseData(@RequestBody List<Integer> courseIdList) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -157,11 +135,11 @@ public class CourseDataController {
             }
         }
 
-        if (failedRecord.size() > 0) {
+        if (!failedRecord.isEmpty()) {
             failedRecord.forEach(LogUtil::error);
             // 回滚事务
             platformTransactionManager.rollback(transactionStatus);
-            return result.failed(400, "删除课程数据失败", failedRecord);
+            return Result.failed().message("删除课程数据失败").data("failedRecord",failedRecord);
         }
 
         for (int courseId : courseIdList) {
@@ -170,7 +148,7 @@ public class CourseDataController {
                 LogUtil.error("ID为" + courseId + "的课程数据删除失败");
                 // 回滚事务
                 platformTransactionManager.rollback(transactionStatus);
-                return result.failed(400, "删除课程数据失败", "ID为" + courseId + "的课程数据删除失败");
+                return Result.failed().message("删除课程数据失败").description("ID为" + courseId + "的课程数据删除失败");
             }
             record.add("ID为" + courseId + "的课程数据删除成功");
         }
@@ -179,7 +157,12 @@ public class CourseDataController {
         LogUtil.info(courseIdList.size() + "条课程数据被删除");
         // 提交事务
         platformTransactionManager.commit(transactionStatus);
-        return result.success(200, "删除课程数据成功", courseIdList.size() + "条课程数据被删除");
+
+        if (courseIdList.size() > 1) {
+            return Result.success().message("删除课程数据成功").description(courseIdList.size() + "条课程数据被删除");
+        }
+
+        return Result.success().message("课程数据删除成功").description("ID为 " + courseIdList.get(0) + " 的课程数据被删除");
 
     }
 
@@ -192,7 +175,7 @@ public class CourseDataController {
      * @return 返回新增结果
      */
     @PostMapping("/addCourseData")
-    public ResultVo addCourseData(@RequestBody CourseData courseData) {
+    public Result addCourseData(@RequestBody CourseData courseData) {
 
         // 开始事务
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -203,13 +186,13 @@ public class CourseDataController {
             LogUtil.info("新增课程数据，课程数据：" + courseData);
             // 回滚事务
             platformTransactionManager.commit(transactionStatus);
-            return result.success(200, "新增课程数据成功", "课程名称为 " + courseData.getCourseName() + " 的课程数据新增成功");
+            return Result.success().message("新增课程数据成功").description("课程名称为 " + courseData.getCourseName() + " 的课程数据新增成功");
         }
 
         LogUtil.error("新增课程数据失败，课程数据：" + courseData);
         // 回滚事务
         platformTransactionManager.rollback(transactionStatus);
-        return result.failed(400, "新增课程数据失败", "课程名称为 " + courseData.getCourseName() + " 的课程数据新增失败");
+        return Result.failed().message("新增课程数据失败").description("课程名称为 " + courseData.getCourseName() + " 的课程数据新增失败");
 
     }
 

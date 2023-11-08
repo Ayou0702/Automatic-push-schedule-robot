@@ -9,15 +9,6 @@ public interface ResultCode {
     /**
      * 失败
      */
-    Integer ERROR = 500;
+    Integer ERROR = 400;
 
-    /**
-     * 登录失效
-     */
-    Integer UNAUTHORIZED = 201;
-
-    /**
-     * 权限不足
-     */
-    Integer FORBIDDEN = 202;
 }

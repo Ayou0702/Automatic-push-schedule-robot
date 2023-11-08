@@ -3,9 +3,8 @@ package com.enterprise.common.exception;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.SaTokenException;
-import com.enterprise.entity.vo.ResultVo;
+import com.enterprise.common.handler.Result;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,11 +21,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
-    /**
-     * 封装返回结果
-     */
-    private final Result result;
 
     /**
      * 捕捉运行时异常
@@ -60,7 +54,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NotLoginException.class)
     @ResponseBody
-    public ResultVo notLoginException(NotLoginException nle) {
+    public Result notLoginException(NotLoginException nle) {
         // 打印堆栈，以供调试
         nle.printStackTrace();
 
@@ -79,21 +73,21 @@ public class GlobalExceptionHandler {
         } else {
             message = "当前会话未登录";
         }
-        return result.failed(message);
+        return Result.failed().message(message);
     }
 
     @ExceptionHandler(NotPermissionException.class)
     @ResponseBody
-    public ResultVo notPermissionException(NotPermissionException npe) {
+    public Result notPermissionException(NotPermissionException npe) {
         npe.printStackTrace();
-        return result.failed(403, "当前登录账号没有访问权限！");
+        return Result.failed().code(403).message("当前登录账号没有访问权限！");
     }
 
     @ExceptionHandler(SaTokenException.class)
     @ResponseBody
-    public ResultVo saTokenException(SaTokenException ste) {
+    public Result saTokenException(SaTokenException ste) {
         ste.printStackTrace();
-        return result.failed(401, "请登录再执行此操作！");
+        return Result.failed().code(401).message("请登录再执行此操作！");
     }
 
 }

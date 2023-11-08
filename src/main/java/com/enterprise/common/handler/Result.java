@@ -5,11 +5,17 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 封装返回结果
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 @Data
 public class Result {
 
     /**
-     * 返回结果
+     * 状态
      */
     private Boolean state;
 
@@ -19,9 +25,14 @@ public class Result {
     private Integer code;
 
     /**
-     * 返回消息
+     * 消息内容
      */
     private String message;
+
+    /**
+     * 消息描述
+     */
+    private String description;
 
     /**
      * 返回数据
@@ -37,22 +48,20 @@ public class Result {
     /**
      * 成功方法
      */
-    public static Result OK() {
+    public static Result success() {
         Result result = new Result();
         result.setState(true);
         result.setCode(ResultCode.SUCCESS);
-        result.setMessage("访问成功");
         return result;
     }
 
     /**
      * 失败方法
      */
-    public static Result Error() {
+    public static Result failed() {
         Result result = new Result();
         result.setState(false);
         result.setCode(ResultCode.ERROR);
-        result.setMessage("访问失败");
         return result;
     }
 
@@ -63,6 +72,11 @@ public class Result {
 
     public Result message(String message) {
         this.setMessage(message);
+        return this;
+    }
+
+    public Result description(String description) {
+        this.setDescription(description);
         return this;
     }
 

@@ -8,6 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * 负责Permission表数据的Controller
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/permission")
 public class PermissionController {
@@ -24,9 +30,9 @@ public class PermissionController {
     public Result createPermission(@RequestBody Permission permission) {
         boolean flag = permissionService.createPermission(permission);
         if (flag) {
-            return Result.OK().message("添加成功");
+            return Result.success().message("添加成功");
         } else {
-            return Result.Error().message("添加失败");
+            return Result.failed().message("添加失败");
         }
     }
 
@@ -40,9 +46,9 @@ public class PermissionController {
     public Result updatePermission(@RequestBody Permission permission) {
         boolean flag = permissionService.updatePermission(permission);
         if (flag) {
-            return Result.OK().message("修改成功");
+            return Result.success().message("修改成功");
         } else {
-            return Result.Error().message("修改失败");
+            return Result.failed().message("修改失败");
         }
     }
 
@@ -55,7 +61,7 @@ public class PermissionController {
     @DeleteMapping("/delete/{id}")
     public Result deletePermission(@PathVariable String id) {
         permissionService.removeChildById(id);
-        return Result.OK();
+        return Result.success();
     }
 
     /**
@@ -67,7 +73,7 @@ public class PermissionController {
     @GetMapping("/{id}")
     public Result findById(@PathVariable String id) {
         Permission permission = permissionService.getById(id);
-        return Result.OK().data("permission", permission);
+        return Result.success().data("permission", permission);
     }
 
     /**
@@ -78,7 +84,7 @@ public class PermissionController {
     @GetMapping("/parentNodes")
     public Result getParentNodes() {
         List<Permission> parentList = permissionService.getParentNodes();
-        return Result.OK().data("parentList", parentList);
+        return Result.success().data("parentList", parentList);
     }
 
     /**
@@ -89,7 +95,7 @@ public class PermissionController {
     @GetMapping("/all")
     public Result getAllNode() {
         List<Permission> permissionList = permissionService.queryAllMenu();
-        return Result.OK().data("Menu", permissionList);
+        return Result.success().data("Menu", permissionList);
     }
 
 }

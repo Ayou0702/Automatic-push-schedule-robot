@@ -1,10 +1,12 @@
 package com.enterprise.util.enums;
 
+import lombok.Getter;
+
 /**
  * 推送模式的枚举类
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 public enum PushMode {
 
@@ -12,16 +14,13 @@ public enum PushMode {
     DAY(0, "晨间推送"),
     NIGHT(1, "夜间推送");
 
+    @Getter
     private final int value;
     private final String desc;
 
     PushMode(int value, String desc) {
         this.value = value;
         this.desc = desc;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     @Override

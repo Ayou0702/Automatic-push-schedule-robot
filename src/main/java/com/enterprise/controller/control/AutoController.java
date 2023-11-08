@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * 负责认证的Controller
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -40,12 +46,12 @@ public class AutoController {
             // 设置Token名称和值
             tokenValue = StpUtil.getTokenValue();
         }
-        return Result.OK().data("tokenValue", tokenValue);
+        return Result.success().data("tokenValue", tokenValue);
     }
 
     @GetMapping("/islogin")
     public Result isLogin() {
-        return Result.OK().data("isLogin", StpUtil.getTokenValue());
+        return Result.success().data("isLogin", StpUtil.getTokenValue());
     }
 
     @GetMapping("/login_info")
@@ -60,9 +66,9 @@ public class AutoController {
             adminVo.setPassWord("");
             // 根据用户读取角色
             List<Permission> permissionList = permissionService.findMenuByRoleId(adminVo.getRoleId(), true);
-            return Result.OK().data("permissionList", permissionList).data("loginAdmin", adminVo);
+            return Result.success().data("permissionList", permissionList).data("loginAdmin", adminVo);
         }
-        return Result.Error().message("无效的Token!");
+        return Result.failed().message("无效的Token!");
     }
 
 }
