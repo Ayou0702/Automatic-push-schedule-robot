@@ -75,9 +75,6 @@ public class ScheduleDataController {
     @PostMapping("/updateScheduleData")
     public Result updateScheduleData(@RequestBody ScheduleData scheduleData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         String message;
 
         if (isNull(scheduleDataService.queryScheduleDataByScheduleId(scheduleData.getScheduleId()))) {
@@ -91,14 +88,11 @@ public class ScheduleDataController {
         if (updateResult) {
             message = "课表ID为 " + scheduleData.getScheduleId() + " 的课表数据被修改";
             LogUtil.info(message);
-            // 提交事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("修改课表数据成功").description(message);
         }
 
         LogUtil.error("ID为" + scheduleData.getScheduleId() + "的课表数据修改失败");
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.failed().message("修改课表数据失败").description("ID为" + scheduleData.getScheduleId() + "的课表数据修改失败");
 
     }
@@ -172,9 +166,6 @@ public class ScheduleDataController {
      */
     @PostMapping("/addScheduleData")
     public Result addScheduleData(@RequestBody ScheduleData scheduleData) {
-        
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
 
         boolean addResult = scheduleDataService.addScheduleData(scheduleData);
 
@@ -182,14 +173,11 @@ public class ScheduleDataController {
 
         if (addResult) {
             LogUtil.info("新增课表数据，课表数据：" + scheduleData);
-            // 回滚事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("新增课表数据成功").description(courseName + " 已添加到课表");
         }
 
         LogUtil.error("新增课表数据失败，课表数据：" + scheduleData);
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.failed().message("新增课表数据失败").description(courseName + " 添加失败");
 
     }

@@ -166,17 +166,12 @@ public class CurriculumDataController {
     @PostMapping("/addCurriculumData")
     public Result addCurriculumData(@RequestBody CurriculumData curriculumData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         String message;
         boolean duplicateResult = curriculumDataService.preciseQueryCurriculumDataByTime(curriculumData.getCurriculumPeriod(), curriculumData.getCurriculumWeek(), curriculumData.getCurriculumSection()) == null;
 
         if (!duplicateResult) {
             LogUtil.error("课程时间冲突： " + curriculumData.getCurriculumPeriod() + " 周、星期 " + curriculumData.getCurriculumWeek() + "、第 " + curriculumData.getCurriculumSection() + " 节");
             LogUtil.error("课程推送队列数据：" + curriculumData);
-            // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
             return Result.failed().message("新增失败").description("新增的课程推送队列数据与已有数据存在推送时间冲突");
 
         }
@@ -186,14 +181,11 @@ public class CurriculumDataController {
         if (insertResult) {
             message = "课程名称为" + curriculumData.getCourseName() + "的课程推送队列数据新增成功";
             LogUtil.info(message);
-            // 提交事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("新增课程推送队列数据成功").description(message);
         }
 
         LogUtil.error("新增课程推送队列数据失败，课程推送队列数据：" + curriculumData);
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.success().message("新增课程推送队列数据失败").description("课程名称为" + curriculumData.getCourseName() + "的课程推送队列数据新增失败");
 
     }
@@ -209,16 +201,11 @@ public class CurriculumDataController {
     @PostMapping("/updateCurriculumData")
     public Result updateCurriculumData(@RequestBody CurriculumData curriculumData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         String message;
 
         if (isNull(curriculumDataService.queryCurriculumDataByCurriculumId(curriculumData.getCurriculumId()))) {
             message = "序列ID为" + curriculumData.getCurriculumId() + "的课程推送队列数据更新失败,数据不存在";
             LogUtil.error(message);
-            // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
             return Result.failed().message("更新课程推送队列数据失败").description(message);
         }
 
@@ -227,14 +214,11 @@ public class CurriculumDataController {
         if (updateResult) {
             message = "序列ID为 " + curriculumData.getCurriculumId() + " 的课程推送队列数据被修改";
             LogUtil.info(message);
-            // 提交事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("修改课程推送队列数据成功").description(message);
         }
 
         LogUtil.error("序列ID为" + curriculumData.getCurriculumId() + "的课程推送队列数据修改失败");
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.failed().message("修改课程推送队列数据失败").description("序列ID为" + curriculumData.getCurriculumId() + "的课程推送队列数据修改失败");
 
     }

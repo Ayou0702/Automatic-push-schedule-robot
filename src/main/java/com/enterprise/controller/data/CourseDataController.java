@@ -75,16 +75,11 @@ public class CourseDataController {
     @PostMapping("/updateCourseData")
     public Result updateCourseData(@RequestBody CourseData courseData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         String message;
 
         if (isNull(courseDataService.queryCourseDataByCourseId(courseData.getCourseId()))) {
             message = "ID为" + courseData.getCourseId() + "的课程数据更新失败,课程数据不存在";
             LogUtil.error(message);
-            // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
             return Result.failed().message("更新课程数据失败").description(message);
         }
 
@@ -93,14 +88,10 @@ public class CourseDataController {
         if (updateResult) {
             message = "课程ID为 " + courseData.getCourseId() + " 的课程数据被修改";
             LogUtil.info(message);
-            // 提交事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("修改课程数据成功").description(message);
         }
 
         LogUtil.error("ID为" + courseData.getCourseId() + "的课程数据修改失败");
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
 
         return Result.failed().message("修改课程数据失败").description("ID为" + courseData.getCourseId() + "的课程数据修改失败");
 
@@ -177,21 +168,15 @@ public class CourseDataController {
     @PostMapping("/addCourseData")
     public Result addCourseData(@RequestBody CourseData courseData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         boolean addResult = courseDataService.addCourseData(courseData);
 
         if (addResult) {
             LogUtil.info("新增课程数据，课程数据：" + courseData);
-            // 回滚事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("新增课程数据成功").description("课程名称为 " + courseData.getCourseName() + " 的课程数据新增成功");
         }
 
         LogUtil.error("新增课程数据失败，课程数据：" + courseData);
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.failed().message("新增课程数据失败").description("课程名称为 " + courseData.getCourseName() + " 的课程数据新增失败");
 
     }

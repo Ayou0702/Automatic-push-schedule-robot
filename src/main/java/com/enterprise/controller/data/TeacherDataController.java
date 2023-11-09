@@ -75,17 +75,12 @@ public class TeacherDataController {
     @PostMapping("/updateTeacherData")
     public Result updateTeacherData(@RequestBody TeacherData teacherData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         String message;
 
         if (isNull(teacherDataService.queryTeacherDataByTeacherId(teacherData.getTeacherId()))) {
 
             message = "ID为" + teacherData.getTeacherId() + "的教师数据更新失败,教师数据不存在";
             LogUtil.error(message);
-            // 回滚事务
-            platformTransactionManager.rollback(transactionStatus);
             return Result.failed().message("更新教师数据失败").description(message);
 
         }
@@ -95,14 +90,11 @@ public class TeacherDataController {
         if (updateResult) {
             message = "ID为 " + teacherData.getTeacherId() + " 的教师数据被修改";
             LogUtil.info(message);
-            // 提交事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("修改教师数据成功").description(message);
         }
 
         LogUtil.error("ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.failed().message("修改教师数据失败").description("ID为" + teacherData.getTeacherId() + "的教师数据修改失败");
 
 
@@ -175,21 +167,15 @@ public class TeacherDataController {
     @PostMapping("/addTeacherData")
     public Result addTeacherData(@RequestBody TeacherData teacherData) {
 
-        // 开始事务
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-
         boolean addResult = teacherDataService.addTeacherData(teacherData);
 
         if (addResult) {
             LogUtil.info("新增教师数据，教师数据：" + teacherData);
-            // 提交事务
-            platformTransactionManager.commit(transactionStatus);
             return Result.success().message("新增教师数据成功").description("课程名称为 " + teacherData.getTeacherName() + " 的教师数据新增成功");
         }
 
         LogUtil.error("新增教师数据失败，课程信息：" + teacherData);
-        // 回滚事务
-        platformTransactionManager.rollback(transactionStatus);
+
         return Result.failed().message("新增教师数据失败,操作已回滚").description("教师名称为 " + teacherData.getTeacherName() + " 的教师数据新增失败");
 
     }
