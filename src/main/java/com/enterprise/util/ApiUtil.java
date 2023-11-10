@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.enterprise.service.data.entity.EnterpriseDataService;
 import com.enterprise.service.wechatService.WxCoreService;
-import com.enterprise.util.enums.PushMode;
+import com.enterprise.vo.enums.PushMode;
 import com.enterprise.vo.pojo.UserListVo;
 import com.enterprise.vo.pojo.WeatherVo;
 import lombok.RequiredArgsConstructor;

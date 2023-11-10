@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.enterprise.common.handler.Result;
 import com.enterprise.util.HttpUtil;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.enums.CloudPhotoType;
+import com.enterprise.vo.enums.CloudPhotoType;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;

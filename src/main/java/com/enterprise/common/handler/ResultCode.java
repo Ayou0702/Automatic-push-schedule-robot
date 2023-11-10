@@ -1,17 +1,29 @@
 package com.enterprise.common.handler;
 
-public interface ResultCode {
+import lombok.Getter;
 
-    /**
-     * 成功
-     */
-    Integer SUCCESS = 200;
+/**
+ * 返回结果的枚举类
+ *
+ * @author PrefersMin
+ * @version 1.0
+ */
+@Getter
+public enum ResultCode {
 
-    /**
-     * 失败
-     */
-    Integer ERROR = 400;
+    SUCCESS(200,"请求成功"),
 
-    Integer NOT_TOKEN = 401;
+    FAILED(400,"请求失败"),
+
+    SESSION_INVALID(701,"会话失效");
+
+    private final int code;
+
+    private final String desc;
+
+    ResultCode(int code,String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
 
 }

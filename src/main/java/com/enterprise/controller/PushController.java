@@ -10,7 +10,7 @@ import com.enterprise.util.DateUtil;
 import com.enterprise.util.EnterpriseDataUtil;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.PushDataUtil;
-import com.enterprise.util.enums.PushMode;
+import com.enterprise.vo.enums.PushMode;
 import com.enterprise.vo.data.entity.CourseData;
 import com.enterprise.vo.data.entity.CurriculumData;
 import com.enterprise.vo.pojo.ParameterListVo;

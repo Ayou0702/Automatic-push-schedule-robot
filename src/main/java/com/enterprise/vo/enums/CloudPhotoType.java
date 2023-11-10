@@ -1,4 +1,6 @@
-package com.enterprise.util.enums;
+package com.enterprise.vo.enums;
+
+import lombok.Getter;
 
 /**
  * 云图库的枚举类
@@ -6,13 +8,19 @@ package com.enterprise.util.enums;
  * @author PrefersMin
  * @version 1.0
  */
+@Getter
 public enum CloudPhotoType {
 
     WALLPAPER(1, "wallpaper"),
+
     AVATAR(2,"avatar"),
+
     LIVE_WALLPAPER(3, "liveWallpaper"),
+
     BACKGROUND_IMAGE(4,"backgroundImage"),
+
     TOOL_PLAY(6,"toolPlay"),
+
     AI(14,"ai");
 
     private final int typeId;
@@ -23,18 +31,10 @@ public enum CloudPhotoType {
         this.typeName = typeName;
     }
 
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
     public static String getTypeNameByTypeId(int typeId) {
-        for (CloudPhotoType type : CloudPhotoType.values()) {
-            if (type.getTypeId() == typeId) {
-                return type.getTypeName();
+        for (CloudPhotoType value : CloudPhotoType.values()) {
+            if (value.getTypeId() == typeId) {
+                return value.getTypeName();
             }
         }
         return null;

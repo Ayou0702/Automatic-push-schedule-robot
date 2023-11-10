@@ -4,7 +4,7 @@ import com.enterprise.controller.PushController;
 import com.enterprise.service.data.entity.EnterpriseDataService;
 import com.enterprise.service.wechatService.SendMessageService;
 import com.enterprise.util.LogUtil;
-import com.enterprise.util.enums.PushMode;
+import com.enterprise.vo.enums.PushMode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;

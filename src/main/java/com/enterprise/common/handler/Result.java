@@ -9,7 +9,7 @@ import java.util.Map;
  * 封装返回结果
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @Data
 public class Result {
@@ -51,7 +51,7 @@ public class Result {
     public static Result success() {
         Result result = new Result();
         result.setState(true);
-        result.setCode(ResultCode.SUCCESS);
+        result.setCode(ResultCode.SUCCESS.getCode());
         return result;
     }
 
@@ -61,12 +61,12 @@ public class Result {
     public static Result failed() {
         Result result = new Result();
         result.setState(false);
-        result.setCode(ResultCode.ERROR);
+        result.setCode(ResultCode.FAILED.getCode());
         return result;
     }
 
-    public Result success(Boolean success) {
-        this.setState(success);
+    public Result state(Boolean state) {
+        this.setState(state);
         return this;
     }
 
@@ -92,6 +92,12 @@ public class Result {
 
     public Result data(Map<String, Object> map) {
         this.setData(map);
+        return this;
+    }
+
+    public Result resultCode(ResultCode resultCode) {
+        this.setCode(resultCode.getCode());
+        this.setDescription(resultCode.getDesc());
         return this;
     }
 
