@@ -1,15 +1,16 @@
 package com.enterprise.common.exception;
 
-import com.enterprise.entity.vo.ExceptionVo;
+import com.enterprise.vo.pojo.ExceptionVo;
 
 /**
  * 自定义异常
  *
  * @author PrefersMin
- * @version 1.2
+ * @version 1.3
  */
 public class CustomException extends Exception  {
 
+    private static final long serialVersionUID = 8073196272301693554L;
     /**
      * 异常对象实体类
      */

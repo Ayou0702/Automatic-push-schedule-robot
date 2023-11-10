@@ -1,6 +1,6 @@
 package com.enterprise.util;
 
-import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import static java.lang.Math.abs;
  * 日期工具类
  *
  * @author PrefersMin
- * @version 1.8
+ * @version 1.9
  */
 @Component
 @RequiredArgsConstructor

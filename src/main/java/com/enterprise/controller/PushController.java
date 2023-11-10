@@ -1,14 +1,19 @@
 package com.enterprise.controller;
 
-import com.enterprise.entity.CourseData;
-import com.enterprise.entity.CurriculumData;
-import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.service.CourseDataService;
-import com.enterprise.service.EnterpriseDataService;
-import com.enterprise.service.SendMessageService;
 import com.enterprise.common.handler.Result;
-import com.enterprise.util.*;
+import com.enterprise.service.data.entity.CourseDataService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
+import com.enterprise.service.wechatService.SendMessageService;
+import com.enterprise.util.CourseDataUtil;
+import com.enterprise.util.CurriculumDataUtil;
+import com.enterprise.util.DateUtil;
+import com.enterprise.util.EnterpriseDataUtil;
+import com.enterprise.util.LogUtil;
+import com.enterprise.util.PushDataUtil;
 import com.enterprise.util.enums.PushMode;
+import com.enterprise.vo.data.entity.CourseData;
+import com.enterprise.vo.data.entity.CurriculumData;
+import com.enterprise.vo.pojo.ParameterListVo;
 import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +29,7 @@ import java.util.stream.Collectors;
  * 推送服务
  *
  * @author PrefersMin
- * @version 1.9
+ * @version 2.0
  */
 @RestController
 @RequiredArgsConstructor

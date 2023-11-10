@@ -1,10 +1,10 @@
 package com.enterprise.controller.util;
 
 import com.enterprise.common.handler.Result;
-import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.entity.vo.WeatherVo;
-import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
 import com.enterprise.util.PushDataUtil;
+import com.enterprise.vo.pojo.ParameterListVo;
+import com.enterprise.vo.pojo.WeatherVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 负责统计数据的Controller
  *
  * @author PrefersMin
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 @RequiredArgsConstructor

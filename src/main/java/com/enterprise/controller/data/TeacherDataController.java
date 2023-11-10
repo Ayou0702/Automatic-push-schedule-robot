@@ -1,9 +1,9 @@
 package com.enterprise.controller.data;
 
 import com.enterprise.common.handler.Result;
-import com.enterprise.entity.TeacherData;
-import com.enterprise.service.ScheduleDataService;
-import com.enterprise.service.TeacherDataService;
+import com.enterprise.vo.data.entity.TeacherData;
+import com.enterprise.service.data.entity.ScheduleDataService;
+import com.enterprise.service.data.entity.TeacherDataService;
 import com.enterprise.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
  * 负责教师数据的Controller
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @RestController
 @RequiredArgsConstructor

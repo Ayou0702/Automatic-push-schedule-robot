@@ -1,7 +1,7 @@
 package com.enterprise.util;
 
-import com.enterprise.entity.vo.ParameterListVo;
-import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
+import com.enterprise.vo.pojo.ParameterListVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import static com.enterprise.util.DateUtil.getNow;
  * 推送数据的工具类
  *
  * @author PrefersMin
- * @version 1.8
+ * @version 1.9
  */
 @Component
 @RequiredArgsConstructor

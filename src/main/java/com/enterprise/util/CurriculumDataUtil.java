@@ -1,11 +1,11 @@
 package com.enterprise.util;
 
 import com.enterprise.common.handler.Result;
-import com.enterprise.entity.CurriculumData;
-import com.enterprise.entity.vo.ScheduleInfo;
-import com.enterprise.service.CurriculumDataService;
-import com.enterprise.service.EnterpriseDataService;
-import com.enterprise.service.MultilistService;
+import com.enterprise.service.data.entity.CurriculumDataService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
+import com.enterprise.service.data.view.ScheduleInfoDataService;
+import com.enterprise.vo.data.entity.CurriculumData;
+import com.enterprise.vo.pojo.ScheduleInfoDataVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,7 +21,7 @@ import static java.util.Objects.isNull;
  * 线性课程表数据工具类
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @Component
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class CurriculumDataUtil {
     /**
      * 课表数据
      */
-    private ScheduleInfo[][][] scheduleDataArray;
+    private ScheduleInfoDataVo[][][] scheduleDataArray;
 
     /**
      * 将课表数据填入线性课程表的临时存储
@@ -48,9 +48,9 @@ public class CurriculumDataUtil {
     private final EnterpriseDataService enterpriseDataService;
 
     /**
-     * 多表联动接口
+     * 课表详细数据视图表接口
      */
-    private final MultilistService multilistService;
+    private final ScheduleInfoDataService scheduleInfoDataService;
 
     /**
      * 配置数据工具类
@@ -80,9 +80,9 @@ public class CurriculumDataUtil {
                 isEmpty = curriculumDataService.deleteAllCurriculumData();
             }
 
-            List<ScheduleInfo> scheduleDataList = multilistService.resetCurriculumData();
+            List<ScheduleInfoDataVo> scheduleDataList = scheduleInfoDataService.getAllScheduleInfoData();
 
-            scheduleDataArray = new ScheduleInfo[PushDataUtil.PERIOD_MAX][PushDataUtil.WEEK_MAX][PushDataUtil.SECTION_MAX];
+            scheduleDataArray = new ScheduleInfoDataVo[PushDataUtil.PERIOD_MAX][PushDataUtil.WEEK_MAX][PushDataUtil.SECTION_MAX];
 
             // 通过for循环将课表数据按照上课时间填入数组中
             scheduleDataList.forEach(scheduleData -> {

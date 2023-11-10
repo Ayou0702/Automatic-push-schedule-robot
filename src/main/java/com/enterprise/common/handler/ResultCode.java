@@ -1,6 +1,7 @@
 package com.enterprise.common.handler;
 
 public interface ResultCode {
+
     /**
      * 成功
      */
@@ -10,5 +11,7 @@ public interface ResultCode {
      * 失败
      */
     Integer ERROR = 400;
+
+    Integer NOT_TOKEN = 401;
 
 }

@@ -1,6 +1,6 @@
 package com.enterprise.util;
 
-import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 课程数据工具类
  *
  * @author PrefersMin
- * @version 1.3
+ * @version 1.4
  */
 @Component
 @RequiredArgsConstructor

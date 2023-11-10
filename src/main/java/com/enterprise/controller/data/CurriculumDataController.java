@@ -1,8 +1,8 @@
 package com.enterprise.controller.data;
 
 import com.enterprise.common.handler.Result;
-import com.enterprise.entity.CurriculumData;
-import com.enterprise.service.CurriculumDataService;
+import com.enterprise.vo.data.entity.CurriculumData;
+import com.enterprise.service.data.entity.CurriculumDataService;
 import com.enterprise.util.CurriculumDataUtil;
 import com.enterprise.util.DateUtil;
 import com.enterprise.util.LogUtil;
@@ -24,7 +24,7 @@ import static java.util.Objects.isNull;
  * 负责线性课程表数据的Controller
  *
  * @author PrefersMin
- * @version 1.4
+ * @version 1.5
  */
 @RestController
 @RequiredArgsConstructor

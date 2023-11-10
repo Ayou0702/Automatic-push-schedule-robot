@@ -1,8 +1,8 @@
 package com.enterprise.config;
 
 import com.enterprise.controller.PushController;
-import com.enterprise.service.EnterpriseDataService;
-import com.enterprise.service.SendMessageService;
+import com.enterprise.service.data.entity.EnterpriseDataService;
+import com.enterprise.service.wechatService.SendMessageService;
 import com.enterprise.util.LogUtil;
 import com.enterprise.util.enums.PushMode;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
  * 定时调用类
  *
  * @author PrefersMin
- * @version 1.5
+ * @version 1.6
  */
 @Configuration
 @RequiredArgsConstructor

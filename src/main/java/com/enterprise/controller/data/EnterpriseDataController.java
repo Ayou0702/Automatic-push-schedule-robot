@@ -1,8 +1,8 @@
 package com.enterprise.controller.data;
 
 import com.enterprise.common.handler.Result;
-import com.enterprise.entity.EnterpriseData;
-import com.enterprise.service.EnterpriseDataService;
+import com.enterprise.vo.data.entity.EnterpriseData;
+import com.enterprise.service.data.entity.EnterpriseDataService;
 import com.enterprise.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,7 +20,7 @@ import java.util.List;
  * 负责配置数据的Controller
  *
  * @author PrefersMin
- * @version 1.6
+ * @version 1.7
  */
 @RestController
 @RequiredArgsConstructor
