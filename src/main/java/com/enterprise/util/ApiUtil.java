@@ -109,10 +109,12 @@ public class ApiUtil {
         assert jsonObject != null;
 
         if (dataSources) {
+
             // 天行数据反序列化
             weatherVo = JSON.parseObject(jsonObject.getJSONArray("newslist").getJSONObject(pushMode).toString(), WeatherVo.class);
 
         } else {
+
             // 高德数据反序列化
             JSONObject Gao = jsonObject.getJSONArray("forecasts").getJSONObject(0).getJSONArray("casts").getJSONObject(pushMode);
             weatherVo.setArea(jsonObject.getJSONArray("forecasts").getJSONObject(0).getString("city"));
@@ -120,6 +122,7 @@ public class ApiUtil {
             weatherVo.setWeather(Gao.getString("dayweather"));
             weatherVo.setHighest(Gao.getString("daytemp_float"));
             weatherVo.setLowest(Gao.getString("nighttemp_float"));
+
         }
 
         weatherVo.setState(pushMode);

@@ -20,13 +20,6 @@
 
     <dependencies>
 
-        <!-- 阿里云OpenAPI -->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>alibabacloud-ecs20140526</artifactId>
-            <version>4.24.17</version>
-        </dependency>
-
         <!-- Sa-Token 权限认证 -->
         <dependency>
             <groupId>cn.dev33</groupId>

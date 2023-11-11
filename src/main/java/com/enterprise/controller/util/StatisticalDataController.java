@@ -43,7 +43,8 @@ public class StatisticalDataController {
         String totalSpecializedClassTimes = enterpriseDataService.queryingEnterpriseData("totalSpecializedClassTimes").getDataValue();
         WeatherVo weather = parameterList.getWeatherVo();
 
-        return Result.success().message("统计数据加载成功")
+        return Result.success().message("数据加载成功")
+                .description("统计数据加载成功")
                 .data("dateStarting", dateStarting)
                 .data("dateEnding", dateEnding)
                 .data("classDays", classDays)

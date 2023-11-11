@@ -10,7 +10,11 @@ import com.enterprise.vo.pojo.ExceptionVo;
  */
 public class CustomException extends Exception  {
 
+    /**
+     * 序列化UID
+     */
     private static final long serialVersionUID = 8073196272301693554L;
+
     /**
      * 异常对象实体类
      */
